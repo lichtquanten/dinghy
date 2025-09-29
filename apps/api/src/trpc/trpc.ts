@@ -11,7 +11,7 @@ const requireAuth = t.middleware(({ ctx, next }) => {
     return next({
         ctx: {
           ...ctx,
-          userId: ctx.userId as string,
+          userId: ctx.userId,
         },
       });
   });

@@ -38,7 +38,7 @@
     },
     "pnpm": {
         "onlyBuiltDependencies": [
-            "@tailwindcss/oxide",
+            "@clerk/shared",
             "esbuild"
         ]
     },

@@ -39,7 +39,7 @@ export const userRouter = router({
       name: z.string().min(1).max(100),
       bio: z.string().max(500).optional(),
     }))
-    .mutation(async ({ ctx, input }) => {
+    .mutation(({ ctx, input }) => {
       console.log('Updating profile for user:', ctx.userId);
 
       // Update user in database

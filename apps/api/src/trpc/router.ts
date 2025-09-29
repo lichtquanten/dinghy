@@ -1,23 +1,20 @@
-import { z } from 'zod';
-import { router, publicProcedure } from './trpc.js';
-import { userRouter } from './routers/user.router.js'
+import { z } from "zod"
+import { router, publicProcedure } from "./trpc.js"
+import { userRouter } from "./routers/user.router.js"
 
 export const appRouter = router({
-  user: userRouter,
+    user: userRouter,
 
-  health: publicProcedure
-    .query(() => {
-      return {
-        status: 'ok',
-        timestamp: new Date(),
-      };
+    health: publicProcedure.query(() => {
+        return {
+            status: "ok",
+            timestamp: new Date(),
+        }
     }),
 
-  hello: publicProcedure
-    .input(z.string().nullish())
-    .query(({ input }) => {
-      return `Hello there ${input ?? 'World'}!`;
+    hello: publicProcedure.input(z.string().nullish()).query(({ input }) => {
+        return `Hello there ${input ?? "World"}!`
     }),
-});
+})
 
-export type AppRouter = typeof appRouter;
+export type AppRouter = typeof appRouter

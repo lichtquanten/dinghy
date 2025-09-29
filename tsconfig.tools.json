@@ -8,9 +8,7 @@
     },
     "include": [
       "eslint.config.ts",
-      "prettier.config.ts",
       "apps/*/eslint.config.ts",
-      "apps/*/prettier.config.ts",
       "apps/*/vite.config.ts",
       "apps/*/svelte.config.js"
     ],

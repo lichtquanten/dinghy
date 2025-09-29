@@ -3,7 +3,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "dev": "pnpm -r --parallel dev",
+        "dev": "dotenv -e .env -- pnpm -r --parallel dev",
         "build": "pnpm -r build",
         "lint": "pnpm -r --parallel lint",
         "lint:fix": "pnpm -r --parallel lint:fix",
@@ -27,6 +27,7 @@
     "devDependencies": {
         "@eslint/js": "^9.36.0",
         "@types/node": "^20.11.17",
+        "dotenv-cli": "^10.0.0",
         "eslint": "^9.36.0",
         "globals": "^16.4.0",
         "prettier": "^3.6.2",

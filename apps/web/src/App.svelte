@@ -1,7 +1,7 @@
 <script lang="ts">
     import { createTRPCProxyClient, httpBatchLink } from "@trpc/client"
     import viteLogo from "/vite.svg"
-    import type { AppRouter } from "../../api/src/router.ts"
+    import type { AppRouter } from "../../api/src/trpc/router.ts"
     import svelteLogo from "./assets/svelte.svg"
     import Counter from "./lib/Counter.svelte"
 

@@ -2,11 +2,7 @@ import { initTRPC, TRPCError } from "@trpc/server"
 import type { Context } from "./context.js"
 import superjson from "superjson"
 
-const t = initTRPC
-    .context<Context>()
-    .create
-    // {transformer: superjson}
-    ()
+const t = initTRPC.context<Context>().create()
 
 const requireAuth = t.middleware(({ ctx, next }) => {
     if (!ctx.userId) throw new TRPCError({ code: "UNAUTHORIZED" })

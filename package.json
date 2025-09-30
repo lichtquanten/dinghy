@@ -22,7 +22,9 @@
     },
     "dependencies": {
         "@hono/node-server": "^1.19.4",
-        "hono": "^4.9.9"
+        "@trpc/client": "^11.6.0",
+        "hono": "^4.9.9",
+        "svelte-clerk": "^0.17.3"
     },
     "devDependencies": {
         "@eslint/js": "^9.36.0",

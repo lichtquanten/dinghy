@@ -3,8 +3,8 @@ import { serve } from "@hono/node-server"
 import { serveStatic } from "@hono/node-server/serve-static"
 import { trpcServer } from "@hono/trpc-server"
 import { Hono } from "hono"
-import { appRouter } from "./trpc/router.js"
-import { createContext } from "./trpc/context.js"
+import { appRouter } from "./trpc/router.ts"
+import { createContext } from "./trpc/context.ts"
 import { logger } from "hono/logger"
 
 const app = new Hono()

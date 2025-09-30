@@ -1,4 +1,4 @@
-FROM node:22.20.0-alpine AS base
+FROM node:24.9.0-alpine AS base
 RUN corepack enable
 WORKDIR /app
 COPY package.json ./

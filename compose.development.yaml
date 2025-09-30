@@ -1,0 +1,52 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      target: development
+      args:
+        - NODE_ENV=development
+    ports:
+      - "${WEB_PORT:-5173}:${WEB_CONTAINER_PORT:-5173}"
+    env_file:
+      - .env
+    environment:
+      - API_HOST=http://api
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: ${RESTART_POLICY:-unless-stopped}
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:${WEB_CONTAINER_PORT:-5173}/",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    volumes:
+      - ./apps/web/src:/app/apps/web/src
+      - ./apps/web/public:/app/apps/web/public
+      - ./apps/web/index.html:/app/apps/web/index.html
+      - ./packages:/app/packages
+      - /app/node_modules
+      - /app/apps/web/node_modules
+    stdin_open: true
+    tty: true
+
+  api:
+    build:
+      target: development
+    volumes:
+      - ./apps/api/src:/app/apps/api/src
+      - ./packages:/app/packages
+      - /app/node_modules
+      - /app/apps/api/node_modules
+    stdin_open: true
+    tty: true

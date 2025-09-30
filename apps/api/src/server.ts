@@ -6,6 +6,7 @@ import { Hono } from "hono"
 import { appRouter } from "./trpc/router.ts"
 import { createContext } from "./trpc/context.ts"
 import { logger } from "hono/logger"
+import { env } from "./config/env.ts"
 
 const app = new Hono()
 
@@ -26,12 +27,7 @@ app.get("/health", (c) => {
 
 app.use("/*", serveStatic({ root: "./public" }))
 
-serve(
-    {
-        fetch: app.fetch,
-        port: 3000,
-    },
-    (info) => {
-        console.log(`Server is running on http://localhost:${info.port}`)
-    }
-)
+serve({
+    fetch: app.fetch,
+    port: env.API_PORT,
+})

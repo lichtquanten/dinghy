@@ -4,12 +4,12 @@ const envSchema = z.object({
     NODE_ENV: z
         .enum(["development", "production", "test"])
         .default("development"),
-    PORT: z.string().default("3000"),
+
+    API_PORT: z.coerce.number().int().nonnegative().default(3000),
 
     LOG_LEVEL: z.enum(["error", "warn", "info", "debug"]).default("info"),
 
-    MONGODB_URI: z.string(),
-    DB_NAME: z.string().optional(),
+    MONGO_URI: z.string(),
 
     CLERK_SECRET_KEY: z.string(),
     CLERK_PUBLISHABLE_KEY: z.string(),

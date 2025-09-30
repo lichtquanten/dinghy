@@ -1,0 +1,45 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+      target: production
+    ports:
+      - "${API_PORT:-3000}:${API_CONTAINER_PORT:-3000}"
+    env_file:
+      - .env
+    restart: ${RESTART_POLICY:-unless-stopped}
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:${API_CONTAINER_PORT:-3000}/health",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  mongo-express:
+    image: mongo-express:latest
+    ports:
+      - "${MONGO_EXPRESS_PORT:-8081}:8081"
+    environment:
+      - ME_CONFIG_MONGODB_URL=${MONGO_EXPRESS_MONGO_URI}
+      - ME_CONFIG_BASICAUTH_USERNAME=${MONGO_EXPRESS_USERNAME}
+      - ME_CONFIG_BASICAUTH_PASSWORD=${MONGO_EXPRESS_PASSWORD}
+    profiles:
+      - debug-db
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    ports:
+      - "${REDIS_COMMANDER_PORT:-8082}:8081"
+    environment:
+      - REDIS_HOSTS=${REDIS_COMMANDER_HOST}
+    profiles:
+      - debug-cache

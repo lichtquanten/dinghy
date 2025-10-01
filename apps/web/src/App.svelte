@@ -44,8 +44,6 @@
         const result = await client.hello.query("Hono")
         alert(result)
     })
-
-    // alert(await client.hello.query("Hono"))
 </script>
 
 <ClerkProvider publishableKey={env.VITE_CLERK_PUBLISHABLE_KEY}>

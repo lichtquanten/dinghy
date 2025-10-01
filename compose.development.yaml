@@ -34,9 +34,6 @@ services:
       - ./apps/web/src:/app/apps/web/src
       - ./apps/web/public:/app/apps/web/public
       - ./apps/web/index.html:/app/apps/web/index.html
-      - ./packages:/app/packages
-      - /app/node_modules
-      - /app/apps/web/node_modules
     stdin_open: true
     tty: true
 
@@ -45,8 +42,5 @@ services:
       target: development
     volumes:
       - ./apps/api/src:/app/apps/api/src
-      - ./packages:/app/packages
-      - /app/node_modules
-      - /app/apps/api/node_modules
     stdin_open: true
     tty: true

@@ -11,6 +11,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 FROM base AS development
 COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+COPY tsconfig.base.json ./tsconfig.base.json
+COPY apps/web ./apps/web
 EXPOSE 5173
 CMD ["pnpm", "--filter", "web", "run", "dev"]

@@ -5,9 +5,8 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build",
+        "build": "tsc -b && vite build",
         "preview": "vite preview",
-        "typecheck": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
         "format": "prettier --write .",
@@ -15,19 +14,22 @@
         "clean": "rm -rf dist"
     },
     "devDependencies": {
-        "@sveltejs/vite-plugin-svelte": "^6.2.0",
-        "@tsconfig/svelte": "^5.0.5",
-        "eslint-plugin-svelte": "^3.12.4",
-        "svelte": "^5.39.4",
-        "svelte-check": "^4.3.1",
+        "@types/react": "^19.1.16",
+        "@types/react-dom": "^19.1.9",
+        "@vitejs/plugin-react": "^5.0.4",
+        "eslint-plugin-react": "^7.37.5",
+        "eslint-plugin-react-hooks": "^5.2.0",
+        "eslint-plugin-react-refresh": "^0.4.22",
         "typescript": "~5.8.3",
         "vite": "^7.1.7"
     },
     "dependencies": {
+        "@clerk/clerk-react": "^5.49.1",
         "@tailwindcss/vite": "^4.1.13",
         "@trpc/client": "^11.6.0",
+        "react": "^19.1.1",
+        "react-dom": "^19.1.1",
         "superjson": "^2.2.2",
-        "svelte-clerk": "^0.17.3",
         "tailwindcss": "^4.1.13",
         "zod": "^4.1.11"
     }

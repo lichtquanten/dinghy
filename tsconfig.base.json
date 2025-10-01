@@ -1,17 +1,20 @@
 {
-  "compilerOptions": {
-    "composite": true,
-    "declaration": true,
+    "compilerOptions": {
+        "composite": true,
+        "declaration": true,
 
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true,
-    "moduleDetection": "force",
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipLibCheck": true,
+        "moduleDetection": "force",
+        "allowImportingTsExtensions": true,
+        "noEmit": true,
 
-    "esModuleInterop": true,
-    "verbatimModuleSyntax": true,
-    "isolatedModules": true,
+        "esModuleInterop": true,
+        "verbatimModuleSyntax": true,
+        "isolatedModules": true,
 
-    "sourceMap": true
-  }
+        "sourceMap": true
+    },
+    "exclude": ["**/node_modules", "**/dist", "**/build"]
 }

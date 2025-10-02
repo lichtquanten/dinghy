@@ -30,3 +30,5 @@ lerna-debug.log*
 **/dist/
 
 apps/api/public/
+
+judge0.conf

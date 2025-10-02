@@ -23,6 +23,6 @@
         "src/**/*.js",
         "src/**/*.tsx",
         "src/**/*.jsx",
-        "../api/src/trpc/router.ts"
+        "../api/src/trpc/**/*.ts"
     ]
 }

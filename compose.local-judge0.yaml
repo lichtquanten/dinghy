@@ -5,7 +5,7 @@ x-logging: &default-logging
       max-size: 100M
 
 services:
-  server:
+  judge0-server:
     image: judge0/judge0:1.13.1
     volumes:
       - ./judge0.conf:/judge0.conf:ro
@@ -15,12 +15,12 @@ services:
     <<: *default-logging
     restart: always
     depends_on:
-      redis:
+      judge0-redis:
         condition: service_healthy
-      db:
+      judge0-db:
         condition: service_healthy
 
-  workers:
+  judge0-workers:
     image: judge0/judge0:1.13.1
     command: ["./scripts/workers"]
     volumes:
@@ -29,12 +29,12 @@ services:
     <<: *default-logging
     restart: always
     depends_on:
-      redis:
+      judge0-redis:
         condition: service_healthy
-      db:
+      judge0-db:
         condition: service_healthy
 
-  db:
+  judge0-db:
     image: postgres:16.2
     env_file: judge0.conf
     volumes:
@@ -48,7 +48,7 @@ services:
       retries: 5
       start_period: 10s
 
-  redis:
+  judge0-redis:
     image: redis:7.2.4
     command:
       [

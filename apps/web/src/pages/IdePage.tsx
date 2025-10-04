@@ -1,73 +1,28 @@
+// pages/IdePage.tsx
 import { useState } from "react"
 import { Button } from "@workspace/ui/components/button"
 import { Play, Code2 } from "lucide-react"
-import { useSse } from "../hooks/useSse"
-import { submitCode } from "../api/judge0"
+import { useCodeExecution } from "../hooks/useCodeExecution"
 import { DEFAULT_CODE, DEFAULT_LANGUAGE_ID } from "../config/consts"
 import { LanguageSelector } from "../components/LanguageSelector"
 import { CodeEditor } from "../components/CodeEditor"
 import { CodeOutput } from "../components/CodeOutput"
 import { ConnectionStatus } from "../components/ConnectionStatus"
-import type { SubmissionResult } from "../types/judge0"
-import { SseMessageSchema } from "../types/judge0"
 
 export const IdePage = () => {
     const [code, setCode] = useState(DEFAULT_CODE)
     const [languageId, setLanguageId] = useState(DEFAULT_LANGUAGE_ID)
     const [stdin, setStdin] = useState("")
-    const [result, setResult] = useState<SubmissionResult | null>(null)
-    const [isLoading, setIsLoading] = useState(false)
-    const [error, setError] = useState<string | null>(null)
 
-    const { connectionState } = useSse("/api/judge0/stream", {
-        events: ["submission"],
-        parseJson: true,
-        onMessage: (data) => {
-            try {
-                const message = SseMessageSchema.parse(data)
-                if (message.submissionId && message.result) {
-                    console.log(
-                        "Received result for submission:",
-                        message.submissionId
-                    )
-                    const result = message.result
-                    if (result.error) {
-                        setError(result.error)
-                        setIsLoading(false)
-                        return
-                    }
-                    setResult(message.result)
-                    setIsLoading(false)
-                }
-            } catch (err) {
-                console.error("Error parsing SSE message:", err)
-            }
-        },
-    })
+    const { executeCode, result, isLoading, error, isConnected } =
+        useCodeExecution({
+            onTimeout: (submissionId) => {
+                console.error("Execution timeout for submission:", submissionId)
+            },
+        })
 
-    const isConnected = connectionState === "open"
-
-    const handleRunCode = async () => {
-        if (!isConnected) {
-            setError("Not connected to execution server")
-            return
-        }
-
-        setIsLoading(true)
-        setError(null)
-        setResult(null)
-
-        try {
-            const submission = await submitCode(code, languageId, stdin)
-            console.log("Submission created:", submission.submissionId)
-        } catch (err) {
-            setIsLoading(false)
-            if (err instanceof Error) {
-                setError(err.message)
-            } else {
-                setError("An unknown error occurred")
-            }
-        }
+    const handleRunCode = () => {
+        executeCode(code, languageId, stdin)
     }
 
     return (

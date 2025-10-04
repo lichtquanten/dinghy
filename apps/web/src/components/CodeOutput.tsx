@@ -68,26 +68,6 @@ export const CodeOutput = ({ result, isLoading, error }: CodeOutputProps) => {
                                     {result.status?.description}
                                 </Badge>
                             </div>
-                            {result.time && (
-                                <div className="flex items-center gap-2">
-                                    <span className="text-sm text-muted-foreground">
-                                        Time:
-                                    </span>
-                                    <span className="text-sm font-mono">
-                                        {result.time}s
-                                    </span>
-                                </div>
-                            )}
-                            {result.memory && (
-                                <div className="flex items-center gap-2">
-                                    <span className="text-sm text-muted-foreground">
-                                        Memory:
-                                    </span>
-                                    <span className="text-sm font-mono">
-                                        {result.memory} KB
-                                    </span>
-                                </div>
-                            )}
                         </div>
 
                         {/* Standard Output */}

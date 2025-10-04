@@ -1,10 +1,10 @@
 import { defineConfig } from "eslint/config"
-import rootConfig from "../../eslint.config.js"
 import globals from "globals"
+import config from "@workspace/eslint-config/node"
 
 export default defineConfig([
     {
-        extends: [rootConfig],
+        extends: [config],
     },
     {
         files: ["**/*.{js,ts}"],

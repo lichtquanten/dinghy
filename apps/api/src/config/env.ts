@@ -9,10 +9,29 @@ const envSchema = z.object({
 
     LOG_LEVEL: z.enum(["error", "warn", "info", "debug"]).default("info"),
 
-    MONGO_URI: z.string(),
+    MONGO_URI: z.url(),
 
-    CLERK_SECRET_KEY: z.string(),
-    CLERK_PUBLISHABLE_KEY: z.string(),
+    REDIS_URL: z.url(),
+
+    CLERK_SECRET_KEY: z.string().min(1),
+    CLERK_PUBLISHABLE_KEY: z.string().min(1),
+
+    JUDGE0_URL: z.url(),
+    JUDGE0_AUTHENTICATION_HEADER: z.string().min(1),
+    JUDGE0_AUTHENTICATION_TOKEN: z.string().min(1),
+
+    API_URL: z.url(),
+
+    CALLBACK_SECRET: z
+        .string()
+        .length(64, {
+            message:
+                "CALLBACK_SECRET must be exactly 64 hexadecimal characters.",
+        })
+        .regex(/^[0-9a-fA-F]{64}$/, {
+            message:
+                "CALLBACK_SECRET must be composed of valid hex characters.",
+        }),
 })
 
 export const env = envSchema.parse(process.env)

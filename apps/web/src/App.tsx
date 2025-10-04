@@ -1,71 +1,40 @@
-import { useState, useEffect } from "react"
-import {
-    SignedIn,
-    SignedOut,
-    SignInButton,
-    UserButton,
-} from "@clerk/clerk-react"
-import { createTRPCProxyClient, httpBatchLink } from "@trpc/client"
-import reactLogo from "./assets/react.svg"
-import viteLogo from "/vite.svg"
-import "./App.css"
-import type { AppRouter } from "../../api/src/trpc/router.ts"
+// App.tsx
+import { Routes, Route, Navigate } from "react-router-dom"
+import { Protect, useAuth } from "@clerk/clerk-react"
+import { Skeleton } from "@workspace/ui/components/skeleton"
+import { LandingPage } from "./pages/LandingPage"
+import { IdePage } from "./pages/IdePage"
 
-const client = createTRPCProxyClient<AppRouter>({
-    links: [
-        httpBatchLink({
-            url: "/trpc",
-        }),
-    ],
-})
+function RootRedirect() {
+    const { isSignedIn, isLoaded } = useAuth()
 
-function App() {
-    const [count, setCount] = useState(0)
-
-    useEffect(() => {
-        async function fetchHello() {
-            const result = await client.hello.query("Hono")
-            alert(result)
-        }
-        fetchHello()
-    }, [])
-
-    return (
-        <>
-            <header>
-                <SignedOut>
-                    <SignInButton />
-                </SignedOut>
-                <SignedIn>
-                    <UserButton />
-                </SignedIn>
-            </header>
-            <div>
-                <a href="https://vite.dev" target="_blank" rel="noreferrer">
-                    <img src={viteLogo} className="logo" alt="Vite logo" />
-                </a>
-                <a href="https://react.dev" target="_blank" rel="noreferrer">
-                    <img
-                        src={reactLogo}
-                        className="logo react"
-                        alt="React logo"
-                    />
-                </a>
+    if (!isLoaded) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="space-y-2">
+                    <Skeleton className="h-4 w-[250px]" />
+                    <Skeleton className="h-4 w-[200px]" />
+                </div>
             </div>
-            <h1>Vite + React</h1>
-            <div className="card">
-                <button onClick={() => setCount((count) => count + 1)}>
-                    count is {count}
-                </button>
-                <p>
-                    Edit <code>src/App.tsx</code> and save to test HMR
-                </p>
-            </div>
-            <p className="read-the-docs">
-                Click on the Vite and React logos to learn more
-            </p>
-        </>
-    )
+        )
+    }
+
+    return isSignedIn ? <Navigate to="/ide" replace /> : <LandingPage />
 }
 
-export default App
+export function App() {
+    return (
+        <Routes>
+            <Route path="/" element={<RootRedirect />} />
+            <Route
+                path="/ide"
+                element={
+                    <Protect fallback={<Navigate to="/" replace />}>
+                        <IdePage />
+                    </Protect>
+                }
+            />
+            <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+    )
+}

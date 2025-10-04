@@ -13,16 +13,21 @@
         "clean": "rm -rf dist"
     },
     "dependencies": {
+        "@hono-rate-limiter/redis": "^0.1.4",
         "@hono/clerk-auth": "^3.0.3",
-        "@hono/node-server": "^1.19.4",
+        "@hono/node-server": "^1.19.5",
         "@hono/trpc-server": "^0.4.0",
+        "@redis/client": "^5.8.3",
         "@trpc/server": "^11.6.0",
         "hono": "^4.9.9",
+        "hono-rate-limiter": "^0.4.2",
+        "ioredis": "^5.8.0",
+        "rate-limit-redis": "^4.2.2",
         "zod": "^4.1.11"
     },
     "devDependencies": {
-        "@types/node": "^20.19.19",
-        "tsx": "^4.7.1",
-        "typescript": "^5.8.3"
+        "@types/node": "^24.6.2",
+        "tsx": "^4.20.6",
+        "typescript": "^5.9.3"
     }
 }

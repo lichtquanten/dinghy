@@ -66,5 +66,9 @@ services:
       retries: 5
       start_period: 10s
 
+  api:
+    environment:
+      - JUDGE0_URL=http://judge0-server:2358
+
 volumes:
   data:

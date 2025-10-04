@@ -1,5 +1,6 @@
 import { z } from "zod"
 import { Base64 } from "js-base64"
+import type { SUBMISSION_STATUSES } from "../config/consts/judge0"
 
 const b64text = z.string().transform((s) => Base64.decode(s))
 
@@ -25,8 +26,7 @@ export const SubmissionResultSchema = z.object({
     stderr: b64text.optional().nullable(),
     compile_output: b64text.optional().nullable(),
     status: StatusSchema.optional(),
-    time: z.string().optional(),
-    memory: z.number().optional(),
+    error: z.string().optional(),
 })
 export type SubmissionResult = z.infer<typeof SubmissionResultSchema>
 
@@ -35,3 +35,5 @@ export const SseMessageSchema = z.object({
     result: SubmissionResultSchema.optional(),
 })
 export type SseMessage = z.infer<typeof SseMessageSchema>
+
+export type SubmissionStatus = (typeof SUBMISSION_STATUSES)[number]

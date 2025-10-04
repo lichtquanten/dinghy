@@ -1,4 +1,3 @@
-// src/pages/IdePage.tsx
 import { useState } from "react"
 import { Button } from "@workspace/ui/components/button"
 import { Play, Code2 } from "lucide-react"
@@ -20,19 +19,24 @@ export const IdePage = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
-    // Set up SSE connection
     const { connectionState } = useSse("/api/judge0/stream", {
         events: ["submission"],
         parseJson: true,
         onMessage: (data) => {
             try {
-                const parsed = SseMessageSchema.parse(data)
-                if (parsed.submissionId && parsed.result) {
+                const message = SseMessageSchema.parse(data)
+                if (message.submissionId && message.result) {
                     console.log(
                         "Received result for submission:",
-                        parsed.submissionId
+                        message.submissionId
                     )
-                    setResult(parsed.result)
+                    const result = message.result
+                    if (result.error) {
+                        setError(result.error)
+                        setIsLoading(false)
+                        return
+                    }
+                    setResult(message.result)
                     setIsLoading(false)
                 }
             } catch (err) {
@@ -68,7 +72,6 @@ export const IdePage = () => {
 
     return (
         <div className="min-h-screen bg-background">
-            {/* Header */}
             <header className="border-b">
                 <div className="container mx-auto px-4 py-4">
                     <div className="flex items-center justify-between">
@@ -81,7 +84,6 @@ export const IdePage = () => {
                 </div>
             </header>
 
-            {/* Main Content */}
             <main className="container mx-auto px-4 py-6">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[calc(100vh-8rem)]">
                     {/* Left Panel - Editor */}

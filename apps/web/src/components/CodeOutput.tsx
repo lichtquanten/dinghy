@@ -9,6 +9,8 @@ import { Alert, AlertDescription } from "@workspace/ui/components/alert"
 import { Badge } from "@workspace/ui/components/badge"
 import { Loader2, Terminal, AlertCircle, CheckCircle2 } from "lucide-react"
 import type { SubmissionResult } from "../types/judge0"
+import { isSuccess, isError } from "../utils/judge0"
+import type { Status } from "../types/judge0"
 
 interface CodeOutputProps {
     result: SubmissionResult | null
@@ -17,10 +19,9 @@ interface CodeOutputProps {
 }
 
 export const CodeOutput = ({ result, isLoading, error }: CodeOutputProps) => {
-    const getStatusVariant = (statusId?: number) => {
-        if (statusId === 3) return "default" // Accepted
-        if (statusId === 11) return "destructive" // Runtime Error
-        if (statusId === 6) return "destructive" // Compilation Error
+    const getStatusVariant = (status: Status) => {
+        if (isSuccess(status)) return "default"
+        if (isError(status)) return "destructive"
         return "secondary"
     }
 
@@ -55,9 +56,11 @@ export const CodeOutput = ({ result, isLoading, error }: CodeOutputProps) => {
                                     Status:
                                 </span>
                                 <Badge
-                                    variant={getStatusVariant(
-                                        result.status?.id
-                                    )}
+                                    variant={
+                                        result.status
+                                            ? getStatusVariant(result.status)
+                                            : "default"
+                                    }
                                 >
                                     {result.status?.id === 3 && (
                                         <CheckCircle2 className="w-3 h-3 mr-1" />

@@ -13,7 +13,6 @@ node_modules/
 
 # env
 .env
-.env.production
 
 # logs
 logs/
@@ -51,5 +50,3 @@ temp
 **/dist/
 
 apps/api/public/
-
-.env.keys

@@ -25,6 +25,7 @@ export async function generateCallbackUrl(
     const callbackUrl = new URL(env.API_URL)
     callbackUrl.pathname = path.join(
         callbackUrl.pathname,
+        "api",
         "judge0",
         "callback",
         submissionId

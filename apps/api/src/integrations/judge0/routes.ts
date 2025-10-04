@@ -110,16 +110,21 @@ judge0Routes.post("/submissions", requireAuth, rateLimitJudge0, async (c) => {
 })
 
 judge0Routes.all("/*", requireAuth, rateLimitJudge0, (c) => {
+    const headers: Record<string, string | undefined> = {
+        [env.JUDGE0_AUTHENTICATION_HEADER]: env.JUDGE0_AUTHENTICATION_TOKEN,
+        Authorization: undefined,
+        Cookie: undefined,
+    }
+
+    // If using RapidAPI, add the host header
+    if (env.JUDGE0_RAPIDAPI_HOST) {
+        headers["x-rapidapi-host"] = env.JUDGE0_RAPIDAPI_HOST
+    }
     return proxy(
         new URL(c.req.path.replace(/^\/judge0\/?/, ""), env.JUDGE0_URL),
         {
             ...c.req,
-            headers: {
-                [env.JUDGE0_AUTHENTICATION_HEADER]:
-                    env.JUDGE0_AUTHENTICATION_TOKEN,
-                Authorization: undefined,
-                Cookie: undefined,
-            },
+            headers,
         }
     )
 })

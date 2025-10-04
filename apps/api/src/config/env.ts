@@ -19,6 +19,7 @@ const envSchema = z.object({
     JUDGE0_URL: z.url(),
     JUDGE0_AUTHENTICATION_HEADER: z.string().min(1),
     JUDGE0_AUTHENTICATION_TOKEN: z.string().min(1),
+    JUDGE0_RAPIDAPI_HOST: z.string().optional(),
 
     API_URL: z.url(),
 

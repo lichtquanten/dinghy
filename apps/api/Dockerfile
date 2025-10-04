@@ -30,7 +30,7 @@ RUN pnpm --filter web run build
 FROM deps-dev AS build-production
 COPY . .
 RUN --mount=type=secret,id=dotenv_key \
-    export DOTENV_PRIVATE_KEY=$(cat /run/secrets/dotenv_key) && \
+    set -a && . /run/secrets/dotenv_key && set +a && \
     pnpm exec dotenvx run --strict -f .env.production -- pnpm --filter web run build
 
 FROM deps-prod AS host-production

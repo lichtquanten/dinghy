@@ -44,6 +44,6 @@ services:
     volumes:
       - ./apps/api/src:/app/apps/api/src
     environment:
-      - API_URL=http://api:${API_PORT}/api
+      - API_URL=http://api:${API_PORT}
     stdin_open: true
     tty: true

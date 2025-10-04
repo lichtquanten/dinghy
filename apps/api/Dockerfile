@@ -39,5 +39,5 @@ COPY --chown=node:node apps/api ./apps/api/
 COPY --chown=node:node --from=build-production /app/apps/web/dist ./apps/api/public/
 COPY --chown=node:node .env.production ./
 USER node
-EXPOSE 3000
+EXPOSE 80
 CMD ["pnpm", "exec", "dotenvx", "run", "--strict", "-f", ".env.production", "--", "pnpm", "--filter", "api", "run", "start"]

@@ -12,6 +12,9 @@
 node_modules/
 
 # env
+.env/*
+!.env/*.encrypted
+.env.keys
 
 # logs
 logs/
@@ -29,6 +32,3 @@ lerna-debug.log*
 
 apps/api/public/
 
-judge0.conf
-
-.env.keys

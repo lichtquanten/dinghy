@@ -4,14 +4,9 @@ services:
       context: .
       dockerfile: apps/web/Dockerfile
       target: development
-      args:
-        - NODE_ENV=development
     ports:
-      - "${WEB_PORT:-5173}:${WEB_CONTAINER_PORT:-5173}"
-    env_file:
-      - .env
-    environment:
-      - API_HOST=http://api
+      - "${WEB_PORT:-5173}:${WEB_PORT:-5173}"
+    env_file: ${ENV_FILE}
     depends_on:
       api:
         condition: service_healthy
@@ -24,7 +19,7 @@ services:
           "--no-verbose",
           "--tries=1",
           "--spider",
-          "http://localhost:${WEB_CONTAINER_PORT:-5173}/",
+          "http://localhost:${WEB_PORT:-5173}/",
         ]
       interval: 30s
       timeout: 10s
@@ -37,13 +32,20 @@ services:
       - ./packages/ui:/app/packages/ui
     stdin_open: true
     tty: true
+    networks:
+      - app-network
 
   api:
     build:
       target: development
     volumes:
       - ./apps/api/src:/app/apps/api/src
-    environment:
-      - API_URL=http://api:${API_PORT}
     stdin_open: true
     tty: true
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    name: app-network
+    driver: bridge

@@ -13,12 +13,29 @@ services:
       - "2358:2358"
     privileged: true
     <<: *default-logging
-    restart: always
+    restart: ${RESTART_POLICY:-unless-stopped}
     depends_on:
       judge0-redis:
         condition: service_healthy
       judge0-db:
         condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:2358/about",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+    networks:
+      - app-network
 
   judge0-workers:
     image: judge0/judge0:1.13.1
@@ -33,6 +50,8 @@ services:
         condition: service_healthy
       judge0-db:
         condition: service_healthy
+    networks:
+      - app-network
 
   judge0-db:
     image: postgres:16.2
@@ -40,13 +59,15 @@ services:
     volumes:
       - data:/var/lib/postgresql/data/
     <<: *default-logging
-    restart: always
+    restart: ${RESTART_POLICY:-unless-stopped}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 10s
+    networks:
+      - app-network
 
   judge0-redis:
     image: redis:7.2.4
@@ -58,17 +79,20 @@ services:
       ]
     env_file: judge0.conf
     <<: *default-logging
-    restart: always
+    restart: ${RESTART_POLICY:-unless-stopped}
     healthcheck:
       test: ["CMD-SHELL", "redis-cli -a $$REDIS_PASSWORD PING | grep PONG"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 10s
-
-  api:
-    environment:
-      - JUDGE0_URL=http://judge0-server:2358
+    networks:
+      - app-network
 
 volumes:
   data:
+
+networks:
+  app-network:
+    name: app-network
+    driver: bridge

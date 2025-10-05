@@ -86,7 +86,7 @@ export const useCodeExecution = (options?: UseCodeExecutionOptions) => {
                         currentSubmissionId.current = null
                         options?.onTimeout?.(submission.submissionId)
                     }
-                }, env.MAX_EXECUTION_WAIT_TIME * 1000)
+                }, env.VITE_MAX_EXECUTION_WAIT_TIME * 1000)
             } catch (err) {
                 clearExecutionTimeout()
                 setIsLoading(false)

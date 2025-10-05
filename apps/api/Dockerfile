@@ -28,16 +28,24 @@ COPY . .
 RUN pnpm --filter web run build
 
 FROM deps-dev AS build-production
+ARG ENV_FILE_ENCRYPTED
 COPY . .
 RUN --mount=type=secret,id=dotenv_key \
-    set -a && . /run/secrets/dotenv_key && set +a && \
-    pnpm exec dotenvx run --strict -f .env.production -- pnpm --filter web run build
+    set -a && \
+     . /run/secrets/dotenv_key && \
+    eval "$(pnpm exec dotenvx get --format eval --strict -f ${ENV_FILE_ENCRYPTED})" && \
+    set +a && \
+    pnpm --filter web run build
 
 FROM deps-prod AS host-production
+ARG ENV_FILE_ENCRYPTED
 COPY --chown=node:node --from=deps-prod /app/node_modules/ ./node_modules
 COPY --chown=node:node apps/api ./apps/api/
 COPY --chown=node:node --from=build-production /app/apps/web/dist ./apps/api/public/
-COPY --chown=node:node .env.production ./
+COPY --chown=node:node ${ENV_FILE_ENCRYPTED} /app/.env.encrypted
 USER node
 EXPOSE 80
-CMD ["pnpm", "exec", "dotenvx", "run", "--strict", "-f", ".env.production", "--", "pnpm", "--filter", "api", "run", "start"]
+CMD sh -c "set -a && \
+eval \"\$(pnpm exec dotenvx get --format eval --strict -f .env.encrypted)\" && \
+set +a && \
+pnpm --filter api run start"

@@ -4,7 +4,7 @@ import { getConnInfo } from "@hono/node-server/conninfo"
 import { redisClient } from "../infrastructure/redis.ts"
 
 export const rateLimit = rateLimiter({
-    windowMs: 15 * 60 * 1000,
+    windowMs: 60 * 1000,
     limit: 100,
     standardHeaders: "draft-6",
     keyGenerator: (c) => {
@@ -20,8 +20,8 @@ export const rateLimit = rateLimiter({
 })
 
 export const rateLimitJudge0 = rateLimiter({
-    windowMs: 15 * 60 * 1000,
-    limit: 100,
+    windowMs: 60 * 1000,
+    limit: 10,
     standardHeaders: "draft-6",
     keyGenerator: (c) => "judge-" + c.var.userId!,
     store: new RedisStore({

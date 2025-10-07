@@ -1,51 +1,40 @@
 // src/components/CodeEditor.tsx
-import { Textarea } from "@workspace/ui/components/textarea"
+import CodeMirror from "@uiw/react-codemirror"
+import { javascript } from "@codemirror/lang-javascript"
 import {
     Card,
     CardContent,
     CardHeader,
     CardTitle,
 } from "@workspace/ui/components/card"
-import { Label } from "@workspace/ui/components/label"
 
 interface CodeEditorProps {
     code: string
-    stdin: string
     onCodeChange: (value: string) => void
-    onStdinChange: (value: string) => void
 }
 
-export const CodeEditor = ({
-    code,
-    stdin,
-    onCodeChange,
-    onStdinChange,
-}: CodeEditorProps) => {
+export const CodeEditor = ({ code, onCodeChange }: CodeEditorProps) => {
     return (
-        <Card className="h-full">
+        <Card className="flex flex-col h-full">
             <CardHeader>
-                <CardTitle>Code Editor</CardTitle>
+                <CardTitle className="text-lg md:text-xl">
+                    Code Editor
+                </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-                <div className="space-y-2">
-                    <Label htmlFor="code">Source Code</Label>
-                    <Textarea
-                        id="code"
+            <CardContent className="flex flex-col gap-2 flex-1 overflow-auto">
+                <div className="flex-1 border rounded-md overflow-hidden">
+                    <CodeMirror
                         value={code}
-                        onChange={(e) => onCodeChange(e.target.value)}
-                        className="min-h-[400px] font-mono text-sm"
-                        placeholder="Enter your code here..."
-                    />
-                </div>
-
-                <div className="space-y-2">
-                    <Label htmlFor="stdin">Standard Input (optional)</Label>
-                    <Textarea
-                        id="stdin"
-                        value={stdin}
-                        onChange={(e) => onStdinChange(e.target.value)}
-                        className="min-h-[100px] font-mono text-sm"
-                        placeholder="Input for your program..."
+                        height="100%"
+                        extensions={[javascript({ jsx: true })]}
+                        onChange={onCodeChange}
+                        className="h-full text-base"
+                        basicSetup={{
+                            lineNumbers: true,
+                            highlightActiveLineGutter: true,
+                            highlightActiveLine: true,
+                            foldGutter: true,
+                        }}
                     />
                 </div>
             </CardContent>

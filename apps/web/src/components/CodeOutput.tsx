@@ -34,7 +34,9 @@ export const CodeOutput = ({ result, isLoading, error }: CodeOutputProps) => {
                 {error && (
                     <Alert variant="destructive">
                         <AlertCircle className="h-4 w-4" />
-                        <AlertDescription>{error}</AlertDescription>
+                        <AlertDescription>
+                            Failed to connect to server or process request.
+                        </AlertDescription>
                     </Alert>
                 )}
 

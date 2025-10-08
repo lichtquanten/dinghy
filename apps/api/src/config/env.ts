@@ -33,6 +33,8 @@ const envSchema = z.object({
             message:
                 "CALLBACK_SECRET must be composed of valid hex characters.",
         }),
+
+    OLLAMA_API_URL: z.url(),
 })
 
 export const env = envSchema.parse(process.env)

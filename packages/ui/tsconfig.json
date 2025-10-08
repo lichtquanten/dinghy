@@ -5,7 +5,9 @@
         "baseUrl": ".",
         "paths": {
             "@ui/*": ["./src/*"],
-            "@eslint-config/*": ["../eslint-config/*"]
+            "@eslint-config/*": ["../eslint-config/*"],
+            "@workspace/ui/*": ["./src/*"],
+            "@workspace/ui/components/*": ["./src/components*"]
         },
         "outDir": "./dist",
         "verbatimModuleSyntax": false

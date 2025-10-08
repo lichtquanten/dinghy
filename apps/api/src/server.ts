@@ -9,6 +9,8 @@ import { env } from "./config/env.ts"
 import { rateLimit } from "./middleware/rate-limit.ts"
 import { clerkMiddleware } from "@hono/clerk-auth"
 import { judge0Routes } from "./integrations/judge0/routes.ts"
+import { aiRoutes } from "./integrations/ai/routes.ts"
+
 const app = new Hono()
 
 app.use(logger())
@@ -25,6 +27,8 @@ app.use(
 )
 
 app.route("/api/judge0", judge0Routes)
+
+app.route("/api/ai", aiRoutes)
 
 app.get("/api/health", (c) => {
     return c.json({ status: "ok" })

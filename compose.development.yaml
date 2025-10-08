@@ -30,6 +30,7 @@ services:
       - ./apps/web/public:/app/apps/web/public
       - ./apps/web/index.html:/app/apps/web/index.html
       - ./packages/ui:/app/packages/ui
+      - ./packages/ai-models:/app/packages/ai-models
     stdin_open: true
     tty: true
     networks:

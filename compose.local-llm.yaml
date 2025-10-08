@@ -1,0 +1,48 @@
+services:
+  ollama:
+    image: ollama/ollama:${OLLAMA_VERSION:-latest}
+    container_name: ${COMPOSE_PROJECT_NAME:-app}-ollama
+    ports:
+      - "${OLLAMA_PORT:-11434}:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: ${RESTART_POLICY:-unless-stopped}
+    environment:
+      - OLLAMA_KEEP_ALIVE=${OLLAMA_KEEP_ALIVE:-24h}
+      - OLLAMA_HOST=0.0.0.0
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+    networks:
+      - app-network
+
+  ollama-pull:
+    image: ollama/ollama:${OLLAMA_VERSION:-latest}
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_HOST=ollama:11434
+    entrypoint: ["/bin/sh", "-c"]
+    command: >
+      "
+      ollama pull ${OLLAMA_MODEL:-ben1t0/tiny-llm} &&
+      echo 'Model ${OLLAMA_MODEL:-ben1t0/tiny-llm} ready for use'
+      "
+    depends_on:
+      ollama:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: "no"
+
+volumes:
+  ollama_data:
+    name: ${COMPOSE_PROJECT_NAME:-app}-ollama-data
+
+networks:
+  app-network:
+    name: app-network
+    driver: bridge

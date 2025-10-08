@@ -1,0 +1,11 @@
+{
+    "extends": "@workspace/typescript-config/react.json",
+    "compilerOptions": {
+        "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo",
+        "baseUrl": ".",
+        "outDir": "./dist",
+        "verbatimModuleSyntax": false
+    },
+    "include": ["src"],
+    "exclude": ["node_modules", "dist"]
+}

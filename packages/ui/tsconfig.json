@@ -9,8 +9,11 @@
             "@workspace/ui/*": ["./src/*"],
             "@workspace/ui/components/*": ["./src/components*"]
         },
-        "outDir": "./dist",
-        "verbatimModuleSyntax": false
+        "verbatimModuleSyntax": false,
+        "strict": false,
+        "noImplicitAny": false,
+        "strictNullChecks": false,
+        "rootDir": "src"
     },
     "include": ["src"],
     "exclude": ["node_modules", "dist"]

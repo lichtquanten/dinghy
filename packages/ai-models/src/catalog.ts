@@ -1,16 +1,18 @@
-export const modelCatalog = [
-    { id: "gpt-4o", label: "GPT 4o" },
+export const MODEL_DEFINITIONS = [
+    { id: "gpt-5-nano", label: "GPT 5 Nano" },
     { id: "deepseek-chat", label: "DeepSeek" },
     { id: "ben1t0/tiny-llm", label: "Tiny LLM" },
+    { id: "google/codegemma-7b-it", label: "Gemma 7b IT" },
 ] as const
 
-export type ModelId = (typeof modelCatalog)[number]["id"]
-export type Model = (typeof modelCatalog)[number]
+export type ModelDefinition = (typeof MODEL_DEFINITIONS)[number]
+export type ModelId = ModelDefinition["id"]
+export type Model = { id: ModelId; label: string }
 
-export function listModels(): readonly Model[] {
-    return modelCatalog
+export function findModel(id: string): ModelDefinition | undefined {
+    return MODEL_DEFINITIONS.find((m) => m.id === id)
 }
 
-export function isValidModelId(id: string): id is ModelId {
-    return modelCatalog.some((m) => m.id === id)
+export function modelCatalogToString(): string {
+    return MODEL_DEFINITIONS.map((m) => `${m.label} (${m.id})`).join("\n")
 }

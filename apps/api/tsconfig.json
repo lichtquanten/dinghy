@@ -3,12 +3,10 @@
     "compilerOptions": {
         "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo",
         "allowImportingTsExtensions": true,
-        "noEmit": true,
         "paths": {
-            "@/*": ["./*"],
-            "@workspace/ai-models/*": ["../../packages/ai-models/src/*"]
+            "@/*": ["./*"]
         }
     },
-    "include": ["src/**/*"],
+    "include": ["src"],
     "references": [{ "path": "../../packages/ai-models" }]
 }

@@ -4,7 +4,8 @@
     "type": "module",
     "private": true,
     "scripts": {
-        "lint": "eslint . --max-warnings 0"
+        "lint": "eslint . --max-warnings 0",
+        "build": "tsc -b"
     },
     "dependencies": {},
     "devDependencies": {
@@ -15,5 +16,6 @@
         "@workspace/eslint-config": "workspace:*",
         "@workspace/typescript-config": "workspace:*",
         "typescript": "^5.9.2"
-    }
+    },
+    "exports": "./src/catalog.ts"
 }

@@ -1,5 +1,5 @@
 {
-    "name": "web",
+    "name": "@workspace/web",
     "private": true,
     "version": "0.0.0",
     "type": "module",
@@ -28,6 +28,9 @@
         "vite-tsconfig-paths": "^5.1.4"
     },
     "dependencies": {
+        "@workspace/ui": "workspace:*",
+        "@workspace/ai-models": "workspace:*",
+        "@workspace/api": "workspace:*",
         "@ai-sdk/react": "^2.0.60",
         "@clerk/clerk-react": "^5.50.0",
         "@codemirror/lang-javascript": "^6.2.4",

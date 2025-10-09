@@ -10,7 +10,7 @@ export const aiRoutes = new Hono()
 
 aiRoutes.post("/chat", zValidator("json", ChatRequestSchema), (c) => {
     const { messages, model: modelId } = c.req.valid("json")
-    const model = getModel(modelId)
+    const model = getModel(modelId)!
 
     const result = streamText({
         model,

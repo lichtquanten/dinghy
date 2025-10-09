@@ -19,7 +19,8 @@
         "noUnusedParameters": true,
         "erasableSyntaxOnly": true,
         "noFallthroughCasesInSwitch": true,
-        "noUncheckedSideEffectImports": true
+        "noUncheckedSideEffectImports": true,
+        "emitDeclarationOnly": true
     },
     "exclude": ["**/node_modules", "**/dist", "**/build"]
 }

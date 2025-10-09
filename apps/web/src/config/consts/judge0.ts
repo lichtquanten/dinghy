@@ -1,5 +1,5 @@
 import type { ProgrammingLanguage } from "../../types/programmingLanguages"
-import type { SubmissionStatus } from "@/src/types/judge0"
+import type { SubmissionStatus } from "../../types/judge0"
 
 export const PROGRAMMING_LANGUAGES: ProgrammingLanguage[] = [
     { id: 45, name: "Assembly (NASM 2.14.02)" },

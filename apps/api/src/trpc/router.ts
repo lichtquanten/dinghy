@@ -16,5 +16,3 @@ export const appRouter = router({
         return `Hello there ${input ?? "World"}!`
     }),
 })
-
-export type AppRouter = typeof appRouter

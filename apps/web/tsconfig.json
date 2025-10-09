@@ -3,21 +3,9 @@
     "compilerOptions": {
         "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo",
         "types": ["vite/client"],
-        "paths": {
-            "@/*": ["./*"],
-            "@workspace/ui/*": ["../../packages/ui/src/*"],
-            "@workspace/ai-models/*": ["../../packages/ai-models/src/*"]
-        },
-        "allowImportingTsExtensions": true,
-        "noEmit": true
+        "allowImportingTsExtensions": true
     },
-
-    "include": [
-        "src",
-        "../api/src/trpc/**/*.ts",
-        "../api/src/integrations/ai/models.ts",
-        "../api/src/integrations/ai/types.ts"
-    ],
+    "include": ["src"],
     "references": [
         { "path": "../../packages/ui" },
         { "path": "../../packages/ai-models" }

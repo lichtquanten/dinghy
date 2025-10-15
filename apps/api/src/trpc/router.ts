@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { router, publicProcedure } from "./trpc.ts"
+import { router, publicProcedure, protectedProcedure } from "./trpc.ts"
 import { userRouter } from "./routers/user.router.ts"
 
 export const appRouter = router({
@@ -14,5 +14,9 @@ export const appRouter = router({
 
     hello: publicProcedure.input(z.string().nullish()).query(({ input }) => {
         return `Hello there ${input ?? "World"}!`
+    }),
+
+    secret: protectedProcedure.input(z.string().min(1)).query(({ input }) => {
+        return `${input.split("").reverse().join("")}`
     }),
 })

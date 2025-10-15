@@ -5,19 +5,21 @@ import { Skeleton } from "@workspace/ui/components/skeleton"
 import { LandingPage } from "./pages/LandingPage"
 import { IdePage } from "./pages/IdePage"
 
+function AuthLoadingSkeleton() {
+    return (
+        <div className="flex items-center justify-center min-h-screen">
+            <div className="space-y-2">
+                <Skeleton className="h-4 w-[250px]" />
+                <Skeleton className="h-4 w-[200px]" />
+            </div>
+        </div>
+    )
+}
+
 function RootRedirect() {
     const { isSignedIn, isLoaded } = useAuth()
 
-    if (!isLoaded) {
-        return (
-            <div className="flex items-center justify-center min-h-screen">
-                <div className="space-y-2">
-                    <Skeleton className="h-4 w-[250px]" />
-                    <Skeleton className="h-4 w-[200px]" />
-                </div>
-            </div>
-        )
-    }
+    if (!isLoaded) return <AuthLoadingSkeleton />
 
     return isSignedIn ? <Navigate to="/ide" replace /> : <LandingPage />
 }

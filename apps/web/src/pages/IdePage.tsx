@@ -17,7 +17,6 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@workspace/ui/components/carousel"
-
 export const IdePage = () => {
     // State management for the IDE
     const [code, setCode] = useState(DEFAULT_CODE) // The actual code being edited

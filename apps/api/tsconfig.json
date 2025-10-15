@@ -4,7 +4,12 @@
         "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo",
         "allowImportingTsExtensions": true,
         "paths": {
-            "@/*": ["./*"]
+            "@/config/*": ["./src/config/*"],
+            "@/infrastructure/*": ["./src/infrastructure/*"],
+            "@/integrations/*": ["./src/integrations/*"],
+            "@/middleware/*": ["./src/middleware/*"],
+            "@/trpc/*": ["./src/trpc/*"],
+            "@/types/*": ["./src/types/*"]
         }
     },
     "include": ["src"],

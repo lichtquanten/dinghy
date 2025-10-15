@@ -1,10 +1,10 @@
 // hooks/useCodeExecution.ts
 import { useState, useRef, useEffect, useCallback } from "react"
 import { useSse } from "./useSse"
-import { submitCode } from "../api/judge0"
-import type { SubmissionResult } from "../types/judge0"
-import { SseMessageSchema } from "../types/judge0"
-import { env } from "../config/env"
+import { submitCode } from "@/api/judge0"
+import type { SubmissionResult } from "@/types/judge0"
+import { SseMessageSchema } from "@/types/judge0"
+import { env } from "@/config/env"
 
 interface UseCodeExecutionOptions {
     onTimeout?: (submissionId: string) => void

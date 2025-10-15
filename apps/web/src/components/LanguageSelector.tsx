@@ -6,7 +6,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@workspace/ui/components/select"
-import { PROGRAMMING_LANGUAGES } from "../config/consts"
+import { PROGRAMMING_LANGUAGES } from "@/config/consts"
 
 interface LanguageSelectorProps {
     value: number

@@ -2,14 +2,14 @@
 import { useState } from "react"
 import { Button } from "@workspace/ui/components/button"
 import { Play, Code2 } from "lucide-react"
-import { useCodeExecution } from "../hooks/useCodeExecution"
-import { DEFAULT_CODE, DEFAULT_LANGUAGE_ID } from "../config/consts"
-import { LanguageSelector } from "../components/LanguageSelector"
-import { CodeEditor } from "../components/CodeEditor"
-import { StdinInput } from "../components/StdinInput"
-import { CodeOutput } from "../components/CodeOutput"
-import { ConnectionStatus } from "../components/ConnectionStatus"
-import { AiChat } from "../components/AiChat"
+import { useCodeExecution } from "@/hooks/useCodeExecution"
+import { DEFAULT_CODE, DEFAULT_LANGUAGE_ID } from "@/config/consts"
+import { LanguageSelector } from "@/components/LanguageSelector"
+import { CodeEditor } from "@/components/CodeEditor"
+import { StdinInput } from "@/components/StdinInput"
+import { CodeOutput } from "@/components/CodeOutput"
+import { ConnectionStatus } from "@/components/ConnectionStatus"
+import { AiChat } from "@/components/AiChat"
 import {
     Carousel,
     CarouselContent,

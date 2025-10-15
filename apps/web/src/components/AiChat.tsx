@@ -36,7 +36,7 @@ import {
     SourcesTrigger,
 } from "@workspace/ui/components/ai-elements/sources"
 import { Loader } from "@workspace/ui/components/ai-elements/loader"
-import { models } from "../api/ai.ts"
+import { models } from "@/api/ai.ts"
 
 export const AiChat = () => {
     const [input, setInput] = useState("")

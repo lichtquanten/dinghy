@@ -5,7 +5,7 @@ import { openai } from "@ai-sdk/openai"
 import { deepseek } from "@ai-sdk/deepseek"
 import { createOllama } from "ollama-ai-provider-v2"
 import { deepinfra } from "@ai-sdk/deepinfra"
-import { env } from "../../config/env.ts"
+import { env } from "@/config/env.ts"
 
 const ollama = createOllama({ baseURL: env.OLLAMA_API_URL })
 

@@ -8,9 +8,9 @@ import {
 import { Alert, AlertDescription } from "@workspace/ui/components/alert"
 import { Badge } from "@workspace/ui/components/badge"
 import { Loader2, Terminal, AlertCircle, CheckCircle2 } from "lucide-react"
-import type { SubmissionResult } from "../types/judge0"
-import { isSuccess, isError } from "../utils/judge0"
-import type { Status } from "../types/judge0"
+import type { SubmissionResult } from "@/types/judge0"
+import { isSuccess, isError } from "@/utils/judge0"
+import type { Status } from "@/types/judge0"
 
 interface CodeOutputProps {
     result: SubmissionResult | null

@@ -1,5 +1,5 @@
 import { createClient } from "@redis/client"
-import { env } from "../config/env.ts"
+import { env } from "@/config/env.ts"
 
 export const redisClient = createClient({ url: env.REDIS_URL })
 await redisClient.connect()

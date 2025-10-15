@@ -1,6 +1,6 @@
 import { z } from "zod"
 import { Base64 } from "js-base64"
-import type { SUBMISSION_STATUSES } from "../config/consts/judge0"
+import type { SUBMISSION_STATUSES } from "@/config/consts/judge0"
 
 const b64text = z.string().transform((s) => Base64.decode(s))
 

@@ -1,5 +1,5 @@
-import { StatusId } from "../config/consts/judge0"
-import type { Status } from "../types/judge0"
+import { StatusId } from "@/config/consts/judge0"
+import type { Status } from "@/types/judge0"
 
 export const isRuntimeError = (status: Status) => {
     if (!status.id) return false

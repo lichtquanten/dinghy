@@ -2,7 +2,7 @@
 import type { ModelId } from "@workspace/ai-models"
 import { type Model } from "@workspace/ai-models"
 
-import { env } from "../config/env.ts"
+import { env } from "@/config/env.ts"
 
 function createModel<T extends ModelId>(id: T, label: string): Model {
     return { id, label }

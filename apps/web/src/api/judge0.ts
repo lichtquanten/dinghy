@@ -1,6 +1,6 @@
 import ky from "ky"
-import type { SubmissionRequest, SubmissionAck } from "../types/judge0"
-import { SubmissionAckSchema } from "../types/judge0"
+import type { SubmissionRequest, SubmissionAck } from "@/types/judge0"
+import { SubmissionAckSchema } from "@/types/judge0"
 import { Base64 } from "js-base64"
 
 const judge0Client = ky.create({

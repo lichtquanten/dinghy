@@ -1,7 +1,7 @@
 import { rateLimiter, type Store } from "hono-rate-limiter"
 import { RedisStore } from "rate-limit-redis"
 import { getConnInfo } from "@hono/node-server/conninfo"
-import { redisClient } from "@/infrastructure/redis.ts"
+import { redisClient } from "#infrastructure/redis.ts"
 
 export const rateLimit = rateLimiter({
     windowMs: 60 * 1000,

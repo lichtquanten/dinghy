@@ -41,5 +41,13 @@
         ".": {
             "types": "./src/index.ts"
         }
+    },
+    "imports": {
+        "#config/*": "./src/config/*",
+        "#infrastructure/*": "./src/infrastructure/*",
+        "#integrations/*": "./src/integrations/*",
+        "#middleware/*": "./src/middleware/*",
+        "#trpc/*": "./src/trpc/*",
+        "#types/*": "./src/types/*"
     }
 }

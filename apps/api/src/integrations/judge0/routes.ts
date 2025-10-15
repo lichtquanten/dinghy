@@ -1,10 +1,10 @@
 import { Hono } from "hono"
 import { streamSSE } from "hono/streaming"
 import { proxy } from "hono/proxy"
-import { env } from "@/config/env.ts"
-import { redisClient, KEYS } from "@/infrastructure/redis.ts"
-import { requireAuth } from "@/middleware/auth.ts"
-import { rateLimitJudge0 } from "@/middleware/rate-limit.ts"
+import { env } from "#config/env.ts"
+import { redisClient, KEYS } from "#infrastructure/redis.ts"
+import { requireAuth } from "#middleware/auth.ts"
+import { rateLimitJudge0 } from "#middleware/rate-limit.ts"
 import {
     generateSubmissionId,
     generateCallbackUrl,

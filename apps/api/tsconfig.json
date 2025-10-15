@@ -2,15 +2,7 @@
     "extends": "@workspace/typescript-config/node.json",
     "compilerOptions": {
         "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo",
-        "allowImportingTsExtensions": true,
-        "paths": {
-            "@/config/*": ["./src/config/*"],
-            "@/infrastructure/*": ["./src/infrastructure/*"],
-            "@/integrations/*": ["./src/integrations/*"],
-            "@/middleware/*": ["./src/middleware/*"],
-            "@/trpc/*": ["./src/trpc/*"],
-            "@/types/*": ["./src/types/*"]
-        }
+        "allowImportingTsExtensions": true
     },
     "include": ["src"],
     "references": [{ "path": "../../packages/ai-models" }]

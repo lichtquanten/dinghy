@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom"
 import { Protect, useAuth } from "@clerk/clerk-react"
 import { Skeleton } from "@workspace/ui/components/skeleton"
 import { LandingPage } from "./pages/LandingPage"
-import { IdePage } from "./pages/IdePage"
+import { StudioPage } from "./pages/StudioPage"
 
 function AuthLoadingSkeleton() {
     return (
@@ -21,7 +21,7 @@ function RootRedirect() {
 
     if (!isLoaded) return <AuthLoadingSkeleton />
 
-    return isSignedIn ? <Navigate to="/ide" replace /> : <LandingPage />
+    return isSignedIn ? <Navigate to="/studio" replace /> : <LandingPage />
 }
 
 export function App() {
@@ -29,10 +29,10 @@ export function App() {
         <Routes>
             <Route path="/" element={<RootRedirect />} />
             <Route
-                path="/ide"
+                path="/studio"
                 element={
                     <Protect fallback={<Navigate to="/" replace />}>
-                        <IdePage />
+                        <StudioPage />
                     </Protect>
                 }
             />

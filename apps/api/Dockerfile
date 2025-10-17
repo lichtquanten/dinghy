@@ -8,10 +8,7 @@ FROM base AS deps
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/api/package.json ./apps/api/
 COPY apps/web/package.json ./apps/web/
-COPY packages/ui/package.json ./packages/ui/
-COPY packages/ai-models/package.json ./packages/ai-models/
-COPY packages/eslint-config/package.json ./packages/eslint-config/
-COPY packages/typescript-config/package.json ./packages/typescript-config/
+COPY packages/*/package.json packages/
 
 FROM deps AS deps-dev
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile

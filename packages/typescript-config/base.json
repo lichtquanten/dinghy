@@ -20,7 +20,8 @@
         "erasableSyntaxOnly": true,
         "noFallthroughCasesInSwitch": true,
         "noUncheckedSideEffectImports": true,
-        "emitDeclarationOnly": true
+        "emitDeclarationOnly": true,
+        "allowImportingTsExtensions": true
     },
     "exclude": ["**/node_modules", "**/dist", "**/build"]
 }

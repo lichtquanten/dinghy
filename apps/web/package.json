@@ -39,6 +39,7 @@
         "@workspace/ai-models": "workspace:*",
         "@workspace/api": "workspace:*",
         "@workspace/ui": "workspace:*",
+        "@workspace/code-languages": "workspace:*",
         "ai": "^5.0.60",
         "js-base64": "^3.7.8",
         "ky": "^1.11.0",

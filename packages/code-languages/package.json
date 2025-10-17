@@ -1,0 +1,33 @@
+{
+    "name": "@workspace/code-languages",
+    "version": "0.0.0",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "lint": "eslint . --max-warnings 0",
+        "build": "tsc -b"
+    },
+    "dependencies": {
+        "@codemirror/lang-cpp": "^6.0.3",
+        "@codemirror/lang-go": "^6.0.1",
+        "@codemirror/lang-java": "^6.0.2",
+        "@codemirror/lang-javascript": "^6.2.4",
+        "@codemirror/lang-php": "^6.0.2",
+        "@codemirror/lang-python": "^6.2.1",
+        "@codemirror/lang-rust": "^6.0.2",
+        "@codemirror/lang-sql": "^6.10.0",
+        "@codemirror/language": "^6.11.3"
+    },
+    "devDependencies": {
+        "@types/node": "^20.19.9",
+        "@types/react": "^19.1.9",
+        "@types/react-dom": "^19.1.7",
+        "@types/react-syntax-highlighter": "^15.5.13",
+        "@workspace/eslint-config": "workspace:*",
+        "@workspace/typescript-config": "workspace:*",
+        "typescript": "^5.9.2"
+    },
+    ".": "./src/index.ts",
+    "./judge0": "./src/judge0.ts",
+    "./codemirror": "./src/codemirror.ts"
+}

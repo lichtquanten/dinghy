@@ -28,6 +28,7 @@
         "hono-rate-limiter": "^0.4.2",
         "ioredis": "^5.8.0",
         "@workspace/ai-models": "workspace:*",
+        "@workspace/code-languages": "workspace:*",
         "ollama-ai-provider-v2": "^1.4.1",
         "rate-limit-redis": "^4.2.2",
         "zod": "^4.1.11"

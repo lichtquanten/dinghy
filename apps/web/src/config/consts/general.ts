@@ -1,4 +1,6 @@
-export const DEFAULT_LANGUAGE_ID = 50 // C (GCC 9.2.0)
+import type { CodeLanguageKey } from "@workspace/code-languages"
+
+export const DEFAULT_CODE_LANGUAGE: CodeLanguageKey = "python"
 
 export const DEFAULT_CODE = `#include <stdio.h>
 

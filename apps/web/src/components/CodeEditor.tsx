@@ -1,19 +1,26 @@
 // src/components/CodeEditor.tsx
 import CodeMirror from "@uiw/react-codemirror"
-import { javascript } from "@codemirror/lang-javascript"
 import {
     Card,
     CardContent,
     CardHeader,
     CardTitle,
 } from "@workspace/ui/components/card"
+import { type CodeLanguageKey } from "@workspace/code-languages"
 
 interface CodeEditorProps {
     code: string
     onCodeChange: (value: string) => void
+    language: CodeLanguageKey
 }
+import { useCodeLanguage } from "@/hooks/useCodeLanguage"
 
-export const CodeEditor = ({ code, onCodeChange }: CodeEditorProps) => {
+export const CodeEditor = ({
+    code,
+    onCodeChange,
+    language,
+}: CodeEditorProps) => {
+    const { data: languageSupport } = useCodeLanguage(language)
     return (
         <Card className="flex flex-col h-full">
             <CardHeader>
@@ -26,7 +33,7 @@ export const CodeEditor = ({ code, onCodeChange }: CodeEditorProps) => {
                     <CodeMirror
                         value={code}
                         height="100%"
-                        extensions={[javascript({ jsx: true })]}
+                        extensions={languageSupport ? [languageSupport] : []}
                         onChange={onCodeChange}
                         className="h-full text-base"
                         basicSetup={{

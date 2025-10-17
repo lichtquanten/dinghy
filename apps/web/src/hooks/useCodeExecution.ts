@@ -5,6 +5,7 @@ import { submitCode } from "@/api/judge0"
 import type { SubmissionResult } from "@/types/judge0"
 import { SseMessageSchema } from "@/types/judge0"
 import { env } from "@/config/env"
+import { getJudge0Id, type CodeLanguageKey } from "@workspace/code-languages"
 
 interface UseCodeExecutionOptions {
     onTimeout?: (submissionId: string) => void
@@ -57,7 +58,7 @@ export const useCodeExecution = (options?: UseCodeExecutionOptions) => {
     })
 
     const executeCode = useCallback(
-        async (code: string, languageId: number, stdin: string) => {
+        async (code: string, language: CodeLanguageKey, stdin: string) => {
             const isConnected = connectionState === "open"
 
             if (!isConnected) {
@@ -71,8 +72,10 @@ export const useCodeExecution = (options?: UseCodeExecutionOptions) => {
             setError(null)
             setResult(null)
 
+            const judge0Id = getJudge0Id(language)
+
             try {
-                const submission = await submitCode(code, languageId, stdin)
+                const submission = await submitCode(code, judge0Id, stdin)
                 currentSubmissionId.current = submission.submissionId
 
                 timeoutRef.current = setTimeout(() => {

@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Button } from "@workspace/ui/components/button"
 import { Play } from "lucide-react"
 import { useCodeExecution } from "@/hooks/useCodeExecution"
-import { DEFAULT_CODE, DEFAULT_LANGUAGE_ID } from "@/config/consts"
+import { DEFAULT_CODE, DEFAULT_CODE_LANGUAGE } from "@/config/consts"
 import { LanguageSelector } from "@/components/LanguageSelector"
 import { CodeEditor } from "@/components/CodeEditor"
 import { StdinInput } from "@/components/StdinInput"
@@ -11,7 +11,7 @@ import { ConnectionStatus } from "@/components/ConnectionStatus"
 
 export const IdePanel = () => {
     const [code, setCode] = useState(DEFAULT_CODE)
-    const [languageId, setLanguageId] = useState(DEFAULT_LANGUAGE_ID)
+    const [codeLanguage, setCodeLanguage] = useState(DEFAULT_CODE_LANGUAGE)
     const [stdin, setStdin] = useState("")
 
     const { executeCode, result, isLoading, error, isConnected } =
@@ -22,7 +22,7 @@ export const IdePanel = () => {
         })
 
     const handleRunCode = () => {
-        executeCode(code, languageId, stdin)
+        executeCode(code, codeLanguage, stdin)
     }
 
     return (
@@ -32,8 +32,8 @@ export const IdePanel = () => {
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:justify-between">
                     <div className="w-full sm:w-auto">
                         <LanguageSelector
-                            value={languageId}
-                            onChange={setLanguageId}
+                            language={codeLanguage}
+                            onChange={setCodeLanguage}
                         />
                     </div>
 
@@ -60,7 +60,11 @@ export const IdePanel = () => {
             {/* Code Editor */}
             <section className="min-h-0 flex flex-col">
                 <div className="min-h-0 flex-1 overflow-auto rounded-md border">
-                    <CodeEditor code={code} onCodeChange={setCode} />
+                    <CodeEditor
+                        code={code}
+                        onCodeChange={setCode}
+                        language={codeLanguage}
+                    />
                 </div>
             </section>
 

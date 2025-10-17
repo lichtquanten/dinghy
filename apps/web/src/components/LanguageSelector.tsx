@@ -6,31 +6,32 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@workspace/ui/components/select"
-import { PROGRAMMING_LANGUAGES } from "@/config/consts"
+
+import { CODE_LANGUAGES, type CodeLanguageKey } from "@workspace/code-languages"
 
 interface LanguageSelectorProps {
-    value: number
-    onChange: (value: number) => void
+    language: CodeLanguageKey
+    onChange: (value: CodeLanguageKey) => void
 }
 
 export const LanguageSelector = ({
-    value,
+    language,
     onChange,
 }: LanguageSelectorProps) => {
     return (
         <div className="space-y-2">
             <label className="text-sm font-medium">Language</label>
             <Select
-                value={value.toString()}
-                onValueChange={(v) => onChange(Number(v))}
+                value={language}
+                onValueChange={(v: CodeLanguageKey) => onChange(v)}
             >
                 <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select a language" />
                 </SelectTrigger>
                 <SelectContent>
-                    {PROGRAMMING_LANGUAGES.map((lang) => (
-                        <SelectItem key={lang.id} value={lang.id.toString()}>
-                            {lang.name}
+                    {CODE_LANGUAGES.map((lang) => (
+                        <SelectItem key={lang.key} value={lang.key}>
+                            {lang.label}
                         </SelectItem>
                     ))}
                 </SelectContent>

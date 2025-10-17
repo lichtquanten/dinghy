@@ -27,7 +27,7 @@
         "@workspace/typescript-config": "workspace:*",
         "typescript": "^5.9.2"
     },
-    ".": "./src/index.ts",
-    "./judge0": "./src/judge0.ts",
-    "./codemirror": "./src/codemirror.ts"
+    "exports": {
+        ".": "./src/index.ts"
+    }
 }

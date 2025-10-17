@@ -24,23 +24,23 @@
         "@dotenvx/dotenvx": "^1.51.0",
         "@hono/node-server": "^1.19.5",
         "@trpc/client": "^11.6.0",
-        "hono": "^4.9.9"
+        "hono": "^4.10.0"
     },
     "devDependencies": {
         "@eslint/js": "^9.37.0",
-        "@types/node": "^24.6.2",
-        "@typescript-eslint/utils": "^8.45.0",
+        "@types/node": "^24.8.0",
+        "@typescript-eslint/utils": "^8.46.1",
         "@workspace/eslint-config": "workspace:*",
         "@workspace/typescript-config": "workspace:*",
         "dotenv-cli": "^10.0.0",
         "eslint": "^9.37.0",
-        "eslint-plugin-react-refresh": "^0.4.23",
+        "eslint-plugin-react-refresh": "^0.4.24",
         "globals": "^16.4.0",
         "prettier": "^3.6.2",
         "prettier-plugin-svelte": "^3.4.0",
         "tsx": "^4.20.6",
         "typescript": "^5.9.3",
-        "typescript-eslint": "^8.45.0"
+        "typescript-eslint": "^8.46.1"
     },
     "pnpm": {
         "onlyBuiltDependencies": [

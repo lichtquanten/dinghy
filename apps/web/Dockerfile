@@ -8,10 +8,10 @@ FROM base AS deps
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/web/package.json ./apps/web/
 COPY packages/*/package.json packages/
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --filter web --filter ui --filter ai-models
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 FROM base AS development
-COPY --from=deps /app/node_modules/ ./node_modules/
+COPY --from=deps /app/ ./
 COPY apps/web/ ./apps/web/
 COPY packages/ ./packages/
 EXPOSE 5173

@@ -13,9 +13,12 @@ node_modules/
 
 # env
 .env/*
-!.env/*.encrypted
-!.env/.env.example
-.env.keys
+.env/source/*
+!.env/
+!.env/source/
+!.env/source/
+!.env/source/*.encrypted
+!.env/source/*.example
 
 # logs
 logs/

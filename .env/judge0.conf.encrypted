@@ -1,0 +1,365 @@
+#/-------------------[DOTENV_PUBLIC_KEY]--------------------/
+#/            public-key encryption for .env files          /
+#/       [how it works](https://dotenvx.com/encryption)     /
+#/----------------------------------------------------------/
+DOTENV_PUBLIC_KEY_JUDGE0.CONF="0379cdae078c760957e02b9b05ff3659ca94a5e0bba1b8088545830ae1717fb104"
+
+# judge0.conf
+################################################################################
+# Judge0 Configuration File
+################################################################################
+# Judge0 is a highly configurable which allows you to use it for many
+# different use-cases. Please, before deploying Judge0 take a look at this
+# configuration file that is divided in several logical sections that will help
+# you understand what can you do with Judge0.
+#
+# This default configuration file is designed to work out of the box for you and
+# you can start with it when deploying Judge0 on your server.
+#
+# If you have any questions please don't hasitate to send an email or open an
+# issue on the GitHub page of the project.
+
+
+################################################################################
+# Judge0 Server Configuration
+################################################################################
+# Enable or disable Judge0 Telemetry.
+# Read more about it here: https://github.com/judge0/judge0/blob/master/TELEMETRY.md
+# Default: true
+JUDGE0_TELEMETRY_ENABLE=encrypted:BAgkHexwQZQch3R1m0nO44ff0fjJJ1d/NyENbF07kDgqzhFk9foshYUF6Xfy1wkLAH6XJQnHjRJmcPc+QUq+D6E78Exps4Px9Njf3ZMLtxM/dndQmxYEivdLo//4H/FtolUzUFGa
+
+# Automatically restart Judge0 server if it fails to start.
+# Default: 10
+RESTART_MAX_TRIES=encrypted:BLRxyw+9DQ2cjfYPaohS/dfccqOz0151e00onrs/vUQtm9xxs2+42CmNKrBsnDWLgS1ukzXYP6N7eam3Tj+uSyOYo7pg8Hqv6sSo2qYJu8ycEo3XRLtBTZSDpWfLKX57gw==
+
+# Maintenance mode is a mode in which clients cannot
+# create or delete submissions while maintenance is enabled.
+# Default: false
+MAINTENANCE_MODE=encrypted:BBDL82yZ+d0FFjsvgUXGBnlen5rdhcGae31f2h5sV9sJiwbRyAoeMfD5x82ouliv87kYLXCMrFGjSKuxlhl/2isHdhQgkao4wDw2Za857Lyu6TbQ7BMXynjCWKqMk1sy1A==
+
+# Set custom maintenance message that will be returned to clients
+# who try to create or delete submisions.
+# Default: Judge0 is currently in maintenance.
+MAINTENANCE_MESSAGE=encrypted:BNG3/21ncYW9WgGcJh4alfl9/+PnExwpPyR+PWhOBG8x6ivjZ5HiZPIfP65IfzO0C6w8++FJYfNQY1UltGlcy3MDfQbW/5XuqZSusJKIBWF0Ip2pkSWZZ4WgYSD50eIZ/A==
+
+# If enabled user can request to synchronically wait for
+# submission result on submission create.
+# Default: true, i.e. user can request to wait for the result
+ENABLE_WAIT_RESULT=encrypted:BD1GKdNy+eJFqSA+M1SOJDX+zL7UPgzlsXPlq6LeXuuPks1G7l3RbMeRVVnGFxunLtOComOWeu8elD9lXz7BEt6lj73jYDD+HKhSaupwpDll1RR1rbodS7vJEYdNyHAZPw==
+
+# If enabled user is allowed to set custom compiler options.
+# Default: true
+ENABLE_COMPILER_OPTIONS=encrypted:BLSe7VP00MsRla6p4vrOPJCjvViXhW0ylzHo20XAOCXYysH4Bieem8AAEMoNL6+6tKIT/JaUuX15AmVSP6VXfJ6jDS6cRU3BMHhVnyGP6gbO1zNvetCZc8meRX+Hlouadw==
+
+# List language names, separated by space, for which setting compiler options is allowed.
+# Note that ENABLE_COMPILER_OPTIONS has higher priority, so this option will be
+# ignored if setting compiler options is disabled with ENABLE_COMPILER_OPTIONS.
+# For example, ALLOWED_LANGUAGES_FOR_COMPILER_OPTIONS="C C++ Java" would only
+# allow setting compiler options for languages C, C++ and Java.
+# Default: empty - for every compiled language setting compiler options is allowed.
+ALLOWED_LANGUAGES_FOR_COMPILER_OPTIONS=encrypted:BBxSb9OrAV3m7kpzAtpcfKi6qsaqvkmG+I/Y3bafUT9iE/rySeEKOXSNK3nduR3QDRevzX2iUyDsQmitYcmUf7q7z8MHkrVJvuELoW7E8kdk6nWeCGatzzwr+2aaf8vrPQ==
+
+# If enabled user is allowed to set custom command line arguments.
+# Default: true
+ENABLE_COMMAND_LINE_ARGUMENTS=encrypted:BAA3XNKyoOaj+bJCUmbiuX2i9vrPcAxj+bFkNTrOhK3PLN1iCTFQt2XuAwsIkTk5lWf71zjBFkEQvubyn1uch4OqoK3ED6U4iSypgOZ0XlRV800V/ABWPTUzhyRLkSwqrw==
+
+# If enabled autorized users can delete a submission.
+# Default: false
+ENABLE_SUBMISSION_DELETE=encrypted:BFMSjCeAE3jFgXHrCc6VJmOgzmJgh6paPUKeXDjXFUpQPdv+dmyl6dvg3oG2QpERlBCTsAYBv3uI3OQKgcSJ0mhp7AS8G4vepGaakfjvew3XxAjgsFkAEz8UaL/j1Z0XgA==
+
+# If enabled user can GET and POST batched submissions.
+# Default: true
+ENABLE_BATCHED_SUBMISSIONS=encrypted:BDURmJCPte9AcvKoM8TJQRQXiO77PVRuWzkaVFrRpIoLGFccrvkR8imHUiouP5e9FxLMSwPTVMBEr0eVng/cIHS0rgDZL2zDr6Mc1edEYOYgludKTGmNJP8GlTOA9W9Bkw==
+
+# Maximum number of submissions that can be created or get in a batch.
+# Default: 20
+MAX_SUBMISSION_BATCH_SIZE=encrypted:BCMbsHioK9e6JyNQmCu0lHjJS94qCI0GGZDaDnZD3HjqHTP8AeFoFlEzMU+4aMH0XDFpwdPy1XlA3/9BZlw6lR7A1V2hVXM5lI8ENXa+lBC20fD3DfA/F+w9eBUK7eK9Dg==
+
+# If enabled user can use callbacks.
+# Default: true
+ENABLE_CALLBACKS=encrypted:BFAkUmEqCWF5slNej9yN7m8KLgL4iEt71tCnLGEVhdMImLl0kJnP+TWWBkRCmQaReIBExBRWgNSEFVffRSwXEfg2/LeZDWNAx+VnnvPjKODlsSD6oTuhW+pMhfkJsmybbg==
+
+# Maximum number of callback tries before giving up.
+# Default: 3
+CALLBACKS_MAX_TRIES=encrypted:BKC1aj/dm53TZWwtCOs41RkPPg3QcRqWSr3uG5RKPTNWY729q4uot96BNlfbi16ZZnLXWNkymSrimZi7cuaeAW2Iq2oz8hRvKUhM3B5A2KVJbnZPtCliPpsSQEcHfzQi8g==
+
+# Timeout callback call after this many seconds.
+# Default: 5
+CALLBACKS_TIMEOUT=encrypted:BKpR6ABtQfqORPdoK5BOKige96x2EUkqsYT/kzMUeHtSZ9RaEbvrw9U+gJvZkYnf7S9Fiiyr7QwJncIQAJD8xnvNovF5HE0AcJQzUzTchPFrOwo2xrpl7k3LDkTNJXSCQQ==
+
+# If enabled user can preset additional files in the sandbox.
+# Default: true
+ENABLE_ADDITIONAL_FILES=encrypted:BBu+8HdtrKW+/eJ4WgUgUM34IdV6NyPs1nuODj4/OIm5Ow/V5ptX/e2DjgfZnPefPIOTqHL5CoC8IqWsB3VuENuibrDMHnmrk0naxdIhvONbOdFWkRMtgk6tR8nTpHIw9A==
+
+# Duration (in seconds) of submission cache. Decimal numbers are allowed.
+# Set to 0 to turn of submission caching. Note that this does not apply to
+# batched submissions.
+# Default: 1
+SUBMISSION_CACHE_DURATION=encrypted:BFlbTA5k1EHT/WMRwUyXLomvVQHqxikIoBHB7z8rOB5FrIpWmsRx0NooN+0crKOGhVfiRjtX7yoNnJqxwfHtTxYbPTLx7L4pDvmJ1V5vVGbmVG5imsKL2ORy7ANvLI16pg==
+
+# If true the documentation page will be used as a homepage, otherwise, the
+# homepage will be empty. You can always access the documentation page via /docs.
+# Default: false
+USE_DOCS_AS_HOMEPAGE=encrypted:BDrSNHfwtALvEQ4wIkVPcHNAhSN6+/NRvEIg5AuErjOtsvXnh9ESBC0myw/o+5ajyiQ+TpqWOdN3qgj8seEyPScdwTeUiyk21oFpz5mbYMhcfR6xgnc4/k21mHjrSgxkwA==
+
+
+################################################################################
+# Judge0 Workers Configuration
+################################################################################
+# Specify polling frequency in seconds. Decimal numbers are allowed.
+# Default: 0.1
+INTERVAL=encrypted:BMaDHHCX0LmacD1VAjc5i9qygi+IxPvSjIGxGCvpRO91GlYQ8ibQ1jr0bnQmHHSQCC2lAYv7pOCCxa9/heAx1Ix8z1c5asIjxnKdyzdJKZBuw9u+uOqzW2ntTZEUi32yCA==
+
+# Specify how many parallel workers to run.
+# Default: 2*nproc (https://linux.die.net/man/1/nproc)
+COUNT=encrypted:BFalu58nMY8xEmujzdA5N+4KdQa4pz3G8d2U40nUyaEe0/F1XqIsOydrU6qmWzcmp4QcB5pTJHaFdbQDLFiB9jS7jyOh+eIzLE5fZS7N+8STxOrWeaZyusgdHuXHIq9Fog==
+
+# Specify maximum queue size. Represents maximum number of submissions that
+# can wait in the queue at once. If request for new submission comes and the
+# queue if full then submission will be rejected.
+# Default: 100
+MAX_QUEUE_SIZE=encrypted:BE/+vLE2IpjhdUXf/raZysJ7My39o7A+Ms3giCaVXFKJmSmUS8tDfDxWVVAMNn4ea1Nry4qaQZfqf9RqUPUmuQv3vJUSiRnj2lRbfA7wbQasHo0TxzCfGPvnAg0k53zbtA==
+
+
+################################################################################
+# Judge0 Server Access Configuration
+################################################################################
+# Allow only specified origins.
+# If left blank, then all origins will be allowed (denoted with '*').
+# Example:
+# ALLOW_ORIGIN="www.judge0.com judge0.com www.example.com blog.example.com"
+ALLOW_ORIGIN=encrypted:BA1niKWY/uKZPXs9Icj4QpoiYGUNMwoBNwjcPtPogSByAnblcK9D6Mp7pemz/0pcwNQL3TvAGnYjkXeHn6wdiWeZAuMS4lndLqeHELHyHucCx/Hn4epNxk/AoVgTINrVag==
+
+# Disallow only specified origins.
+# If left blank, then no origin will be disallowed.
+# Example:
+# DISALLOW_ORIGIN="www.judge0.com judge0.com www.example.com blog.example.com"
+DISALLOW_ORIGIN=encrypted:BDi68YZ0jYHXHhAwo8jSa9WONOF49be8knz4VMvZGj189gH/2VXuHjU5v2WML8kOFb6WncLCwcF/cH7XaDbEwwvcTxTVvXIc/pF3PvyDLTvpKorG6muSh4wGUzrkh+KQzQ==
+
+# Allow only specified IP addresses.
+# If left blank, then all IP addresses will be allowed.
+# Example:
+# ALLOW_IP="192.168.10.10 96.239.226.228 208.23.207.242"
+ALLOW_IP=encrypted:BO7zLM5yiA32F6X6VIiRjZz8U0VxR8weROL+OCMowbauvmUhQ0pABv748vsUkN6lK25tCsC0wQ0By2imjwMhqFaaG6HGLiCOvijNKySF9PGHH2TCdABIkFtAb9xrXD3iJQ==
+
+# Disallow only specified IP addresses.
+# If left blank, then no IP addresses will be disallowed.
+# Example:
+# DISALLOW_IP="192.168.10.10 96.239.226.228 208.23.207.242"
+DISALLOW_IP=encrypted:BOmBtw55ggu7spzkMQM5VvNCXLO394xDl/yjoLdgZfHbq6+cytV7Zx82MqmbyIq6O5N/2bIjP/14gfHTxIpCzj/OCNV0sc9/CfC+tby1Xu912gRv7oS2MtfmIW/2EJL8GA==
+
+
+################################################################################
+# Judge0 Authentication Configuration
+################################################################################
+# You can protect your API with (AUTHN_HEADER, AUTHN_TOKEN) pair.
+# Each request then needs to have this pair either in headers or
+# query parameters. For example let AUTHN_HEADER=X-Judge0-Token and
+# AUTHN_TOKEN=mySecretToken. Then user should authenticate by sending this
+# in headers or query parameters in each request, e.g.:
+# https://api.judge0.com/system_info?X-Judge0-Token=mySecretToken
+
+# Specify authentication header name.
+# Default: X-Auth-Token
+AUTHN_HEADER=encrypted:BN7b/Rd0Vn5l99M+wSiRk3rtQa7Im/w+jfH6oQtG9nXCOHl2jgBAX4zGdIqpX+sPSll36WycsWsaLQD79VgJPwOLasjAj4hWYuW0DII1q7RI79BBaUwQ9kFlxZZcjDVY05Ke/JHrPV98M3z8lQ==
+
+# Specify valid authentication tokens.
+# Default: empty - authentication is disabled
+AUTHN_TOKEN=encrypted:BLUEIAITgNaYDfu30XTjUBS2r8+Q7Dy26nE3L57Sna36S0/9gL7SjYk9oP/shAD/fsUlamM/fqhpZ/FHwIWmCD2QC/kV1ME/XZJTofabcOC6USt/LH+Bcl5pDq7FpWVsQPF5VSrwLgFSF9TPdvBXy5Q1VxaUWm24HUvt4a66qN/IDpuOky/drlbwekmujMIqPSLnGjj32TEY4Xokthya5fc=
+
+
+################################################################################
+# Judge0 Authorization Configuration
+################################################################################
+# Protected API calls can be issued with (AUTHZ_HEADER, AUTHZ_TOKEN) pair.
+# To see exactly which API calls are protected with authorization tokens
+# please read the docs at https://api.judge0.com.
+# API authorization ensures that only specified users call protected API calls.
+# For example let AUTHZ_HEADER=X-Judge0-User and AUTHZ_TOKEN=mySecretToken.
+# Then user should authorize be sending this in headers or query parameters in
+# each request, e.g.: https://api.judge0.com/system_info?X-Judge0-User=mySecretToken
+# Note that if you enabled authentication, then user should also send valid
+# authentication token.
+
+# Specify authorization header name.
+# Default: X-Auth-User
+AUTHZ_HEADER=encrypted:BP4q84xZIgEU412FW+cDFhfE+Bn0R2Te+x/64nVDxtbvzIHDaxcCbIQZdHE076CNCNwaV8PYGl3QP7eETSh9dik3QLWKsLfnOGInSxtgSHSKHwpqw9ly4kv5YtuhzRRKFA==
+
+# Specify valid authorization tokens.
+# Default: empty - authorization is disabled, protected API calls cannot be issued
+AUTHZ_TOKEN=encrypted:BN8CV+VidSW8FF2NM3BOGcPZizWBI/f1Jep43Vwz85j2tvkpd60saJncSp+ipXOqVUbSJ0Dll7D+om8PrloPfOFew04hICRC7AM03tbvYW9VrepuevkA+J18Pfa8iZmUPQ==
+
+
+################################################################################
+# Redis Configuration
+################################################################################
+# Specify Redis host
+# Default: localhost
+REDIS_HOST=encrypted:BP6uXh+oua4lBacPC8vKgQNrMnfDiXSE1uCPQ33HPK9DRlcK1HOHT2SICKm9lUMWyajOVslC8e0AKSdZPpHrAo02Z+PAsBGXszpCPM7hVjbkF2BNKF4X5lWJGlcMlO+WcVQEjYVkVe2LGf0O2g==
+
+# Specify Redis port.
+# Default: 6379
+REDIS_PORT=encrypted:BJEssH5TW7fgjZZtt6T2+8qA3r7pjSRvpMXdCoYy/aOrn2RxegCdy2nZIBmsEb56f/vzmiXsTbEnwTj5kHKsct/X7C8uEClBgkUhX9TESal4o3l41jWdbnzXbpIgFvj8RA==
+
+# Specify Redis password. Cannot be blank.
+# Default: NO DEFAULT! MUST BE SET!
+REDIS_PASSWORD=encrypted:BLeT11PHF3XQPp1H3jZEfLHL0s9qJGszy+qQdB4a/RMXrU4ASoqhw6RKHeUHdlt5nSb+zntBCtZP7xVq9ORacOqQdpbbY/kETfLs8k7/eodkcmrb5OeMXtNW0Fd7ojj8eCxEtnyBZb0QNB81OnC7EID5kBHTaRJlWoabFEowfNdi
+
+
+################################################################################
+# PostgreSQL Configuration
+################################################################################
+# Specify Postgres host.
+# Default: localhost
+POSTGRES_HOST=encrypted:BAM/j+Xt9c4pIGWbZ3yqfhY167hwmvAMts229xFufE1vGs7dyLFtU7SY9t0+86cmOtaU9jtGbhmSfswfZWul3y4HKUh3OUE5xETbrGL32NA7CO04/oSJ+51SzDRdCo8qrumEvquukBHj1g==
+
+# Specify Postgres port.
+# Default: 5432
+POSTGRES_PORT=encrypted:BNsDB92aya62wOjFsK1CuGYto4bAu8rwGiWywP44wEekyavNOH6NAuTSYQF44rIFkvFWlL4FgWUfEBp/6rzV3pdRKypQoNAcZ7LuXyiZi23MLUFbWjT7vNzLiwQlrJloZg==
+
+# Name of the database to use. Used only in production.
+# Default: postgres
+POSTGRES_DB=encrypted:BIgziCPLyTSEN1eUdpMEYFWjtucOjujGrWsDP+VM+jGdIaxqnL2IFYHY4flROsW4Iqcb85t9d4FjNcLpKeetwiXGGimtXHq4M23Xf61sVXATlGAzxz/P/2ndrpHEarmfLD/XjN09LQ==
+
+# User who can access this database. Used only in production.
+# Default: postgres
+POSTGRES_USER=encrypted:BO2U4kx4hAFyfJOWNMt9iKFUDzILfzCQtmvP1xfbuSr61/ETrUS62M/sQbE3YSWyc7NsjRtNvoJFh2/9tECrVhdIyIxJziSN6MaW/Pq5i3V6qyezXECZBmwPsXD2G//dMh6FO2828g==
+
+# Password of the user. Cannot be blank. Used only in production.
+# Default: NO DEFAULT, YOU MUST SET YOUR PASSWORD
+POSTGRES_PASSWORD=encrypted:BMzEXjdQYKevOtxRH2wrKrXMkPk28ERVtNzLs4j83pyPv7FqyXdeX7gv78qhJ8vuYoAB/LDoLKcj7MoUZal35kB3NlQ7o6bT27YAlhWHVrTEVPPRjawnoLW+mV7T4RSL+eO4nP0is8bKSXFtmkNWl/m6wpRssVoMyuOIlOqc50Sa
+
+
+################################################################################
+# Submission Configuration
+################################################################################
+# Judge0 uses isolate as an sandboxing environment.
+# Almost all of the options you see here can be mapped to one of the options
+# that isolate provides. For more information about these options please
+# check for the isolate documentation here:
+# https://raw.githubusercontent.com/ioi/isolate/master/isolate.1.txt
+
+# Default runtime limit for every program (in seconds). Decimal numbers are allowed.
+# Time in which the OS assigns the processor to different tasks is not counted.
+# Default: 5
+CPU_TIME_LIMIT=encrypted:BEJJV/Wtu0USmMk9xeLgOZ22J/JG/H2rPJqg/UBsKcBj+HrIcYNtUNHD78TU88/JrwHF2XhTKKQmG6HxcRQ4AKRn456SjNOlgwJEL+U6/oF+xMBcJ7w9wekBjnfuyMNxSpw=
+
+# Maximum custom CPU_TIME_LIMIT.
+# Default: 15
+MAX_CPU_TIME_LIMIT=encrypted:BL7cL1Wxp7Hpj6Wf505/2JwnAEASKl8v69ZGJN3WfMyih+an5KFokBh3AU9nfjjX+7GCdx6fkoZGVX4tsrNd4I94xhURYAWIO55CoJsn0qTMPi5s4aAR+thBBb8E9BoOtQ==
+
+# When a time limit is exceeded, wait for extra time (in seconds), before
+# killing the program. This has the advantage that the real execution time
+# is reported, even though it slightly exceeds the limit.
+# Default: 1
+CPU_EXTRA_TIME=encrypted:BDcBpsSmBJIkDkNvUT/oyGtFhaZjfjHoNqDHpXs9zyUv0bOVV0i+H0nM9Tq65VqjmaQFgZo0RB4hVKtuEBPCeB1Kp9qkp0Zk+fuPhlUpj1SHP/tJ62GoAFk/rknHTpbeZKY=
+
+# Maximum custom CPU_EXTRA_TIME.
+# Default: 5
+MAX_CPU_EXTRA_TIME=encrypted:BBghy5xrvM0H/ElLPIAm9zs7m29HTjpItyGPi26t3SQZXzTE3LQqjFo4uHzsd7kVEMyFlj8PxyJ+y5jXmrhIlR4EtjSnOlFcaKz+iVrx9AL9Kjh8xSI2t1Le1hGiK19/Aw==
+
+# Limit wall-clock time in seconds. Decimal numbers are allowed.
+# This clock measures the time from the start of the program to its exit,
+# so it does not stop when the program has lost the CPU or when it is waiting
+# for an external event. We recommend to use CPU_TIME_LIMIT as the main limit,
+# but set WALL_TIME_LIMIT to a much higher value as a precaution against
+# sleeping programs.
+# Default: 10
+WALL_TIME_LIMIT=encrypted:BHnZWQ5T4P7qgBvy7v/k+Xh+bavfHeym+tuM157uhbBFu3v7gDmEceS4qvUJCsy3/+V9foSuZ8O/Wja79cKXsQML1CS5eC6rAqOnFDCNdBy5r4Chd083Gsmi0E0APMa3WE6B
+
+# Maximum custom WALL_TIME_LIMIT.
+# Default: 20
+MAX_WALL_TIME_LIMIT=encrypted:BH3TycWHCEQyCj5X93GE2bwv782meb0sNXzz0znyeY9tPxxxmdqrRfjXpUprH1j0jc2pxnRdtA9+icEnC9mmy3/TVN+g+fuNhBOgAvcCR46zUZ/fEZQAJZg2TtwJI2lT0g==
+
+# Limit address space of the program in kilobytes.
+# Default: 128000
+MEMORY_LIMIT=encrypted:BLI4wV3QUh/1Y7J/oPk3d1L7p9N9tVKk6iaGvV/D1GIekALBXFJhxUpvA02lKOK029iMfTOBt/cGTgRVpEtAfIIe4/2afXrjvxTqQ2A3xIMNBrhkXJUpTjUi6MLuQ0J6UJgJXW08hA==
+
+# Maximum custom MEMORY_LIMIT.
+# Default: 512000
+MAX_MEMORY_LIMIT=encrypted:BGrUEJy/hUeW9njzxy04Wiiy3yU+drhaXvJCEoD4FJVhbmxeytl/ZpIrreeUECh8GGH2hxCxsGp+ep75rh+v8VA59ncAVJLD6tWatFe4rGiLyUGnu3kQ1RWoBr4SDjr2CA==
+
+# Limit process stack in kilobytes.
+# Default: 64000
+STACK_LIMIT=encrypted:BCz0oH2WisQ8jgNUNWqrv3xaQmmJch4GsUBy1TdFQBmGdIxDa/saU1tAMBt48qG3DfQgFvKYHXH/7jBoSf7JVuol1aE6RmK9Y1k3EBKMdlBGXZWD7juw0ixhATdHkhyk8zMy+dkG
+
+# Maximum custom STACK_LIMIT.
+# Default: 128000
+MAX_STACK_LIMIT=encrypted:BL6oSSdC1xbN8hUIjEMynBSI+8oTJpG63HTYxuYAnh/08RK1YLiTg++uvja3XyIohfcqLeyLHnH3E9tfvhHJCxVOlvaa69PytUl1jLFC5KT+kPI/CtI0OFZOiSzSF2d7Cg==
+
+# Maximum number of processes and/or threads program can create.
+# Default: 60
+MAX_PROCESSES_AND_OR_THREADS=encrypted:BPr8VWVm05Yv4qZVYNY1fdFXnyYhMna98lsq/GxrTbTnJegD9Qhgzt1DB+7iEC6CUTkvhoXZUfa0/gx8suA/8TXZRZMsPqZAoH+nGj+L2TU3Th9NPbJAg+2T19mwPoB2qbgk
+
+# Maximum custom MAX_PROCESSES_AND_OR_THREADS.
+# Default: 120
+MAX_MAX_PROCESSES_AND_OR_THREADS=encrypted:BIwwQxBy/DxPCbeuV9k6G7OsggWlXyKlHEb5BfQf9IUQibr8RBYdUfOsjYFdG8InC7VTo0lcZ9BQQ7LQPaIEpVsGJaN4vEIiyA3PnpMUwt8CUsVte+A9Lb+TnhQs9DthlQ==
+
+# If true then CPU_TIME_LIMIT will be used as per process and thread.
+# Default: false, i.e. CPU_TIME_LIMIT is set as a total limit for all processes and threads.
+ENABLE_PER_PROCESS_AND_THREAD_TIME_LIMIT=encrypted:BFfqDr0T5lDa7Oc4yR6zdN2AgdikCvqXSnyoOkXfmZLe1L68A9lZROswYBu5o1MYoweBMVVvG6efF/NN9+ZIIbAnJuIkZ0NkO6iqx0MyNa087uwWu6CVTlLPX07lWXznI7PIiys=
+
+# If false, user won't be able to set ENABLE_PER_PROCESS_AND_THREAD_TIME_LIMIT.
+# Default: true
+ALLOW_ENABLE_PER_PROCESS_AND_THREAD_TIME_LIMIT=encrypted:BGGQp3qvlhg3TmHXVKUZO4bWUlasz4tyFS3wms8Fvf2uzahOE671sMmBhqOACepR+NCaFc4DvaYuAd23kd0wrqETThuDgK7ueWVVoZACtyurKEsQsY5Ip1Ft0oY4FRe5hw==
+
+# If true then MEMORY_LIMIT will be used as per process and thread.
+# Default: false, i.e. MEMORY_LIMIT is set as a total limit for all processes and threads.
+ENABLE_PER_PROCESS_AND_THREAD_MEMORY_LIMIT=encrypted:BA28h4L5RyzjKBMCk94kYd1b1/6zWtf2GJxQyvPt2vdnsR4eUadP0sxvgREZJWHOZHsS//UzYU9ZEBqE+acmOSYK79viWpK60ocjselzbaXuROmDsTH1V+xj2FzsBOi/dUocTBw=
+
+# If false, user won't be able to set ENABLE_PER_PROCESS_AND_THREAD_MEMORY_LIMIT.
+# Default: true
+ALLOW_ENABLE_PER_PROCESS_AND_THREAD_MEMORY_LIMIT=encrypted:BLJwVOywm4FZI/uUZblt8VtM+WL9e4Bl3D76DJwQ/unIrBPwyY9ozhgUIIjhzYQlzDkLgXYjQZxTqxXKpdNQvtacCcY/LADqxmJSNpV7fzva6nU/Kwu6WKQ5H5lWwrq8VA==
+
+# Limit size of files created (or modified) by the program in kilobytes.
+# Default: 1024
+MAX_FILE_SIZE=encrypted:BLcvnULTTA7LnraBYaMCGatLwCEozsNN3fbkUaV1fOv283GnnMMGLD4UaCBTacEsI8WP1j4WRTOoVCk0PZfDzRvtRt+sDPFBB0i9Yug0Izdnwt4eb7XIM/XYVh11RMFUVw==
+
+# Maximum custom MAX_FILE_SIZE.
+# Default: 4096
+MAX_MAX_FILE_SIZE=encrypted:BF8ccMPeJAtcubNyo0d8N0RPAXgi9ANULcoynQosUnNAWrdyGaKr5JdcG2KGHsWLwcdDybFXNmou4G+lMgO/vbequqm4ENu8x3NsCQYAhacNq80yqdo35GwMezCTAi8LfA==
+
+# Run each program this many times and take average of time and memory.
+# Default: 1
+NUMBER_OF_RUNS=encrypted:BL4X97Y3YmPtE6r0NJrWqJk60He2Mj521AdL20VLqlOaUSSkcDU6EgnVnyCviXLQ+FpdIeAqy9WpAIuzIkG06mcbMhx9TKClIK6agyw7k9geFtz7OsUsDUF3kTwPrW/wwn4=
+
+# Maximum custom NUMBER_OF_RUNS.
+# Default: 20
+MAX_NUMBER_OF_RUNS=encrypted:BKtMC8QaGPNHYQYknU0cjI04bCah3N34MfEYG0EXhT6EpEu1OgLMhB3zzbQ9qVCascHSw5wFen5orjavVxBvTP1NMYSx3t24EKaOhhVY9OmEfq0tuOT9OFNIDlDJEvbm8Q==
+
+# Redirect stderr to stdout.
+# Default: false
+REDIRECT_STDERR_TO_STDOUT=encrypted:BNb5BsZHxihrFt0KWQv6vTtRuClcsMbdrl1Hfg+gm04rKLivTahuhKXFD7D3Yj0eOGweNw5t2sH3+lYAOJGcJ/skgxg/RARRiJamjTi6ZUnT1v/lvMP8zA9ysj2oBMbbIw==
+
+# Maximum total size (in kilobytes) of extracted files from additional files archive.
+# Default: 10240, i.e. maximum of 10MB in total can be extracted.
+MAX_EXTRACT_SIZE=encrypted:BC2G5jCiXkJZ9DP3TZ22k5UWr1AWO8MIXB+bX4Ie2rr6KlPTowxtIgvyRviQF4Ha3K223DokFQ5uf7h1I2L2BbUoH+XdJfNs2Ylaw5pmLWUMGV8oZH7XlVYIlAp5oQTQbA==
+
+# If false, user won't be able to set ENABLE_NETWORK.
+# Default: true, i.e. allow user to permit or deny network calls from the submission.
+ALLOW_ENABLE_NETWORK=encrypted:BGCP1gnsKhD5PzWYrUdjeadHanrHibgy6/7Rup8vkCt5OXPTr1Q84uzOzq3TEF35iEmArKRxiOqTxUYnuDNdX8G/kel06nQrK22woSbuNTSi2p5JdC+eiO4hIYEE65MlkA==
+
+# If true submission will by default be able to do network calls.
+# Default: false, i.e. programs cannot do network calls.
+ENABLE_NETWORK=encrypted:BH7MOpJu6JyD7AZmfkMqjBVcnzaylZIJ5ofLucnXzPC5YTe12szDKMUztrEG3+yDZGLy9f7CwEASkuLnOaeYokplFsQ1mOA35ih2dUKrDlN2lKuUY4A9g0EyZl8gWhFPgQ==
+
+
+################################################################################
+# Rails Configuration
+################################################################################
+# Specify Rails environment: production or development
+# Default: production
+RAILS_ENV=encrypted:BJwvBdbUxZWCf4cUCe1rV1W0WS+LGTNe4XSndfTDglQEZ/EIPEsXJtW5zJXdDup3xYU3gGMcXLvuEi5obAoj7r2QD6fk1zhnAMYzxkujszsHmqHbbxc8XOy5kdsJVBEV2g==
+
+# Specify maximum number of concurrent Rails threads.
+# Default: nproc (https://linux.die.net/man/1/nproc)
+RAILS_MAX_THREADS=encrypted:BHQxK/bT3uqmATfG2xAmeJpAPxRFFn1J3ylYRg9TMbiPKz0aRuC8Yh7bSmKhzXh1/45Sn1GuoqOUDDd51XnKJirnrzAuCVMJClC82i2tZgacsuEUENy6lLQDWTLwZeQPqA==
+
+# Specify how many processes will be created for handing requests. Each process
+# will aditionally create RAILS_MAX_THREADS threads.
+# Default: 2
+RAILS_SERVER_PROCESSES=encrypted:BJPEIrl8j79kDt2DN7uoCK/RcKsySeeAf+XkxuDkPu/fHcP2RA1D2QPEQn7r8Yg31hEQGoOiLwz4gSGzPSYjJPXgnTm1Fzu416Ogw6nUqPTPnljmxWx/0fcSKPXhJEBoaw==
+
+# Secret key base for production, if not set it will be randomly generated
+# Default: randomly generated
+SECRET_KEY_BASE=encrypted:BDLwZaZpjaSTujCYHMNP3yu2cXDcEKeCA0SiRJyWFYZ1bUa4Xo7wkuueQxazOThEZrYI25tbxvw8UJ0a2xEbshtkim0Ee6IlxV4AOy8K6BXOliiwCd6waCnoeXlqMGGAWg==

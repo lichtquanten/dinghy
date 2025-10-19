@@ -42,7 +42,7 @@ app.use("/*", serveStatic({ root: "./public" }))
 serve(
     {
         fetch: app.fetch,
-        port: env.API_PORT,
+        port: env.API_CONTAINER_PORT,
     },
     (info) => {
         console.log(`API server is running on port ${info.port}.`)

@@ -4,8 +4,8 @@ import { assignments } from "../seed/index"
 import { z } from "zod"
 
 const envSchema = z.object({
-    MONGODB_URI: z.url(),
-    MONGODB_DB_NAME: z.string().min(1),
+    MONGO_ROOT_URI: z.url(),
+    MONGO_DB_NAME: z.string().min(1),
 })
 
 export const env = envSchema.parse(process.env)
@@ -13,7 +13,7 @@ export const env = envSchema.parse(process.env)
 async function main() {
     console.log("Syncing assignments to MongoDB...\n")
 
-    await mongoose.connect(env.MONGODB_URI, { dbName: env.MONGODB_DB_NAME })
+    await mongoose.connect(env.MONGO_ROOT_URI, { dbName: env.MONGO_DB_NAME })
     console.log("✓ Connected to MongoDB\n")
 
     console.log(`Found ${assignments.length} assignments to sync\n`)

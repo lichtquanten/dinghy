@@ -10,6 +10,7 @@
         "apps/*/vite.config.ts",
         "apps/web/vite.config.ts",
         "prettier.config.js",
-        "apps/api/tsup.config.ts"
+        "apps/api/tsup.config.ts",
+        "scripts/*"
     ]
 }

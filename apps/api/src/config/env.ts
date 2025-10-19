@@ -5,7 +5,7 @@ const envSchema = z.object({
         .enum(["development", "production", "test"])
         .default("development"),
 
-    API_PORT: z.coerce.number().int().nonnegative().default(3000),
+    API_CONTAINER_PORT: z.coerce.number().int().nonnegative().default(3000),
 
     LOG_LEVEL: z.enum(["error", "warn", "info", "debug"]).default("info"),
 

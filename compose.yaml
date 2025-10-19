@@ -21,7 +21,7 @@ services:
     env_file:
       - ./.env/.env.keys
     ports:
-      - "${API_PORT:-3000}:${API_CONTAINER_PORT:-3000}"
+      - "${API_HOST_PORT:-3000}:${API_CONTAINER_PORT:-3000}"
     restart: ${RESTART_POLICY:-unless-stopped}
     healthcheck:
       test:
@@ -242,9 +242,9 @@ services:
       - "4040:4040"
     command:
       - "http"
-      - "http://api:${API_PORT}"
+      - "http://api:${API_HOST_PORT}"
     environment:
-      - NGROK_AUTHTOKEN=${NGROK_AUTH_TOKEN}
+      NGROK_AUTHTOKEN: ${NGROK_AUTH_TOKEN:-}
     networks:
       - app-network
 
@@ -257,7 +257,7 @@ services:
     ports:
       - "${MONGO_EXPRESS_PORT:-8081}:8081"
     environment:
-      - ME_CONFIG_MONGODB_URL=${MONGO_USER_URI}
+      - ME_CONFIG_MONGODB_URL=${MONGO_ROOT_URI}
       - ME_CONFIG_BASICAUTH_USERNAME=${MONGO_EXPRESS_USERNAME}
       - ME_CONFIG_BASICAUTH_PASSWORD=${MONGO_EXPRESS_PASSWORD}
 

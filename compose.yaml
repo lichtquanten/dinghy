@@ -17,7 +17,7 @@ services:
         - dotenv_key
       args:
         API_CONTAINER_PORT: ${API_CONTAINER_PORT:-3000}
-        ENV_FILE_ENCRYPTED: ${ENV_FILE_ENCRYPTED:-./.env/.env.production.encrypted}
+        ENV_FILE_ENCRYPTED: ${ENV_FILE_ENCRYPTED:-./.env/.prod.encrypted}
     env_file:
       - ./.env/.env.keys
     ports:

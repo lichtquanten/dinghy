@@ -1,8 +1,17 @@
 {
     "extends": "@workspace/typescript-config/node.json",
     "compilerOptions": {
-        "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo"
+        "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo",
+        "composite": true,
+        "paths": {
+            "@/*": ["./src/*"]
+        }
     },
     "include": ["src"],
-    "references": [{ "path": "../../packages/ai-models" }]
+
+    "references": [
+        { "path": "../../packages/ai-models" },
+        { "path": "../../packages/code-languages" },
+        { "path": "../../packages/database" }
+    ]
 }

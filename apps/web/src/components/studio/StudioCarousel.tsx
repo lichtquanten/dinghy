@@ -4,7 +4,7 @@ import {
     CarouselItem,
     CarouselNext,
     CarouselPrevious,
-} from "@workspace/ui/components/carousel"
+} from "@workspace/ui/components/carousel.tsx"
 
 interface Panel {
     id: string
@@ -20,9 +20,7 @@ export const StudioCarousel = ({ panels }: StudioCarouselProps) => {
         <Carousel className="w-full max-w-9/10">
             <CarouselContent>
                 {panels.map((panel) => (
-                    <CarouselItem key={panel.id}>
-                        {panel.content}
-                    </CarouselItem>
+                    <CarouselItem key={panel.id}>{panel.content}</CarouselItem>
                 ))}
             </CarouselContent>
             <CarouselPrevious />

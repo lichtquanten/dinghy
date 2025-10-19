@@ -1,4 +1,4 @@
-const dbName = process.env.DB_NAME
+const dbName = process.env.MONGO_DB_NAME
 const username = process.env.APP_DB_USER
 const password = process.env.APP_DB_PASSWORD
 

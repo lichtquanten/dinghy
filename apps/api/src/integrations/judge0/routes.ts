@@ -1,15 +1,15 @@
 import { Hono } from "hono"
 import { streamSSE } from "hono/streaming"
 import { proxy } from "hono/proxy"
-import { env } from "#config/env.ts"
-import { redisClient, KEYS } from "#infrastructure/redis.ts"
-import { requireAuth } from "#middleware/auth.ts"
-import { rateLimitJudge0 } from "#middleware/rate-limit.ts"
+import { env } from "@/config/env.js"
+import { redisClient, KEYS } from "@/infrastructure/redis.js"
+import { requireAuth } from "@/middleware/auth.js"
+import { rateLimitJudge0 } from "@/middleware/rate-limit.js"
 import {
     generateSubmissionId,
     generateCallbackUrl,
     verifyAndConsumeCallback,
-} from "./security.ts"
+} from "./security.js"
 
 export const judge0Routes = new Hono()
 
@@ -42,7 +42,7 @@ judge0Routes.put("/callback/:submissionId", async (c) => {
 })
 
 judge0Routes.get("/stream", requireAuth, async (c) => {
-    const userId = c.var.userId!
+    const userId = c.var.userId
     const subscriber = redisClient.duplicate()
     await subscriber.connect()
 
@@ -89,7 +89,7 @@ judge0Routes.get("/stream", requireAuth, async (c) => {
 judge0Routes.post("/submissions", requireAuth, rateLimitJudge0, async (c) => {
     const body: Record<string, unknown> = await c.req.json()
     const submissionId = generateSubmissionId()
-    body.callback_url = await generateCallbackUrl(submissionId, c.var.userId!)
+    body.callback_url = await generateCallbackUrl(submissionId, c.var.userId)
 
     const judge0Url = new URL(
         `submissions${new URL(c.req.url).search}`,

@@ -1,27 +1,25 @@
 {
     "compilerOptions": {
-        "esModuleInterop": true,
-        "incremental": true,
-        "isolatedModules": true,
-        "lib": ["ES2023", "DOM", "DOM.Iterable"],
-        "module": "NodeNext",
-        "moduleDetection": "force",
-        "moduleResolution": "NodeNext",
-        "noUncheckedIndexedAccess": true,
-        "resolveJsonModule": true,
-        "skipLibCheck": true,
         "strict": true,
-        "target": "ES2023",
-        "composite": true,
-        "forceConsistentCasingInFileNames": true,
-        "verbatimModuleSyntax": true,
+        "noUncheckedIndexedAccess": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
-        "erasableSyntaxOnly": true,
         "noFallthroughCasesInSwitch": true,
-        "noUncheckedSideEffectImports": true,
-        "emitDeclarationOnly": true,
-        "allowImportingTsExtensions": true
+        "forceConsistentCasingInFileNames": true,
+
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "verbatimModuleSyntax": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "useDefineForClassFields": false,
+        "moduleDetection": "force",
+
+        "target": "ESNext",
+
+        "skipLibCheck": true,
+        "incremental": true
     },
     "exclude": ["**/node_modules", "**/dist", "**/build"]
 }

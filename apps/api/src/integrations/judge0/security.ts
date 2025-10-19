@@ -1,7 +1,7 @@
 import { createHmac, randomBytes } from "crypto"
-import { env } from "#config/env.ts"
-import { redisClient, KEYS } from "#infrastructure/redis.ts"
-import { SubmissionMetadataSchema } from "./schema.ts"
+import { env } from "@/config/env.js"
+import { redisClient, KEYS } from "@/infrastructure/redis.js"
+import { SubmissionMetadataSchema } from "./schema.js"
 import path from "path"
 
 export function generateSubmissionId(): string {

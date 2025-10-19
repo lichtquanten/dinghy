@@ -1,14 +1,14 @@
 {
     "extends": "./base.json",
     "compilerOptions": {
-        "sourceMap": true,
-        "target": "ES2023",
         "module": "ESNext",
         "moduleResolution": "bundler",
-        "declaration": true,
-        "declarationMap": true,
-        "jsx": "react-jsx",
-        "outDir": "./dist",
-        "lib": ["ES2023", "DOM", "DOM.Iterable"]
+
+        "allowImportingTsExtensions": true,
+        "emitDeclarationOnly": true,
+
+        "lib": ["ES2023", "DOM", "DOM.Iterable"],
+
+        "jsx": "react-jsx"
     }
 }

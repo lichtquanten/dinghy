@@ -1,3 +1,3 @@
-import type { appRouter } from "./router.ts"
+import type { appRouter } from "./router.js"
 
 export type AppRouter = typeof appRouter

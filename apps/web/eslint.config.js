@@ -3,12 +3,14 @@ import { defineConfig } from "eslint/config"
 
 /** @type {import("eslint").Linter.Config} */
 export default defineConfig([
+    {
+        ignores: ["vite.config.ts"],
+    },
     ...config,
     {
         files: ["**/*.{ts,tsx}"],
         languageOptions: {
             parserOptions: {
-                project: true,
                 tsconfigRootDir: import.meta.dirname,
             },
         },

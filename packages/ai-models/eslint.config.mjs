@@ -1,4 +1,15 @@
-import { config } from "@eslint-config/react"
+import config from "@workspace/eslint-config/base"
+import { defineConfig } from "eslint/config"
 
 /** @type {import("eslint").Linter.Config} */
-export default config
+export default defineConfig([
+    ...config,
+    {
+        files: ["**/*.{ts,tsx}"],
+        languageOptions: {
+            parserOptions: {
+                tsconfigRootDir: import.meta.dirname,
+            },
+        },
+    },
+])

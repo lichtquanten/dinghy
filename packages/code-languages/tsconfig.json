@@ -1,13 +1,8 @@
 {
-    "extends": "@workspace/typescript-config/react.json",
+    "extends": "@workspace/typescript-config/shared.json",
     "compilerOptions": {
         "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo",
-        "baseUrl": ".",
-        "verbatimModuleSyntax": false,
-        "rootDir": "src",
-        "module": "nodenext",
-        "moduleResolution": "nodenext"
+        "composite": true
     },
-    "include": ["src"],
-    "exclude": ["node_modules", "dist"]
+    "include": ["src"]
 }

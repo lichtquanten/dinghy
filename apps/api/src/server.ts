@@ -2,16 +2,19 @@ import { serve } from "@hono/node-server"
 import { serveStatic } from "@hono/node-server/serve-static"
 import { trpcServer } from "@hono/trpc-server"
 import { Hono } from "hono"
-import { appRouter } from "./trpc/router.ts"
-import { createContext } from "./trpc/context.ts"
+import { appRouter } from "./trpc/router.js"
+import { createContext } from "./trpc/context.js"
 import { logger } from "hono/logger"
-import { env } from "./config/env.ts"
-import { rateLimit } from "./middleware/rate-limit.ts"
+import { env } from "./config/env.js"
+import { rateLimit } from "./middleware/rate-limit.js"
 import { clerkMiddleware } from "@hono/clerk-auth"
-import { judge0Routes } from "./integrations/judge0/routes.ts"
-import { aiRoutes } from "./integrations/ai/routes.ts"
+import { judge0Routes } from "./integrations/judge0/routes.js"
+import { aiRoutes } from "./integrations/ai/routes.js"
+import { connectMongoDB, disconnectMongoDB } from "./infrastructure/mongodb.js"
 
 const app = new Hono()
+
+await connectMongoDB()
 
 app.use(logger())
 app.use(rateLimit)
@@ -36,7 +39,21 @@ app.get("/api/health", (c) => {
 
 app.use("/*", serveStatic({ root: "./public" }))
 
-serve({
-    fetch: app.fetch,
-    port: env.API_PORT,
-})
+serve(
+    {
+        fetch: app.fetch,
+        port: env.API_PORT,
+    },
+    (info) => {
+        console.log(`API server is running on port ${info.port}.`)
+    }
+)
+
+const gracefulShutdown = async (signal: string) => {
+    console.log(`${signal} received, shutting down gracefully...`)
+    await disconnectMongoDB()
+    process.exit(0)
+}
+
+process.on("SIGINT", () => void gracefulShutdown("SIGINT"))
+process.on("SIGTERM", () => void gracefulShutdown("SIGTERM"))

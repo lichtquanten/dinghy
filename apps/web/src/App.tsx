@@ -1,9 +1,12 @@
 // App.tsx
 import { Routes, Route, Navigate } from "react-router-dom"
 import { Protect, useAuth } from "@clerk/clerk-react"
-import { Skeleton } from "@workspace/ui/components/skeleton"
+import { Skeleton } from "@workspace/ui/components/skeleton.tsx"
 import { LandingPage } from "./pages/LandingPage"
 import { StudioPage } from "./pages/StudioPage"
+import { trpc } from "@/lib/trpc"
+import { useEffect } from "react"
+import { useQuery } from "@tanstack/react-query"
 
 function AuthLoadingSkeleton() {
     return (
@@ -25,6 +28,20 @@ function RootRedirect() {
 }
 
 export function App() {
+    const {
+        data: assignments,
+        isLoading,
+        error,
+    } = useQuery(trpc.assignment.list.queryOptions())
+    useEffect(() => {
+        console.log("Assignments:", assignments)
+    }, [assignments])
+    useEffect(() => {
+        console.log("Is Loading:", isLoading)
+    }, [isLoading])
+    useEffect(() => {
+        console.log("Error:", error)
+    }, [error])
     return (
         <Routes>
             <Route path="/" element={<RootRedirect />} />

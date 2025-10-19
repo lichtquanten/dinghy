@@ -5,7 +5,7 @@ import {
     CardContent,
     CardHeader,
     CardTitle,
-} from "@workspace/ui/components/card"
+} from "@workspace/ui/components/card.tsx"
 
 interface StdinInputProps {
     stdin: string

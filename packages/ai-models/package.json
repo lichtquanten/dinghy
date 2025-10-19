@@ -4,14 +4,13 @@
     "type": "module",
     "private": true,
     "scripts": {
-        "lint": "eslint . --max-warnings 0",
-        "build": "tsc -b"
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "format": "prettier --write .",
+        "format:check": "prettier --check .",
+        "typecheck": "tsc --build; tsc --build --clean"
     },
     "devDependencies": {
-        "@types/node": "^20.19.21",
-        "@types/react": "^19.2.2",
-        "@types/react-dom": "^19.2.2",
-        "@types/react-syntax-highlighter": "^15.5.13",
         "@workspace/eslint-config": "workspace:*",
         "@workspace/typescript-config": "workspace:*",
         "typescript": "^5.9.3"

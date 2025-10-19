@@ -1,5 +1,5 @@
-export type { AppRouter } from "./trpc/types.ts"
+export type { AppRouter } from "./trpc/types.js"
 export type {
     Judge0Result,
     SubmissionMetadata,
-} from "./integrations/judge0/types.ts"
+} from "./integrations/judge0/types.js"

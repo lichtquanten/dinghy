@@ -1,7 +1,5 @@
 import { z } from "zod"
 
-console.log(import.meta.env)
-
 const envSchema = z.object({
     VITE_CLERK_PUBLISHABLE_KEY: z.string(),
     VITE_MAX_EXECUTION_WAIT_TIME: z.coerce.number().positive().default(120),

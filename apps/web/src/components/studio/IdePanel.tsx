@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Button } from "@workspace/ui/components/button"
+import { Button } from "@workspace/ui/components/button.tsx"
 import { Play } from "lucide-react"
 import { useCodeExecution } from "@/hooks/useCodeExecution"
 import { DEFAULT_CODE, DEFAULT_CODE_LANGUAGE } from "@/config/consts"
@@ -22,7 +22,7 @@ export const IdePanel = () => {
         })
 
     const handleRunCode = () => {
-        executeCode(code, codeLanguage, stdin)
+        void executeCode(code, codeLanguage, stdin)
     }
 
     return (

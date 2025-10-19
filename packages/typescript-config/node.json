@@ -1,8 +1,10 @@
 {
     "extends": "./base.json",
     "compilerOptions": {
-        "target": "ESNext",
         "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+
+        "lib": ["ESNext"],
         "types": ["node"]
     }
 }

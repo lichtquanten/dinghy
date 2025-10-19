@@ -3,14 +3,15 @@
     "private": "true",
     "type": "module",
     "scripts": {
-        "dev": "tsx watch src/server.ts",
-        "start": "node src/server.ts",
-        "typecheck": "tsc --noEmit",
+        "dev": "concurrently \"tsdown --watch\" \"nodemon\"",
+        "build": "tsdown",
+        "start": "node dist/server.js",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
-        "clean": "rm -rf dist"
+        "typecheck": "tsc --build; tsc --build --clean",
+        "clean": "rm -rf dist/"
     },
     "dependencies": {
         "@ai-sdk/deepinfra": "^1.0.23",
@@ -23,32 +24,30 @@
         "@hono/zod-validator": "^0.7.4",
         "@redis/client": "^5.8.3",
         "@trpc/server": "^11.6.0",
+        "@typegoose/typegoose": "^12.20.0",
         "@workspace/ai-models": "workspace:*",
         "@workspace/code-languages": "workspace:*",
-        "ai": "^5.0.75",
-        "hono": "^4.10.0",
+        "@workspace/database": "workspace:*",
+        "ai": "^5.0.76",
+        "hono": "^4.10.1",
         "hono-rate-limiter": "^0.4.2",
         "ioredis": "^5.8.1",
+        "mongoose": "^8.19.1",
         "ollama-ai-provider-v2": "^1.5.0",
         "rate-limit-redis": "^4.2.2",
         "zod": "^4.1.12"
     },
     "devDependencies": {
-        "@types/node": "^24.8.0",
-        "tsx": "^4.20.6",
+        "@types/node": "^24.8.1",
+        "concurrently": "^9.2.1",
+        "nodemon": "^3.1.10",
+        "tsdown": "^0.15.8",
+        "tsup": "^8.5.0",
         "typescript": "^5.9.3"
     },
     "exports": {
         ".": {
-            "types": "./src/index.ts"
+            "types": "./dist/index.d.ts"
         }
-    },
-    "imports": {
-        "#config/*": "./src/config/*",
-        "#infrastructure/*": "./src/infrastructure/*",
-        "#integrations/*": "./src/integrations/*",
-        "#middleware/*": "./src/middleware/*",
-        "#trpc/*": "./src/trpc/*",
-        "#types/*": "./src/types/*"
     }
 }

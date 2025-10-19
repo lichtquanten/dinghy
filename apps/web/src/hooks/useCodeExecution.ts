@@ -78,7 +78,7 @@ export const useCodeExecution = (options?: UseCodeExecutionOptions) => {
                 const submission = await submitCode(code, judge0Id, stdin)
                 currentSubmissionId.current = submission.submissionId
 
-                timeoutRef.current = setTimeout(() => {
+                timeoutRef.current = window.setTimeout(() => {
                     if (
                         currentSubmissionId.current === submission.submissionId
                     ) {

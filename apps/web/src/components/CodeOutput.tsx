@@ -4,8 +4,8 @@ import {
     CardContent,
     CardHeader,
     CardTitle,
-} from "@workspace/ui/components/card"
-import { Alert, AlertDescription } from "@workspace/ui/components/alert"
+} from "@workspace/ui/components/card.tsx"
+import { Alert, AlertDescription } from "@workspace/ui/components/alert.tsx"
 import { Loader2, Terminal, AlertCircle } from "lucide-react"
 import type { SubmissionResult } from "@/types/judge0"
 

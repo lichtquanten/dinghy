@@ -16,7 +16,7 @@ export default defineConfig([
     },
 
     {
-        files: ["**/*.{ts,ts}"],
+        files: ["**/*.{ts,tsx}"],
         extends: [tseslint.configs.recommendedTypeChecked],
         languageOptions: {
             parserOptions: {

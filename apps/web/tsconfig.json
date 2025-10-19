@@ -2,22 +2,20 @@
     "extends": "@workspace/typescript-config/react.json",
     "compilerOptions": {
         "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo",
+        "composite": true,
         "types": ["vite/client"],
+
         "paths": {
-            "@/components/*": ["./src/components/*"],
-            "@/config/*": ["./src/config/*"],
-            "@/api/*": ["./src/api/*"],
-            "@/lib/*": ["./src/lib/*"],
-            "@/hooks/*": ["./src/hooks/*"],
-            "@/pages/*": ["./src/pages/*"],
-            "@/types/*": ["./src/types/*"],
-            "@/utils/*": ["./src/utils/*"],
-            "@/assets/*": ["./src/assets/*"]
+            "@/*": ["./src/*"]
         }
     },
     "include": ["src"],
+    "exclude": ["node_modules", "../../packages/ui"],
+
     "references": [
-        { "path": "../../packages/ui" },
-        { "path": "../../packages/ai-models" }
+        { "path": "../../packages/ai-models" },
+        { "path": "../../packages/code-languages" },
+        { "path": "../../packages/database" },
+        { "path": "../../packages/ui" }
     ]
 }

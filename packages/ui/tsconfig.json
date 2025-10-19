@@ -1,20 +1,24 @@
 {
     "extends": "@workspace/typescript-config/react.json",
+
     "compilerOptions": {
         "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo",
-        "baseUrl": ".",
-        "paths": {
-            "@ui/*": ["./src/*"],
-            "@eslint-config/*": ["../eslint-config/*"],
-            "@workspace/ui/*": ["./src/*"],
-            "@workspace/ui/components/*": ["./src/components*"]
-        },
-        "verbatimModuleSyntax": false,
+        "composite": true,
+
         "strict": false,
         "noImplicitAny": false,
         "strictNullChecks": false,
-        "rootDir": "src"
+
+        "paths": {
+            "@workspace/ui/*": ["./src/*"]
+        }
     },
+
     "include": ["src"],
-    "exclude": ["node_modules", "dist"]
+
+    "exports": {
+        "./globals.css": "./src/styles/globals.css",
+        "./postcss.config": "./postcss.config.mjs",
+        "./*": "./src/*"
+    }
 }

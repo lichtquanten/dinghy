@@ -1,16 +1,27 @@
+x-logging: &default-logging
+  logging:
+    driver: json-file
+    options:
+      max-size: 100M
+
 services:
   api:
+    profiles:
+      - api
+      - full
     build:
       context: .
-      dockerfile: apps/api/Dockerfile
-      target: host-production
+      dockerfile: Dockerfile
+      target: production
       secrets:
         - dotenv_key
       args:
-        ENV_FILE_ENCRYPTED: ${ENV_FILE_ENCRYPTED}
+        API_CONTAINER_PORT: ${API_CONTAINER_PORT:-3000}
+        ENV_FILE_ENCRYPTED: ${ENV_FILE_ENCRYPTED:-./.env/.env.production.encrypted}
+    env_file:
+      - ./.env/.env.keys
     ports:
       - "${API_PORT:-3000}:${API_CONTAINER_PORT:-3000}"
-    env_file: ${ENV_FILE}
     restart: ${RESTART_POLICY:-unless-stopped}
     healthcheck:
       test:
@@ -29,29 +40,202 @@ services:
     networks:
       - app-network
 
-  mongo-express:
-    image: mongo-express:latest
-    restart: ${RESTART_POLICY:-unless-stopped}
-    ports:
-      - "${MONGO_EXPRESS_PORT:-8081}:8081"
-    environment:
-      - ME_CONFIG_MONGODB_URL=${MONGO_USER_URI}
-      - ME_CONFIG_BASICAUTH_USERNAME=${MONGO_EXPRESS_USERNAME}
-      - ME_CONFIG_BASICAUTH_PASSWORD=${MONGO_EXPRESS_PASSWORD}
+  mongodb:
     profiles:
-      - debug-db
+      - db
+      - infra
+      - full
+    image: mongo:${MONGO_VERSION:-7.0}
+    ports:
+      - "${MONGO_PORT:-27017}:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_DB_NAME}
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+      - ./scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    restart: ${RESTART_POLICY:-unless-stopped}
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    networks:
+      - app-network
 
-  redis-commander:
-    image: rediscommander/redis-commander:latest
-    restart: ${RESTART_POLICY:-unless-stopped}
-    ports:
-      - "${REDIS_COMMANDER_PORT:-8082}:8081"
-    environment:
-      - REDIS_HOSTS=${REDIS_COMMANDER_HOSTS}
+  redis:
     profiles:
-      - debug-cache
+      - cache
+      - infra
+      - full
+    image: redis:${REDIS_VERSION:-7-alpine}
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redis_data:/data
+    restart: ${RESTART_POLICY:-unless-stopped}
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "PING"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - app-network
+
+  judge0-server:
+    profiles:
+      - judge0
+      - infra
+      - full
+    image: judge0/judge0:1.13.1
+    volumes:
+      - .env/judge0.conf:/judge0.conf:ro
+    ports:
+      - "2358:2358"
+    privileged: true
+    <<: *default-logging
+    restart: ${RESTART_POLICY:-unless-stopped}
+    depends_on:
+      judge0-redis:
+        condition: service_healthy
+      judge0-db:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:2358/about",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+    networks:
+      - app-network
+
+  judge0-workers:
+    profiles:
+      - judge0
+      - infra
+      - full
+    image: judge0/judge0:1.13.1
+    command: ["./scripts/workers"]
+    volumes:
+      - .env/judge0.conf:/judge0.conf:ro
+    privileged: true
+    <<: *default-logging
+    restart: always
+    depends_on:
+      judge0-redis:
+        condition: service_healthy
+      judge0-db:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  judge0-db:
+    profiles:
+      - judge0
+      - infra
+      - full
+    image: postgres:16.2
+    env_file: .env/judge0.conf
+    volumes:
+      - judge0_data:/var/lib/postgresql/data/
+    <<: *default-logging
+    restart: ${RESTART_POLICY:-unless-stopped}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - app-network
+
+  judge0-redis:
+    profiles:
+      - judge0
+      - infra
+      - full
+    image: redis:7.2.4
+    command:
+      [
+        "bash",
+        "-c",
+        'docker-entrypoint.sh --appendonly no --requirepass "$$REDIS_PASSWORD"',
+      ]
+    env_file: .env/judge0.conf
+    <<: *default-logging
+    restart: ${RESTART_POLICY:-unless-stopped}
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a $$REDIS_PASSWORD PING | grep PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - app-network
+
+  ollama:
+    profiles:
+      - ai
+      - infra
+      - full
+    image: ollama/ollama:${OLLAMA_VERSION:-latest}
+    container_name: ${COMPOSE_PROJECT_NAME:-app}-ollama
+    ports:
+      - "${OLLAMA_PORT:-11434}:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: ${RESTART_POLICY:-unless-stopped}
+    environment:
+      - OLLAMA_KEEP_ALIVE=${OLLAMA_KEEP_ALIVE:-24h}
+      - OLLAMA_HOST=0.0.0.0
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+    networks:
+      - app-network
+
+  ollama-pull:
+    profiles:
+      - ai
+      - infra
+      - full
+    image: ollama/ollama:${OLLAMA_VERSION:-latest}
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_HOST=ollama:11434
+    entrypoint: ["/bin/sh", "-c"]
+    command: >
+      "
+      ollama pull ${OLLAMA_MODEL:-ben1t0/tiny-llm} &&
+      echo 'Model ${OLLAMA_MODEL:-ben1t0/tiny-llm} ready for use'
+      "
+    depends_on:
+      ollama:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: "no"
 
   ngrok:
+    profiles:
+      - proxy
     image: ngrok/ngrok:latest
     restart: ${RESTART_POLICY:-unless-stopped}
     ports:
@@ -61,10 +245,44 @@ services:
       - "http://api:${API_PORT}"
     environment:
       - NGROK_AUTHTOKEN=${NGROK_AUTH_TOKEN}
-    profiles:
-      - proxy
     networks:
       - app-network
+
+  mongo-express:
+    profiles:
+      - db-tools
+      - admin-tools
+    image: mongo-express:latest
+    restart: ${RESTART_POLICY:-unless-stopped}
+    ports:
+      - "${MONGO_EXPRESS_PORT:-8081}:8081"
+    environment:
+      - ME_CONFIG_MONGODB_URL=${MONGO_USER_URI}
+      - ME_CONFIG_BASICAUTH_USERNAME=${MONGO_EXPRESS_USERNAME}
+      - ME_CONFIG_BASICAUTH_PASSWORD=${MONGO_EXPRESS_PASSWORD}
+
+  redis-commander:
+    profiles:
+      - cache-tools
+      - admin-tools
+    image: rediscommander/redis-commander:latest
+    restart: ${RESTART_POLICY:-unless-stopped}
+    ports:
+      - "${REDIS_COMMANDER_PORT:-8082}:8081"
+    environment:
+      - REDIS_HOSTS=${REDIS_COMMANDER_HOSTS}
+
+volumes:
+  ollama_data:
+    name: ${COMPOSE_PROJECT_NAME:-app}-ollama-data
+  judge0_data:
+    name: ${COMPOSE_PROJECT_NAME:-app}-judge0-data
+  mongodb_data:
+    name: ${COMPOSE_PROJECT_NAME:-app}-mongodb-data
+  mongodb_config:
+    name: ${COMPOSE_PROJECT_NAME:-app}-mongodb-config
+  redis_data:
+    name: ${COMPOSE_PROJECT_NAME:-app}-redis-data
 
 networks:
   app-network:

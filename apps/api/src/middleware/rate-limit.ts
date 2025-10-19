@@ -1,7 +1,8 @@
 import { rateLimiter, type Store } from "hono-rate-limiter"
 import { RedisStore } from "rate-limit-redis"
 import { getConnInfo } from "@hono/node-server/conninfo"
-import { redisClient } from "#infrastructure/redis.ts"
+import { redisClient } from "@/infrastructure/redis.js"
+import type { AuthVariables } from "./auth.js"
 
 export const rateLimit = rateLimiter({
     windowMs: 60 * 1000,
@@ -16,15 +17,15 @@ export const rateLimit = rateLimiter({
     },
     store: new RedisStore({
         sendCommand: (...args: string[]) => redisClient.sendCommand(args),
-    }) as unknown as Store,
+    }) as unknown as Store<{ Variables: AuthVariables }>,
 })
 
-export const rateLimitJudge0 = rateLimiter({
+export const rateLimitJudge0 = rateLimiter<{ Variables: AuthVariables }>({
     windowMs: 60 * 1000,
     limit: 10,
     standardHeaders: "draft-6",
-    keyGenerator: (c) => "judge-" + c.var.userId!,
+    keyGenerator: (c) => "judge-" + c.var.userId,
     store: new RedisStore({
         sendCommand: (...args: string[]) => redisClient.sendCommand(args),
-    }) as unknown as Store,
+    }) as unknown as Store<{ Variables: AuthVariables }>,
 })

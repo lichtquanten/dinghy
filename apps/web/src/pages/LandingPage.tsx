@@ -1,5 +1,5 @@
 // src/pages/LandingPage.tsx
-import { Button } from "@workspace/ui/components/button"
+import { Button } from "@workspace/ui/components/button.tsx"
 import {
     SignedIn,
     SignedOut,

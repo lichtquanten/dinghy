@@ -5,7 +5,7 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@workspace/ui/components/select"
+} from "@workspace/ui/components/select.tsx"
 
 import { CODE_LANGUAGES, type CodeLanguageKey } from "@workspace/code-languages"
 

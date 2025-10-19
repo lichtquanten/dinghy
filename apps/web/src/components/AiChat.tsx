@@ -1,14 +1,12 @@
-"use client"
-
 import {
     Conversation,
     ConversationContent,
     ConversationScrollButton,
-} from "@workspace/ui/components/ai-elements/conversation"
+} from "@workspace/ui/components/ai-elements/conversation.tsx"
 import {
     Message,
     MessageContent,
-} from "@workspace/ui/components/ai-elements/message"
+} from "@workspace/ui/components/ai-elements/message.tsx"
 import {
     PromptInput,
     PromptInputBody,
@@ -20,27 +18,31 @@ import {
     PromptInputModelSelectValue,
     PromptInputSubmit,
     PromptInputTextarea,
-    PromptInputToolbar,
+    PromptInputFooter,
     PromptInputTools,
-} from "@workspace/ui/components/ai-elements/prompt-input"
-import { Action, Actions } from "@workspace/ui/components/ai-elements/actions"
+} from "@workspace/ui/components/ai-elements/prompt-input.tsx"
+import {
+    Action,
+    Actions,
+} from "@workspace/ui/components/ai-elements/actions.tsx"
 import { Fragment, useState } from "react"
 import { useChat } from "@ai-sdk/react"
 import { DefaultChatTransport } from "ai"
-import { Response } from "@workspace/ui/components/ai-elements/response"
+import { Response } from "@workspace/ui/components/ai-elements/response.tsx"
 import { CopyIcon, RefreshCcwIcon } from "lucide-react"
 import {
     Source,
     Sources,
     SourcesContent,
     SourcesTrigger,
-} from "@workspace/ui/components/ai-elements/sources"
-import { Loader } from "@workspace/ui/components/ai-elements/loader"
+} from "@workspace/ui/components/ai-elements/sources.tsx"
+import { Loader } from "@workspace/ui/components/ai-elements/loader.tsx"
 import { models } from "@/api/ai.ts"
+import type { ModelId } from "@workspace/ai-models"
 
 export const AiChat = () => {
     const [input, setInput] = useState("")
-    const [model, setModel] = useState<string>("deepseek/deepseek-r1")
+    const [model, setModel] = useState<ModelId>("deepseek-chat")
     const { messages, sendMessage, status, regenerate } = useChat({
         transport: new DefaultChatTransport({
             api: "/api/ai/chat",
@@ -54,7 +56,7 @@ export const AiChat = () => {
             return
         }
 
-        sendMessage(
+        void sendMessage(
             {
                 text: message.text || "",
             },
@@ -159,15 +161,17 @@ export const AiChat = () => {
                 >
                     <PromptInputBody>
                         <PromptInputTextarea
-                            onChange={(e) => setInput(e.target.value)}
+                            onChange={(
+                                e: React.ChangeEvent<HTMLTextAreaElement>
+                            ) => setInput(e.target.value)}
                             value={input}
                         />
                     </PromptInputBody>
-                    <PromptInputToolbar>
+                    <PromptInputFooter>
                         <PromptInputTools>
                             <PromptInputModelSelect
-                                onValueChange={(value) => {
-                                    setModel(value)
+                                onValueChange={(modelId: ModelId) => {
+                                    setModel(modelId)
                                 }}
                                 value={model}
                             >
@@ -190,7 +194,7 @@ export const AiChat = () => {
                             disabled={!input && !status}
                             status={status}
                         />
-                    </PromptInputToolbar>
+                    </PromptInputFooter>
                 </PromptInput>
             </div>
         </div>

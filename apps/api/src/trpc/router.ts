@@ -1,9 +1,11 @@
 import { z } from "zod"
-import { router, publicProcedure, protectedProcedure } from "./trpc.ts"
-import { userRouter } from "./routers/user.router.ts"
+import { router, publicProcedure, protectedProcedure } from "./trpc.js"
+import { userRouter } from "./routers/user.router.js"
+import { assignmentRouter } from "./routers/assignment.router.js"
 
 export const appRouter = router({
     user: userRouter,
+    assignment: assignmentRouter,
 
     health: publicProcedure.query(() => {
         return {

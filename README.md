@@ -13,9 +13,13 @@ A web-based coding platform supporting multiple programming languages. Execute c
 ## Tech Stack
 
 **Frontend**: React, Vite, TailwindCSS
+
 **Backend**: Hono, tRPC
+
 **Database**: MongoDB, Redis
+
 **Code Execution**: Judge0
+
 **Infrastructure**: Docker Compose
 
 Built as a pnpm monorepo with shared packages for database models and programming language definitions.

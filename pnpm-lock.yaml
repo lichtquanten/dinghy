@@ -263,6 +263,9 @@ importers:
       '@workspace/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
+      envsub:
+        specifier: ^4.1.0
+        version: 4.1.0
       eslint-plugin-react:
         specifier: ^7.37.5
         version: 7.37.5(eslint@9.38.0(jiti@2.6.1))
@@ -278,6 +281,9 @@ importers:
       vite:
         specifier: ^7.1.10
         version: 7.1.11(@types/node@24.9.1)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.20.6)
+      vite-plugin-runtime-env:
+        specifier: ^1.0.0
+        version: 1.0.0(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.20.6))
       vite-tsconfig-paths:
         specifier: ^5.1.4
         version: 5.1.4(typescript@5.9.3)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.20.6))
@@ -2609,6 +2615,9 @@ packages:
   birpc@2.6.1:
     resolution: {integrity: sha512-LPnFhlDpdSH6FJhJyn4M0kFO7vtQ5iPw24FnG0y21q09xC7e8+1LeR31S1MAIrDAHp4m7aas4bEkTDTvMAtebQ==}
 
+  bluebird@3.7.2:
+    resolution: {integrity: sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==}
+
   body-parser@2.2.0:
     resolution: {integrity: sha512-02qvAaxv8tp7fBa/mw1ga98OGm+eCbqzJOKoRt70sLmfEEi+jyBYVTDGfCL/k06/4EMk/z01gCe7HoCH/f2LTg==}
     engines: {node: '>=18'}
@@ -2667,6 +2676,10 @@ packages:
 
   ccount@2.0.1:
     resolution: {integrity: sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg==}
+
+  chalk@3.0.0:
+    resolution: {integrity: sha512-4D3B6Wf41KOYRFdszmDqMCGq5VV/uMAB273JILmO+3jAlh8X4qDtdtgCR3fxtbLEMzSx22QdhnDcJvu2u1fVwg==}
+    engines: {node: '>=8'}
 
   chalk@4.1.2:
     resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
@@ -3061,6 +3074,10 @@ packages:
   devlop@1.1.0:
     resolution: {integrity: sha512-RWmIqhcFf1lRYBvNmr7qTNuyCt/7/ns2jbpp1+PalgE/rDQcBT0fioSMUpJ93irlUhC5hrg4cYqe6U+0ImW0rA==}
 
+  diff@4.0.2:
+    resolution: {integrity: sha512-58lmxKSA4BNyLz+HHMUzlOEpg09FV+ev6ZMe3vJihgdxzgcwZ8VoEEPmALCZG9LmqfVoNMMKpttIYTVG6uDY7A==}
+    engines: {node: '>=0.3.1'}
+
   diff@8.0.2:
     resolution: {integrity: sha512-sSuxWU5j5SR9QQji/o2qMvqRNYRDOcBTgsJ/DeCf4iSN4gW+gNMXM7wFIP+fdXZxoNiAnHUTGjCr+TSWXdRDKg==}
     engines: {node: '>=0.3.1'}
@@ -3151,6 +3168,10 @@ packages:
   entities@6.0.1:
     resolution: {integrity: sha512-aN97NXWF6AWBTahfVOIrB/NShkzi5H7F9r1s9mD3cDj4Ko5f2qhhVoYMibXF7GlLveb/D2ioWay8lxI97Ven3g==}
     engines: {node: '>=0.12'}
+
+  envsub@4.1.0:
+    resolution: {integrity: sha512-B44hta3xNFu6+zDhOha1TIrZkQHGDO3G5K8D2sJIkm/s3XyQjxWBGp1B+b/Y74Go1PqMP+cp8moPR4JullnD9Q==}
+    hasBin: true
 
   es-abstract@1.24.0:
     resolution: {integrity: sha512-WSzPgsdLtTcQwm4CROfS5ju2Wa1QQcVeT37jFjYzdFz1r9ahadC8B8/a4qxJxM+09F18iumCdRmlr96ZYkQvEg==}
@@ -3502,6 +3523,11 @@ packages:
 
   hachure-fill@0.5.2:
     resolution: {integrity: sha512-3GKBOn+m2LX9iq+JC1064cSFprJY4jL1jCXTcpnfER5HYE2l/4EfWSGzkPa/ZDBmYI0ZOEj5VHV/eKnPGkHuOg==}
+
+  handlebars@4.7.8:
+    resolution: {integrity: sha512-vafaFqs8MZkRrSX7sFVUdo3ap/eNiLnb4IakshzvP56X5Nr1iGKAIqdX6tMlm6HcNRIkr6AxO5jFEoJzzpT8aQ==}
+    engines: {node: '>=0.4.7'}
+    hasBin: true
 
   has-bigints@1.1.0:
     resolution: {integrity: sha512-R3pbpkcIqv2Pm3dUwgjclDRVmWpTJW2DcMzcIhEXEx1oh/CEMObMm3KLmRJOdvhM7o4uQBnwr8pzRK2sJWIqfg==}
@@ -4346,6 +4372,9 @@ packages:
     resolution: {integrity: sha512-8Ofs/AUQh8MaEcrlq5xOX0CQ9ypTF5dl78mjlMNfOK08fzpgTHQRQPBxcPlEtIw0yRpws+Zo/3r+5WRby7u3Gg==}
     engines: {node: '>= 0.6'}
 
+  neo-async@2.6.2:
+    resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
+
   next-themes@0.4.6:
     resolution: {integrity: sha512-pZvgD5L0IEvX5/9GWyHMf3m8BKiVQwsCMHfoFosXtXBMnaS0ZnIJ9ST4b4NqLVKDEm8QBxoNNGNaBv2JNF6XNA==}
     peerDependencies:
@@ -4783,6 +4812,10 @@ packages:
   remark-stringify@11.0.0:
     resolution: {integrity: sha512-1OSmLd3awB/t8qdoEOMazZkNsfVTeY4fTsgzcQFdXNq8ToTN4ZGwrMnlda4K6smTFKD+GRV6O48i6Z4iKgPPpw==}
 
+  replace-last@1.2.6:
+    resolution: {integrity: sha512-Cj+MK38VtNu1S5J73mEZY3ciQb9dJajNq1Q8inP4dn/MhJMjHwoAF3Z3FjspwAEV9pfABl565MQucmrjOkty4g==}
+    engines: {node: '>= 4.0.0'}
+
   require-directory@2.1.1:
     resolution: {integrity: sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q==}
     engines: {node: '>=0.10.0'}
@@ -4963,6 +4996,10 @@ packages:
 
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
+    engines: {node: '>=0.10.0'}
+
+  source-map@0.6.1:
+    resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
 
   source-map@0.8.0-beta.0:
@@ -5278,6 +5315,11 @@ packages:
   ufo@1.6.1:
     resolution: {integrity: sha512-9a4/uxlTWJ4+a5i0ooc1rU7C7YOw3wT+UGqdeNNHWnOF9qcMBgLRS+4IYUqbczewFx4mLEig6gawh7X6mFlEkA==}
 
+  uglify-js@3.19.3:
+    resolution: {integrity: sha512-v3Xu+yuwBXisp6QYTcH4UbH+xYJXqnq2m/LtQVWKWzYc1iehYnLixoQDN9FH6/j9/oybfd6W9Ghwkl8+UMKTKQ==}
+    engines: {node: '>=0.8.0'}
+    hasBin: true
+
   unbox-primitive@1.1.0:
     resolution: {integrity: sha512-nWJ91DjeOkej/TA8pXQ3myruKpKEYgqvpw9lz4OPHj/NWFNluYrjbz9j01CJ8yKQd2g4jFoOkINCTW2I5LEEyw==}
     engines: {node: '>= 0.4'}
@@ -5389,6 +5431,11 @@ packages:
 
   victory-vendor@36.9.2:
     resolution: {integrity: sha512-PnpQQMuxlwYdocC8fIJqVXvkeViHYzotI+NJrCuav0ZYFoq912ZHBk3mCeuj+5/VpodOjPe1z0Fk2ihgzlXqjQ==}
+
+  vite-plugin-runtime-env@1.0.0:
+    resolution: {integrity: sha512-0fV4NGeIubM632bQLQ4WijAyfFrrWw2zbar8b/HUGj6hNmKXQ6HUdWAcBPGILInOIgY3qm5hSOhWDJEvhFF64g==}
+    peerDependencies:
+      vite: '*'
 
   vite-tsconfig-paths@5.1.4:
     resolution: {integrity: sha512-cYj0LRuLV2c2sMqhqhGpaO3LretdtMn/BVX4cPLanIZuwwrkVl+lK84E/miEXkCHWXuq65rhNN4rXsBcOB3S4w==}
@@ -5507,6 +5554,9 @@ packages:
   word-wrap@1.2.5:
     resolution: {integrity: sha512-BN22B5eaMMI9UMtjrGd5g5eCYPpCPDUy0FJXbYsaT5zYxjFOckS53SQDE3pWkVoWpHXVb3BrYcEN4Twa55B5cA==}
     engines: {node: '>=0.10.0'}
+
+  wordwrap@1.0.0:
+    resolution: {integrity: sha512-gvVzJFlPycKc5dZN4yPkP8w7Dc37BtP1yczEneOb4uq34pXZcvrtRTmWV8W+Ume+XCxKgbjM+nevkyFPMybd4Q==}
 
   wrap-ansi@7.0.0:
     resolution: {integrity: sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==}
@@ -7752,6 +7802,8 @@ snapshots:
 
   birpc@2.6.1: {}
 
+  bluebird@3.7.2: {}
+
   body-parser@2.2.0:
     dependencies:
       bytes: 3.1.2
@@ -7820,6 +7872,11 @@ snapshots:
   caniuse-lite@1.0.30001751: {}
 
   ccount@2.0.1: {}
+
+  chalk@3.0.0:
+    dependencies:
+      ansi-styles: 4.3.0
+      supports-color: 7.2.0
 
   chalk@4.1.2:
     dependencies:
@@ -8235,6 +8292,8 @@ snapshots:
     dependencies:
       dequal: 2.0.3
 
+  diff@4.0.2: {}
+
   diff@8.0.2: {}
 
   doctrine@2.1.0:
@@ -8312,6 +8371,17 @@ snapshots:
       tapable: 2.3.0
 
   entities@6.0.1: {}
+
+  envsub@4.1.0:
+    dependencies:
+      bluebird: 3.7.2
+      chalk: 3.0.0
+      commander: 4.1.1
+      diff: 4.0.2
+      handlebars: 4.7.8
+      lodash: 4.17.21
+      replace-last: 1.2.6
+      string.prototype.matchall: 4.0.12
 
   es-abstract@1.24.0:
     dependencies:
@@ -8814,6 +8884,15 @@ snapshots:
   graphemer@1.4.0: {}
 
   hachure-fill@0.5.2: {}
+
+  handlebars@4.7.8:
+    dependencies:
+      minimist: 1.2.8
+      neo-async: 2.6.2
+      source-map: 0.6.1
+      wordwrap: 1.0.0
+    optionalDependencies:
+      uglify-js: 3.19.3
 
   has-bigints@1.1.0: {}
 
@@ -9899,6 +9978,8 @@ snapshots:
 
   negotiator@1.0.0: {}
 
+  neo-async@2.6.2: {}
+
   next-themes@0.4.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
     dependencies:
       react: 19.2.0
@@ -10400,6 +10481,8 @@ snapshots:
       mdast-util-to-markdown: 2.1.2
       unified: 11.0.5
 
+  replace-last@1.2.6: {}
+
   require-directory@2.1.1: {}
 
   resolve-from@4.0.0: {}
@@ -10654,6 +10737,8 @@ snapshots:
       react-dom: 19.2.0(react@19.2.0)
 
   source-map-js@1.2.1: {}
+
+  source-map@0.6.1: {}
 
   source-map@0.8.0-beta.0:
     dependencies:
@@ -11020,6 +11105,9 @@ snapshots:
 
   ufo@1.6.1: {}
 
+  uglify-js@3.19.3:
+    optional: true
+
   unbox-primitive@1.1.0:
     dependencies:
       call-bound: 1.0.4
@@ -11165,6 +11253,11 @@ snapshots:
       d3-time: 3.1.0
       d3-timer: 3.0.1
 
+  vite-plugin-runtime-env@1.0.0(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.20.6)):
+    dependencies:
+      magic-string: 0.30.19
+      vite: 7.1.11(@types/node@24.9.1)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.20.6)
+
   vite-tsconfig-paths@5.1.4(typescript@5.9.3)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.20.6)):
     dependencies:
       debug: 4.4.3(supports-color@5.5.0)
@@ -11277,6 +11370,8 @@ snapshots:
       isexe: 3.1.1
 
   word-wrap@1.2.5: {}
+
+  wordwrap@1.0.0: {}
 
   wrap-ansi@7.0.0:
     dependencies:

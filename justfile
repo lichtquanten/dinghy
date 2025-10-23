@@ -3,6 +3,18 @@ default:
     @just --list
 
 # ============================================================================
+# Private Helpers
+# ============================================================================
+
+# Run docker compose with encrypted env file
+_dc env *ARGS:
+    ENV_FILE_ENCRYPTED="./.env/{{env}}.encrypted" docker compose {{ARGS}}
+
+# Run docker compose with development overrides and encrypted env file
+_dcdev env *ARGS:
+    ENV_FILE_ENCRYPTED="./.env/{{env}}.encrypted" docker compose -f compose.yaml -f compose.development.yaml {{ARGS}}
+
+# ============================================================================
 # Env File Management
 # ============================================================================
 
@@ -32,171 +44,171 @@ env-setup: env-merge env-encrypt env-examples
 # ============================================================================
 
 # Build local development (check if build works)
-dev-build:
-    docker compose -f compose.yaml -f compose.development.yaml --env-file .env/local.dev --profile api --profile infra build
+dev-build env="local_dev":
+    @just _dcdev "{{env}}" --profile api --profile infra build
 
 # Build local development with no cache
-dev-build-clean:
-    docker compose -f compose.yaml -f compose.development.yaml --env-file .env/local.dev --profile api --profile infra build --no-cache
+dev-build-clean env="local_dev":
+    @just _dcdev "{{env}}" --profile api --profile infra build --no-cache
 
 # Start local development
-dev:
-    docker compose -f compose.yaml -f compose.development.yaml --env-file .env/local.dev --profile api --profile infra up -d --build
+dev env="local_dev":
+    @just _dcdev "{{env}}" --profile api --profile infra up -d --build
 
 # Start local development without rebuilding
-dev-fast:
-    docker compose -f compose.yaml -f compose.development.yaml --env-file .env/local.dev --profile api --profile infra up -d
+dev-fast env="local_dev":
+    @just _dcdev "{{env}}" --profile api --profile infra up -d
 
 # Stop local development
-dev-down:
-    docker compose -f compose.yaml -f compose.development.yaml --env-file .env/local.dev down
+dev-down env="local_dev":
+    @just _dcdev "{{env}}" down
 
 # ============================================================================
 # Remote Development
 # ============================================================================
 
 # Build remote development (check if build works)
-remote-build:
-    docker compose -f compose.yaml -f compose.development.yaml --env-file .env/remote.dev --profile api --profile proxy build
+remote-build env="remote_dev":
+    @just _dcdev "{{env}}" --profile api --profile proxy build
 
 # Build remote development with no cache
-remote-build-clean:
-    docker compose -f compose.yaml -f compose.development.yaml --env-file .env/remote.dev --profile api --profile proxy build --no-cache
+remote-build-clean env="remote_dev":
+    @just _dcdev "{{env}}" --profile api --profile proxy build --no-cache
 
 # Start remote development
-remote:
-    docker compose -f compose.yaml -f compose.development.yaml --env-file .env/remote.dev --profile api --profile proxy up -d --build
+remote env="remote_dev":
+    @just _dcdev "{{env}}" --profile api --profile proxy up -d --build
 
 # Start remote without rebuilding
-remote-fast:
-    docker compose -f compose.yaml -f compose.development.yaml --env-file .env/remote.dev --profile api --profile proxy up -d
+remote-fast env="remote_dev":
+    @just _dcdev "{{env}}" --profile api --profile proxy up -d
 
 # Stop remote development
-remote-down:
-    docker compose -f compose.yaml -f compose.development.yaml --env-file .env/remote.dev down
+remote-down env="remote_dev":
+    @just _dcdev "{{env}}" down
 
 # ============================================================================
 # Staging Environment
 # ============================================================================
 
 # Build staging (check if build works)
-staging-build:
-    docker compose --env-file .env/staging --profile api --profile proxy build
+staging-build env="staging":
+    @just _dc "{{env}}" --profile api --profile proxy build
 
 # Build staging with no cache
-staging-build-clean:
-    docker compose --env-file .env/staging --profile api --profile proxy build --no-cache
+staging-build-clean env="staging":
+    @just _dc "{{env}}" --profile api --profile proxy build --no-cache
 
 # Start staging environment
-staging:
-    docker compose --env-file .env/staging --profile api --profile proxy up -d --build
+staging env="staging":
+    @just _dc "{{env}}" --profile api --profile proxy up -d --build
 
 # Start staging without rebuilding
-staging-fast:
-    docker compose --env-file .env/staging --profile api --profile proxy up -d
+staging-fast env="staging":
+    @just _dc "{{env}}" --profile api --profile proxy up -d
 
 # Stop staging environment
-staging-down:
-    docker compose --env-file .env/staging down
+staging-down env="staging":
+    @just _dc "{{env}}" down
 
 # ============================================================================
 # Production
 # ============================================================================
 
 # Build production (check if build works)
-prod-build:
-    docker compose --env-file .env/prod --profile api build
+prod-build env="prod":
+    @just _dc "{{env}}" --profile api build
 
 # Build production with no cache
-prod-build-clean:
-    docker compose --env-file .env/prod --profile api build --no-cache
+prod-build-clean env="prod":
+    @just _dc "{{env}}" --profile api build --no-cache
 
 # Start production
-prod:
-    docker compose --env-file .env/prod --profile api up -d --build
+prod env="prod":
+    @just _dc "{{env}}" --profile api up -d --build
 
 # Start production without rebuilding
-prod-fast:
-    docker compose --env-file .env/prod --profile api up -d
+prod-fast env="prod":
+    @just _dc "{{env}}" --profile api up -d
 
 # Stop production
-prod-down:
-    docker compose --env-file .env/prod down
+prod-down env="prod":
+    @just _dc "{{env}}" down
 
 # ============================================================================
 # Infrastructure
 # ============================================================================
 
 # Start infrastructure only
-infra:
-    docker compose --env-file .env/local.dev --profile infra up -d
+infra env="local_dev":
+    @just _dc "{{env}}" --profile infra up -d
 
 # Stop infrastructure
-infra-down:
-    docker compose --env-file .env/local.dev --profile infra down
+infra-down env="local_dev":
+    @just _dc "{{env}}" --profile infra down
 
 # ============================================================================
 # Admin Tools
 # ============================================================================
 
-# Start admin tools [env: local.dev|remote.dev|staging|prod]
-admin env="local.dev":
-    docker compose --env-file .env/{{env}} --profile admin-tools up -d
+# Start admin tools [env: local_dev|remote_dev|staging|prod]
+admin env="local_dev":
+    @just _dc "{{env}}" --profile admin-tools up -d
 
 # Stop admin tools (works for any environment)
-admin-down:
-    docker compose --profile admin-tools down
+admin-down env="local_dev":
+    @just _dc "{{env}}" --profile admin-tools down
 
 # ============================================================================
 # Logs & Status
 # ============================================================================
 
-# View logs [env: local.dev|remote.dev|staging|prod]
-logs env="local.dev":
-    docker compose --env-file .env/{{env}} --profile "*" logs -f
+# View logs [env: local_dev|remote_dev|staging|prod]
+logs env="local_dev":
+    @just _dc "{{env}}" --profile "*" logs -f
 
-# View logs for specific service [env: local.dev|remote.dev|staging|prod]
-logs-service service env="local.dev":
-    docker compose -f compose.yaml -f compose.development.yaml --env-file .env/{{env}} logs -f {{service}}
+# View logs for specific service [env: local_dev|remote_dev|staging|prod]
+logs-service service env="local_dev":
+    @just _dcdev "{{env}}" logs -f {{service}}
 
-# Show container status [env: local.dev|remote.dev|staging|prod]
-status env="local.dev":
-    docker compose -f compose.yaml -f compose.development.yaml --env-file .env/{{env}} ps
+# Show container status [env: local_dev|remote_dev|staging|prod]
+status env="local_dev":
+    @just _dcdev "{{env}}" ps
 
 # ============================================================================
 # Shell Access
 # ============================================================================
 # NOTE: Is it an issue if i have the development override even when i am using env of staging
 # for example where I don't use this override?
-# Open shell in API container [env: local.dev|remote.dev|staging|prod]
-shell env="local.dev":
-    docker compose -f compose.yaml -f compose.development.yaml --env-file .env/{{env}} exec api sh
+# Open shell in API container [env: local_dev|remote_dev|staging|prod]
+shell env="local_dev":
+    @just _dcdev "{{env}}" exec api sh
 
-# Open shell in specific service [env: local.dev|remote.dev|staging|prod]
-shell-service service env="local.dev":
-    docker compose -f compose.yaml -f compose.development.yaml --env-file .env/{{env}} exec {{service}} sh
+# Open shell in specific service [env: local_dev|remote_dev|staging|prod]
+shell-service service env="local_dev":
+    @just _dcdev "{{env}}" exec {{service}} sh
 
-# Open MongoDB shell [env: local.dev|remote.dev|staging|prod]
-db-shell env="local.dev":
-    docker compose -f compose.yaml -f compose.development.yaml --env-file .env/{{env}} exec mongodb mongosh
+# Open MongoDB shell [env: local_dev|remote_dev|staging|prod]
+db-shell env="local_dev":
+    @just _dcdev "{{env}}" exec mongodb mongosh
 
-# Open Redis CLI [env: local.dev|remote.dev|staging|prod]
-redis-shell env="local.dev":
-    docker compose -f compose.yaml -f compose.development.yaml --env-file .env/{{env}} exec redis redis-cli
+# Open Redis CLI [env: local_dev|remote_dev|staging|prod]
+redis-shell env="local_dev":
+    @just _dcdev "{{env}}" exec redis redis-cli
 
 # ============================================================================
 # Cleanup
 # ============================================================================
 
-# Stop all services [env: local.dev|remote.dev|staging|prod]
-stop env="local.dev":
-    docker compose -f compose.yaml --profile "*" --env-file .env/{{env}} down
+# Stop all services [env: local_dev|remote_dev|staging|prod]
+stop env="local_dev":
+    @just _dc "{{env}}" -f compose.yaml --profile "*" down
 
-# Stop and remove volumes [env: local.dev|remote.dev|staging|prod]
-clean env="local.dev":
-    docker compose -f compose.yaml --profile "*" --env-file .env/{{env}} down -v
+# Stop and remove volumes [env: local_dev|remote_dev|staging|prod]
+clean env="local_dev":
+    @just _dc "{{env}}" -f compose.yaml --profile "*" down -v
 
-# Remove everything including orphans [env: local.dev|remote.dev|staging|prod]
-clean-all env="local.dev":
-    docker compose -f compose.yaml --profile "*" --env-file .env/{{env}} down -v --remove-orphans
+# Remove everything including orphans [env: local_dev|remote_dev|staging|prod]
+clean-all env="local_dev":
+    @just _dc "{{env}}" -f compose.yaml --profile "*" down -v --remove-orphans
     docker system prune -f

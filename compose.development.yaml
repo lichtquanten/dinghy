@@ -2,9 +2,8 @@ services:
   api:
     build:
       target: development
-      args:
-        WEB_CONTAINER_PORT: ${WEB_CONTAINER_PORT:-5173}
-        ENV_FILE_ENCRYPTED: ${ENV_FILE_ENCRYPTED:-./.env/.env.remote.development.encrypted}
+    environment:
+      ENV_FILE_ENCRYPTED: ${ENV_FILE_ENCRYPTED:-./.env/remove_dev.encrypted}
     ports:
       - "${WEB_HOST_PORT:-5173}:${WEB_CONTAINER_PORT:-5173}"
     healthcheck:

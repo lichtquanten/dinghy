@@ -24,19 +24,13 @@ COPY packages/ui/package.json ./packages/ui/
 # DEVELOPMENT TARGET
 # =============================================================================
 FROM base AS development
-ARG API_CONTAINER_PORT
-ARG ENV_FILE_ENCRYPTED
 COPY . .
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm install --frozen-lockfile
-COPY ${ENV_FILE_ENCRYPTED} ./.env.encrypted
-
-EXPOSE ${API_CONTAINER_PORT}
-EXPOSE ${WEB_CONTAINER_PORT}
 
 CMD sh -c "set -a && \
   eval \"\$(pnpm exec dotenvx get --format eval --strict \
-    --env-file ./.env.encrypted)\" && \
+    --env-file ${ENV_FILE_ENCRYPTED})\" && \
   set +a && \
   pnpm run dev"
 
@@ -44,18 +38,13 @@ CMD sh -c "set -a && \
 # BUILD STAGE
 # =============================================================================
 FROM package-json AS build
-ARG ENV_FILE_ENCRYPTED
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm install --frozen-lockfile
 
 COPY . .
 
-RUN --mount=type=secret,id=dotenv_key \
-    set -a && \
-    eval "$(pnpm exec dotenvx get --format eval --strict --env-keys-file /run/secrets/dotenv_key --env-file ${ENV_FILE_ENCRYPTED})" && \
-    set +a && \
-    pnpm run build
+RUN pnpm run build
 
 # =============================================================================
 # DEPENDENCIES STAGE
@@ -68,24 +57,22 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
 # PRODUCTION TARGET
 # =============================================================================
 FROM base AS production
-ARG API_CONTAINER_PORT
-ARG ENV_FILE_ENCRYPTED
 
 COPY --from=production-dependencies --chown=node:node /app/ ./
 
 COPY --chown=node:node packages/ ./packages/
 
+COPY --chown=node:node .env/ .env/
+
 COPY --from=build --chown=node:node /app/apps/web/dist/ ./apps/api/public/
 COPY --from=build --chown=node:node /app/apps/api/dist/ ./apps/api/dist/
 COPY --from=build --chown=node:node /app/packages/database/dist/ ./packages/database/dist/
 
-COPY --chown=node:node ${ENV_FILE_ENCRYPTED} ./.env.encrypted
-
 USER node
-EXPOSE ${API_CONTAINER_PORT}
 
 CMD sh -c "set -a && \
     eval \"\$(pnpm exec dotenvx get --format eval --strict \
-    --env-file ./.env.encrypted)\" && \
+    --env-file ${ENV_FILE_ENCRYPTED})\" && \
     set +a && \
+    pnpm --filter web run inject-env-vars && \
     pnpm --filter api run start"

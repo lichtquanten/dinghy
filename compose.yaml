@@ -13,11 +13,8 @@ services:
       context: .
       dockerfile: Dockerfile
       target: production
-      secrets:
-        - dotenv_key
-      args:
-        API_CONTAINER_PORT: ${API_CONTAINER_PORT:-3000}
-        ENV_FILE_ENCRYPTED: ${ENV_FILE_ENCRYPTED:-./.env/.prod.encrypted}
+    environment:
+      ENV_FILE_ENCRYPTED: ${ENV_FILE_ENCRYPTED:-./.env/prod.encrypted}
     env_file:
       - ./.env/.env.keys
     ports:
@@ -288,7 +285,3 @@ networks:
   app-network:
     name: app-network
     driver: bridge
-
-secrets:
-  dotenv_key:
-    file: .env/.env.keys

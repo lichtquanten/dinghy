@@ -1,17 +1,24 @@
-import { useState } from "react"
 import { Button } from "@workspace/ui/components/button.tsx"
 import { Play } from "lucide-react"
 import { useCodeExecution } from "@/hooks/useCodeExecution"
-import { DEFAULT_CODE, DEFAULT_CODE_LANGUAGE } from "@/config/consts"
+import { useCode } from "@/hooks/useCode"
+import { useCodeAutoSave } from "@/hooks/useCodeAutoSave"
 import { LanguageSelector } from "@/components/LanguageSelector"
 import { CodeEditor } from "@/components/CodeEditor"
 import { StdinInput } from "@/components/StdinInput"
 import { CodeOutput } from "@/components/CodeOutput"
 import { ConnectionStatus } from "@/components/ConnectionStatus"
+import type { AssignmentPublic } from "@workspace/database/types/assignment.js"
+import { useState } from "react"
 
-export const IdePanel = () => {
-    const [code, setCode] = useState(DEFAULT_CODE)
-    const [codeLanguage, setCodeLanguage] = useState(DEFAULT_CODE_LANGUAGE)
+interface IdePanelProps {
+    assignment: AssignmentPublic
+}
+
+export const IdePanel = ({ assignment }: IdePanelProps) => {
+    const { code, setCode } = useCode(assignment)
+    const { isSaving, isSaved } = useCodeAutoSave(assignment.slug, code)
+
     const [stdin, setStdin] = useState("")
 
     const { executeCode, result, isLoading, error, isConnected } =
@@ -22,7 +29,7 @@ export const IdePanel = () => {
         })
 
     const handleRunCode = () => {
-        void executeCode(code, codeLanguage, stdin)
+        void executeCode(code, assignment.codeLanguage, stdin)
     }
 
     return (
@@ -32,12 +39,21 @@ export const IdePanel = () => {
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:justify-between">
                     <div className="w-full sm:w-auto">
                         <LanguageSelector
-                            language={codeLanguage}
-                            onChange={setCodeLanguage}
+                            language={assignment.codeLanguage}
+                            onChange={() => {}}
                         />
                     </div>
-
                     <div className="flex items-center gap-3">
+                        <div className="text-sm">
+                            {isSaving && (
+                                <span className="text-muted-foreground">
+                                    Saving...
+                                </span>
+                            )}
+                            {isSaved && (
+                                <span className="text-green-600">Saved ✓</span>
+                            )}
+                        </div>
                         <ConnectionStatus isConnected={isConnected} />
                         <Button
                             onClick={handleRunCode}
@@ -63,7 +79,7 @@ export const IdePanel = () => {
                     <CodeEditor
                         code={code}
                         onCodeChange={setCode}
-                        language={codeLanguage}
+                        language={assignment.codeLanguage}
                     />
                 </div>
             </section>
@@ -71,7 +87,6 @@ export const IdePanel = () => {
             {/* Input/Output */}
             <section className="min-h-0 flex flex-col gap-3 md:gap-4">
                 <StdinInput stdin={stdin} onStdinChange={setStdin} />
-
                 <div
                     className="min-h-0 flex-1 overflow-auto rounded-md border"
                     aria-busy={isLoading}

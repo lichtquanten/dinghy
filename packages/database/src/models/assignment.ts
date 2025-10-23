@@ -1,4 +1,4 @@
-import { prop, getModelForClass } from "@typegoose/typegoose"
+import { prop, getModelForClass, modelOptions } from "@typegoose/typegoose"
 import type { IModelOptions } from "@typegoose/typegoose/lib/types"
 import type {
     CodeLanguageKey,
@@ -6,6 +6,7 @@ import type {
     AssignmentPublic,
 } from "../types/assignment"
 
+@modelOptions({ schemaOptions: { timestamps: true, collection: "testCases" } })
 export class TestCase {
     @prop({ required: true })
     public input!: string
@@ -20,7 +21,13 @@ export class TestCase {
     public description?: string
 }
 
+@modelOptions({
+    schemaOptions: { timestamps: true, collection: "assignments" },
+})
 export class Assignment {
+    createdAt?: Date | undefined
+    updatedAt?: Date | undefined
+
     @prop({ required: true, unique: true })
     public slug!: string
 

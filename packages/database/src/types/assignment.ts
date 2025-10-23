@@ -24,6 +24,6 @@ export type PublicTestCase = Omit<InstanceType<typeof TestCaseClass>, "hidden">
 
 export type Assignment = InstanceType<typeof AssignmentClass>
 
-export interface AssignmentPublic extends Omit<Assignment, "testCases"> {
+export interface AssignmentPublic extends Omit<AssignmentClass, "testCases"> {
     testCases: Array<PublicTestCase>
 }

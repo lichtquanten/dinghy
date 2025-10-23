@@ -3,6 +3,7 @@ import { getModelForClass } from "@typegoose/typegoose"
 
 import { User } from "@workspace/database/models/user.js"
 import { Assignment } from "@workspace/database/models/assignment.js"
+import { Progress } from "@workspace/database/models/progress.js"
 
 import { env } from "../config/env.js"
 
@@ -19,10 +20,8 @@ export async function disconnectMongoDB() {
     console.log("MongoDB disconnected")
 }
 
-export const UserModel = getModelForClass(User, {
-    schemaOptions: { timestamps: true },
-})
+export const UserModel = getModelForClass(User)
 
-export const AssignmentModel = getModelForClass(Assignment, {
-    schemaOptions: { timestamps: true },
-})
+export const AssignmentModel = getModelForClass(Assignment)
+
+export const ProgressModel = getModelForClass(Progress)

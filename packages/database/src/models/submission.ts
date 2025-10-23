@@ -1,23 +1,22 @@
-import { prop, getModelForClass } from "@typegoose/typegoose"
+import { prop, getModelForClass, modelOptions } from "@typegoose/typegoose"
 import type { IModelOptions } from "@typegoose/typegoose/lib/types"
-import type { Types } from "mongoose"
-import type { CodeLanguageKey } from "../types/assignment"
 import type { SubmissionStatus } from "../types/submission"
 
+@modelOptions({
+    schemaOptions: { timestamps: true, collection: "submissions" },
+})
 export class Submission {
     createdAt?: Date | undefined
     updatedAt?: Date | undefined
-    @prop({ required: true, ref: "User" })
-    public userId!: Types.ObjectId
+
+    @prop({ required: true })
+    public userId!: string
 
     @prop({ required: true })
     public assignmentSlug!: string
 
     @prop({ required: true })
     public code!: string
-
-    @prop({ required: true })
-    public codeLanguage!: CodeLanguageKey
 
     @prop({ default: "pending" })
     public status!: SubmissionStatus
@@ -34,9 +33,6 @@ export class Submission {
             error?: string
         }>
     }
-
-    @prop()
-    public executionTimeMs?: number
 }
 
 export function getSubmissionModel(options?: IModelOptions) {

@@ -4,6 +4,7 @@
     "type": "module",
     "scripts": {
         "dev": "concurrently \"tsdown --watch\" \"nodemon\"",
+        "watch": "tsdown --watch",
         "build": "tsdown",
         "start": "node dist/server.js",
         "lint": "eslint .",
@@ -35,6 +36,7 @@
         "mongoose": "^8.19.1",
         "ollama-ai-provider-v2": "^1.5.0",
         "rate-limit-redis": "^4.2.2",
+        "superjson": "^2.2.3",
         "zod": "^4.1.12"
     },
     "devDependencies": {

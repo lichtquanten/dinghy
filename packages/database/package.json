@@ -5,6 +5,7 @@
     "private": true,
     "scripts": {
         "dev": "tsdown --watch",
+        "watch": "tsdown --watch",
         "build": "tsdown",
         "sync": "tsx src/scripts/sync.ts",
         "lint": "eslint .",

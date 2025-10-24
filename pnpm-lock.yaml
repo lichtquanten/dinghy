@@ -11,6 +11,9 @@ importers:
       '@dotenvx/dotenvx':
         specifier: ^1.51.0
         version: 1.51.0
+      envsub:
+        specifier: ^4.1.0
+        version: 4.1.0
     devDependencies:
       '@eslint/js':
         specifier: ^9.38.0
@@ -102,6 +105,9 @@ importers:
       ai:
         specifier: ^5.0.76
         version: 5.0.78(zod@4.1.12)
+      envsub:
+        specifier: ^4.1.0
+        version: 4.1.0
       hono:
         specifier: ^4.10.1
         version: 4.10.2

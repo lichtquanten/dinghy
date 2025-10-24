@@ -3,6 +3,7 @@
     "private": "true",
     "type": "module",
     "scripts": {
+        "inject-env-vars": "envsub dist/index.html",
         "dev": "concurrently \"tsdown --watch\" \"nodemon\"",
         "watch": "tsdown --watch",
         "build": "tsdown",
@@ -30,6 +31,7 @@
         "@workspace/code-languages": "workspace:*",
         "@workspace/database": "workspace:*",
         "ai": "^5.0.76",
+        "envsub": "^4.1.0",
         "hono": "^4.10.1",
         "hono-rate-limiter": "^0.4.2",
         "ioredis": "^5.8.1",

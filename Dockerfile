@@ -74,5 +74,5 @@ CMD sh -c "set -a && \
     eval \"\$(pnpm exec dotenvx get --format eval --strict \
     --env-file ${ENV_FILE_ENCRYPTED})\" && \
     set +a && \
-    pnpm --filter web run inject-env-vars && \
+    pnpm run --filter api inject-env-vars && \
     pnpm --filter api run start"

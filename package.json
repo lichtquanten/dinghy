@@ -15,7 +15,8 @@
         "clean": "pnpm -r --parallel clean"
     },
     "dependencies": {
-        "@dotenvx/dotenvx": "^1.51.0"
+        "@dotenvx/dotenvx": "^1.51.0",
+        "envsub": "^4.1.0"
     },
     "devDependencies": {
         "@eslint/js": "^9.38.0",

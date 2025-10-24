@@ -3,7 +3,7 @@
     "private": "true",
     "type": "module",
     "scripts": {
-        "inject-env-vars": "envsub dist/index.html",
+        "inject-env-vars": "envsub public/index.html",
         "dev": "concurrently \"tsdown --watch\" \"nodemon\"",
         "watch": "tsdown --watch",
         "build": "tsdown",

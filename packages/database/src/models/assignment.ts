@@ -1,9 +1,9 @@
-import { prop, getModelForClass, modelOptions } from "@typegoose/typegoose"
+import { getModelForClass, modelOptions, prop } from "@typegoose/typegoose"
 import type { IModelOptions } from "@typegoose/typegoose/lib/types"
 import type {
-    CodeLanguageKey,
-    AssignmentStatus,
     AssignmentPublic,
+    AssignmentStatus,
+    CodeLanguageKey,
 } from "../types/assignment"
 
 @modelOptions({ schemaOptions: { timestamps: true, collection: "testCases" } })

@@ -28,11 +28,16 @@ COPY . .
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm install --frozen-lockfile
 
-CMD sh -c "set -a && \
-  eval \"\$(pnpm exec dotenvx get --format eval --strict \
-    --env-file ${ENV_FILE_ENCRYPTED})\" && \
-  set +a && \
-  pnpm run dev"
+CMD sh -c "if [ -n \"${ENV_FILE_ENCRYPTED}\" ]; then \
+    set -a && \
+    if [ -n \"${ENV_KEYS}\" ]; then \
+        eval \"\$(DOTENV_KEY=\"${ENV_KEYS}\" pnpm exec dotenvx get --format eval --strict --env-file ${ENV_FILE_ENCRYPTED})\"; \
+    else \
+        eval \"\$(pnpm exec dotenvx get --format eval --strict --env-file ${ENV_FILE_ENCRYPTED})\"; \
+    fi && \
+    set +a; \
+fi && \
+pnpm run dev"
 
   # =============================================================================
 # BUILD STAGE
@@ -70,9 +75,14 @@ COPY --from=build --chown=node:node /app/packages/database/dist/ ./packages/data
 
 USER node
 
-CMD sh -c "set -a && \
-    eval \"\$(pnpm exec dotenvx get --format eval --strict \
-    --env-file ${ENV_FILE_ENCRYPTED})\" && \
-    set +a && \
+CMD sh -c "if [ -n \"${ENV_FILE_ENCRYPTED}\" ]; then \
+        set -a && \
+        if [ -n \"${ENV_KEYS}\" ]; then \
+            eval \"\$(DOTENV_KEY=\"${ENV_KEYS}\" pnpm exec dotenvx get --format eval --strict --env-file ${ENV_FILE_ENCRYPTED})\"; \
+        else \
+            eval \"\$(pnpm exec dotenvx get --format eval --strict --env-file ${ENV_FILE_ENCRYPTED})\"; \
+        fi && \
+        set +a; \
+    fi && \
     pnpm run --filter api inject-env-vars && \
     pnpm --filter api run start"

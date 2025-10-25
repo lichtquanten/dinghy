@@ -1,8 +1,8 @@
-import { Hono } from "hono"
 import { zValidator } from "@hono/zod-validator"
-import { streamText, convertToModelMessages } from "ai"
-import { ChatRequestSchema } from "./types.js"
+import { convertToModelMessages, streamText } from "ai"
+import { Hono } from "hono"
 import { getModel } from "./models.js"
+import { ChatRequestSchema } from "./types.js"
 
 export const maxDuration = 30
 

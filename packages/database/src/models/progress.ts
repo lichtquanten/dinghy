@@ -1,4 +1,4 @@
-import { prop, getModelForClass, modelOptions } from "@typegoose/typegoose"
+import { getModelForClass, modelOptions, prop } from "@typegoose/typegoose"
 import type { IModelOptions } from "@typegoose/typegoose/lib/types"
 
 @modelOptions({ schemaOptions: { timestamps: true, collection: "progress" } })

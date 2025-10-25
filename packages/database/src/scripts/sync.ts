@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
+import { z } from "zod"
 import { getAssignmentModel } from "../models/assignment"
 import { assignments } from "../seed/index"
-import { z } from "zod"
 
 const envSchema = z.object({
     MONGO_ROOT_URI: z.url(),

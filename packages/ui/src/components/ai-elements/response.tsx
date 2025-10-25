@@ -1,8 +1,8 @@
 "use client"
 
-import { cn } from "@workspace/ui/lib/utils"
 import { type ComponentProps, memo } from "react"
 import { Streamdown } from "streamdown"
+import { cn } from "@workspace/ui/lib/utils"
 
 type ResponseProps = ComponentProps<typeof Streamdown>
 

@@ -1,6 +1,6 @@
 import { z } from "zod"
-import { protectedProcedure, router } from "@/trpc/trpc.js"
 import { ProgressModel } from "@/infrastructure/mongodb.js"
+import { protectedProcedure, router } from "@/trpc/trpc.js"
 
 export const progressRouter = router({
     get: protectedProcedure

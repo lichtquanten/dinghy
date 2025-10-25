@@ -1,5 +1,5 @@
-import { cn } from "@workspace/ui/lib/utils"
 import type { HTMLAttributes } from "react"
+import { cn } from "@workspace/ui/lib/utils"
 
 type LoaderIconProps = {
     size?: number

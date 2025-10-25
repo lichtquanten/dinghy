@@ -1,6 +1,6 @@
+import { getConnInfo } from "@hono/node-server/conninfo"
 import { rateLimiter, type Store } from "hono-rate-limiter"
 import { RedisStore } from "rate-limit-redis"
-import { getConnInfo } from "@hono/node-server/conninfo"
 import { redisClient } from "@/infrastructure/redis.js"
 import type { AuthVariables } from "./auth.js"
 

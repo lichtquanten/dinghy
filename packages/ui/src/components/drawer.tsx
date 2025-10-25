@@ -2,7 +2,6 @@
 
 import type * as React from "react"
 import { Drawer as DrawerPrimitive } from "vaul"
-
 import { cn } from "@workspace/ui/lib/utils"
 
 function Drawer({

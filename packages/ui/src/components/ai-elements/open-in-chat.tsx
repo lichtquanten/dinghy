@@ -1,3 +1,9 @@
+import {
+    ChevronDownIcon,
+    ExternalLinkIcon,
+    MessageCircleIcon,
+} from "lucide-react"
+import { type ComponentProps, createContext, useContext } from "react"
 import { Button } from "@workspace/ui/components/button"
 import {
     DropdownMenu,
@@ -8,12 +14,6 @@ import {
     DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu"
 import { cn } from "@workspace/ui/lib/utils"
-import {
-    ChevronDownIcon,
-    ExternalLinkIcon,
-    MessageCircleIcon,
-} from "lucide-react"
-import { type ComponentProps, createContext, useContext } from "react"
 
 const providers = {
     github: {

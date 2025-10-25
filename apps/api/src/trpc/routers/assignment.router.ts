@@ -1,13 +1,11 @@
 import { z } from "zod"
-
 import { toPublicAssignment } from "@workspace/database/models/assignment.js"
 import type {
     Assignment,
     AssignmentPublic,
 } from "@workspace/database/types/assignment.js"
 import { AssignmentModel } from "@/infrastructure/mongodb.js"
-
-import { publicProcedure, protectedProcedure, router } from "@/trpc/trpc.js"
+import { protectedProcedure, publicProcedure, router } from "@/trpc/trpc.js"
 
 export const assignmentRouter = router({
     list: publicProcedure.query(async (): Promise<AssignmentPublic[]> => {

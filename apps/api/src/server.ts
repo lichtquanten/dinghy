@@ -1,16 +1,16 @@
+import { clerkMiddleware } from "@hono/clerk-auth"
 import { serve } from "@hono/node-server"
 import { serveStatic } from "@hono/node-server/serve-static"
 import { trpcServer } from "@hono/trpc-server"
 import { Hono } from "hono"
-import { appRouter } from "./trpc/router.js"
-import { createContext } from "./trpc/context.js"
 import { logger } from "hono/logger"
 import { env } from "./config/env.js"
-import { rateLimit } from "./middleware/rate-limit.js"
-import { clerkMiddleware } from "@hono/clerk-auth"
-import { judge0Routes } from "./integrations/judge0/routes.js"
-import { aiRoutes } from "./integrations/ai/routes.js"
 import { connectMongoDB, disconnectMongoDB } from "./infrastructure/mongodb.js"
+import { aiRoutes } from "./integrations/ai/routes.js"
+import { judge0Routes } from "./integrations/judge0/routes.js"
+import { rateLimit } from "./middleware/rate-limit.js"
+import { createContext } from "./trpc/context.js"
+import { appRouter } from "./trpc/router.js"
 
 const app = new Hono()
 

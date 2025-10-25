@@ -13,10 +13,8 @@ services:
       context: .
       dockerfile: Dockerfile
       target: production
-    environment:
-      ENV_FILE_ENCRYPTED: ${ENV_FILE_ENCRYPTED:-./.env/prod.encrypted}
     env_file:
-      - ./.env/.env.keys
+      - ${ENV_FILE}
     ports:
       - "${API_HOST_PORT:-3000}:${API_CONTAINER_PORT:-3000}"
     restart: ${RESTART_POLICY:-unless-stopped}

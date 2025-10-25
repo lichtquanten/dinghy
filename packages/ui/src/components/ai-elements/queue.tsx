@@ -1,5 +1,7 @@
 "use client"
 
+import { ChevronDownIcon, PaperclipIcon } from "lucide-react"
+import type { ComponentProps } from "react"
 import { Button } from "@workspace/ui/components/button"
 import {
     Collapsible,
@@ -8,8 +10,6 @@ import {
 } from "@workspace/ui/components/collapsible"
 import { ScrollArea } from "@workspace/ui/components/scroll-area"
 import { cn } from "@workspace/ui/lib/utils"
-import { ChevronDownIcon, PaperclipIcon } from "lucide-react"
-import type { ComponentProps } from "react"
 
 export type QueueMessagePart = {
     type: string

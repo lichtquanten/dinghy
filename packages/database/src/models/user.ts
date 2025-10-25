@@ -1,4 +1,4 @@
-import { prop, getModelForClass } from "@typegoose/typegoose"
+import { getModelForClass, prop } from "@typegoose/typegoose"
 import type { ReturnModelType } from "@typegoose/typegoose/lib/types.js"
 import type { IModelOptions } from "@typegoose/typegoose/lib/types.js"
 import type { UserStatus } from "../types/user"

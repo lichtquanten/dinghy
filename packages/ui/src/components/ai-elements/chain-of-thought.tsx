@@ -1,13 +1,6 @@
 "use client"
 
 import { useControllableState } from "@radix-ui/react-use-controllable-state"
-import { Badge } from "@workspace/ui/components/badge"
-import {
-    Collapsible,
-    CollapsibleContent,
-    CollapsibleTrigger,
-} from "@workspace/ui/components/collapsible"
-import { cn } from "@workspace/ui/lib/utils"
 import {
     BrainIcon,
     ChevronDownIcon,
@@ -16,6 +9,13 @@ import {
 } from "lucide-react"
 import type { ComponentProps } from "react"
 import { createContext, memo, useContext, useMemo } from "react"
+import { Badge } from "@workspace/ui/components/badge"
+import {
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger,
+} from "@workspace/ui/components/collapsible"
+import { cn } from "@workspace/ui/lib/utils"
 
 type ChainOfThoughtContextValue = {
     isOpen: boolean

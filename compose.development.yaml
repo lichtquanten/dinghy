@@ -2,8 +2,6 @@ services:
   api:
     build:
       target: development
-    environment:
-      ENV_FILE_ENCRYPTED: ${ENV_FILE_ENCRYPTED:-./.env/remove_dev.encrypted}
     ports:
       - "${WEB_HOST_PORT:-5173}:${WEB_CONTAINER_PORT:-5173}"
     healthcheck:

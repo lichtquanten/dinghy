@@ -1,6 +1,7 @@
 import js from "@eslint/js"
-import tseslint from "typescript-eslint"
 import { defineConfig, globalIgnores } from "eslint/config"
+import importPlugin from "eslint-plugin-import"
+import tseslint from "typescript-eslint"
 
 export default defineConfig([
     globalIgnores([
@@ -33,6 +34,54 @@ export default defineConfig([
             "@typescript-eslint/no-misused-promises": [
                 "error",
                 { checksVoidReturn: { attributes: false } },
+            ],
+        },
+    },
+    {
+        files: ["**/*.{js,ts,tsx}"],
+        plugins: {
+            import: importPlugin,
+        },
+        rules: {
+            "sort-imports": [
+                "warn",
+                {
+                    ignoreCase: true,
+                    ignoreDeclarationSort: true,
+                    ignoreMemberSort: false,
+                    allowSeparatedGroups: true,
+                },
+            ],
+            "import/order": [
+                "warn",
+                {
+                    groups: [
+                        "builtin",
+                        "external",
+                        "internal",
+                        "parent",
+                        "sibling",
+                        "index",
+                    ],
+                    pathGroups: [
+                        {
+                            pattern: "@workspace/**",
+                            group: "external",
+                            position: "after",
+                        },
+                        {
+                            pattern: "@/**",
+                            group: "internal",
+                            position: "before",
+                        },
+                    ],
+                    pathGroupsExcludedImportTypes: ["builtin"],
+                    "newlines-between": "never",
+                    alphabetize: {
+                        order: "asc",
+                        caseInsensitive: true,
+                    },
+                },
             ],
         },
     },

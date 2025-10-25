@@ -1,10 +1,10 @@
 // apps/api/src/integrations/ai/models.ts
-import type { LanguageModel } from "ai"
-import { MODEL_DEFINITIONS, type ModelId } from "@workspace/ai-models"
-import { openai } from "@ai-sdk/openai"
-import { deepseek } from "@ai-sdk/deepseek"
-import { createOllama } from "ollama-ai-provider-v2"
 import { deepinfra } from "@ai-sdk/deepinfra"
+import { deepseek } from "@ai-sdk/deepseek"
+import { openai } from "@ai-sdk/openai"
+import type { LanguageModel } from "ai"
+import { createOllama } from "ollama-ai-provider-v2"
+import { MODEL_DEFINITIONS, type ModelId } from "@workspace/ai-models"
 import { env } from "@/config/env.js"
 
 const ollama = createOllama({ baseURL: env.OLLAMA_API_URL })

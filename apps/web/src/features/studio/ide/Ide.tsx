@@ -1,6 +1,6 @@
 import { Play } from "lucide-react"
 import { useState } from "react"
-import type { AssignmentPublic } from "@workspace/database/types/assignment.js"
+import type { AssignmentPublic } from "@workspace/database"
 import { Button } from "@workspace/ui/components/button.tsx"
 import { useCodeExecution } from "@/lib/judge0/hooks/useCodeExecution"
 import { CodeEditor } from "./components/CodeEditor"

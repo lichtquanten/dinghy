@@ -9,7 +9,6 @@ import Ide from "./ide/Ide"
 
 const assignmentSlug = "string-length"
 
-// Child component that uses the suspense query
 function StudioContent() {
     const { data: assignment } = useSuspenseQuery(
         trpc.assignment.getBySlug.queryOptions({

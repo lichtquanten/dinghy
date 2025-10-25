@@ -1,14 +1,10 @@
 import { z } from "zod"
-import { toPublicAssignment } from "@workspace/database/models/assignment.js"
-import type {
-    Assignment,
-    AssignmentPublic,
-} from "@workspace/database/types/assignment.js"
+import { toPublicAssignment } from "@workspace/database"
 import { AssignmentModel } from "@/infrastructure/mongodb.js"
 import { protectedProcedure, publicProcedure, router } from "@/trpc/trpc.js"
 
 export const assignmentRouter = router({
-    list: publicProcedure.query(async (): Promise<AssignmentPublic[]> => {
+    list: publicProcedure.query(async () => {
         const assignments = await AssignmentModel.find({
             status: "published",
         })
@@ -20,7 +16,7 @@ export const assignmentRouter = router({
 
     getBySlug: publicProcedure
         .input(z.object({ slug: z.string() }))
-        .query(async ({ input }): Promise<AssignmentPublic> => {
+        .query(async ({ input }) => {
             const assignment = await AssignmentModel.findOne({
                 slug: input.slug,
             })
@@ -34,7 +30,9 @@ export const assignmentRouter = router({
             return toPublicAssignment(assignment)
         }),
 
-    listAll: protectedProcedure.query(async (): Promise<Assignment[]> => {
+    listAll: protectedProcedure.query(async () => {
         return AssignmentModel.find().sort({ order: 1 }).lean().exec()
     }),
 })
+
+export type AssignmentRouter = typeof assignmentRouter

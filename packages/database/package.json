@@ -28,8 +28,9 @@
         "zod": "^4.1.12"
     },
     "exports": {
-        "./types/*": "./dist/types/*",
-        "./models/*": "./dist/models/*",
-        "./seed": "./dist/seed/index.js"
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        }
     }
 }

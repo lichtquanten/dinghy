@@ -45,3 +45,5 @@ export const progressRouter = router({
             return progress
         }),
 })
+
+export type ProgressRouter = typeof progressRouter

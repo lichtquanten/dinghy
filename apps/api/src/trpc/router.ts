@@ -24,3 +24,5 @@ export const appRouter = router({
         return `${input.split("").reverse().join("")}`
     }),
 })
+
+export type AppRouter = typeof appRouter

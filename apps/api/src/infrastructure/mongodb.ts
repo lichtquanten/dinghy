@@ -1,8 +1,8 @@
 import { getModelForClass } from "@typegoose/typegoose"
 import mongoose from "mongoose"
-import { Assignment } from "@workspace/database/models/assignment.js"
-import { Progress } from "@workspace/database/models/progress.js"
-import { User } from "@workspace/database/models/user.js"
+import { Assignment } from "@workspace/database"
+import { Progress } from "@workspace/database"
+import { User } from "@workspace/database"
 import { env } from "../config/env.js"
 
 export async function connectMongoDB() {

@@ -22,3 +22,5 @@ export const userRouter = router({
             return user.toObject()
         }),
 })
+
+export type UserRouter = typeof userRouter

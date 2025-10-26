@@ -1,4 +1,3 @@
-// src/components/ConnectionStatus.tsx
 import { Badge } from "@workspace/ui/components/badge.tsx"
 
 interface ConnectionStatusProps {

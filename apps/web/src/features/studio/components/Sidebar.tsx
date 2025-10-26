@@ -1,57 +1,44 @@
-import { type ReactNode } from "react"
+import { Bot, Code2, type LucideIcon } from "lucide-react"
+import { cn } from "@workspace/ui/lib/utils.ts"
+import type { WorkspaceView } from "../Studio"
 
-export interface SidebarItem<TKey extends string = string> {
-    key: TKey
+interface SidebarItemConfig {
     label: string
-    icon?: ReactNode
+    icon: LucideIcon
 }
 
-interface Props<TKey extends string = string> {
-    items: SidebarItem<TKey>[]
-    selectedKey: TKey
-    onSelect: (key: TKey) => void
-    className?: string
+const SIDEBAR_ITEMS = {
+    ide: { label: "IDE", icon: Code2 },
+    ai: { label: "AI", icon: Bot },
+} as const satisfies Record<WorkspaceView, SidebarItemConfig>
+
+interface SidebarProps {
+    activeView: WorkspaceView
+    onViewChange: (view: WorkspaceView) => void
 }
 
-export default function Sidebar<TKey extends string>({
-    items,
-    selectedKey,
-    onSelect,
-}: Props<TKey>) {
+export default function Sidebar({ activeView, onViewChange }: SidebarProps) {
     return (
-        <div className="w-72 border-r bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-            <div className="flex flex-col h-full py-8 px-6">
-                <nav className="flex-1 flex flex-col justify-center gap-4">
-                    {items.map((item) => (
-                        <button
-                            key={item.key}
-                            onClick={() => onSelect(item.key)}
-                            className={`
-                group relative flex flex-col items-center gap-4 p-8 rounded-2xl
-                transition-all duration-200 ease-out
-                ${
-                    selectedKey === item.key
-                        ? "bg-primary text-primary-foreground shadow-lg scale-105"
-                        : "bg-muted/50 hover:bg-muted hover:scale-102 text-foreground/70 hover:text-foreground"
-                }
-              `}
-                        >
-                            {item.icon && (
-                                <div className="w-16 h-16 flex items-center justify-center">
-                                    <div className="scale-150">{item.icon}</div>
-                                </div>
-                            )}
-                            <span className="text-xl font-semibold text-center">
-                                {item.label}
-                            </span>
-
-                            {selectedKey === item.key && (
-                                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-12 bg-primary-foreground rounded-r-full" />
-                            )}
-                        </button>
-                    ))}
-                </nav>
-            </div>
+        <div className="w-32 border border-border rounded-lg flex flex-col items-center py-6 gap-2 bg-white shadow-sm">
+            {(
+                Object.entries(SIDEBAR_ITEMS) as Array<
+                    [WorkspaceView, SidebarItemConfig]
+                >
+            ).map(([view, { label, icon: Icon }]) => (
+                <button
+                    key={view}
+                    onClick={() => onViewChange(view)}
+                    className={cn(
+                        "w-24 flex flex-col items-center gap-3 py-5 rounded-lg transition-all duration-200",
+                        "text-muted-foreground hover:bg-slate-100",
+                        activeView === view &&
+                            "bg-slate-100 text-primary shadow-sm ring-2 ring-primary/20"
+                    )}
+                >
+                    <Icon className="w-5 h-5" />
+                    <span className="text-sm font-medium">{label}</span>
+                </button>
+            ))}
         </div>
     )
 }

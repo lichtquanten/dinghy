@@ -1,21 +1,18 @@
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { Bot, Code2 } from "lucide-react"
-import { type ReactNode, Suspense, useState } from "react"
+import { Suspense, useState } from "react"
 import { ErrorBoundary } from "react-error-boundary"
 import { Skeleton } from "@workspace/ui/components/skeleton.tsx"
 import { trpc } from "@/lib/trpc"
 import Ai from "./ai/Ai"
+import Header from "./components/Header"
 import Sidebar from "./components/Sidebar"
+import Workspace from "./components/Workspace"
+import { AssignmentProvider } from "./context"
 import Ide from "./ide/Ide"
 
 const assignmentSlug = "string-length"
 
-interface MenuItemConfig {
-    key: string
-    label: string
-    icon: ReactNode
-    content: ReactNode
-}
+export type WorkspaceView = "ide" | "ai"
 
 function StudioContent() {
     const { data: assignment } = useSuspenseQuery(
@@ -24,42 +21,28 @@ function StudioContent() {
         })
     )
 
-    const menuItemsConfig = [
-        {
-            key: "ide",
-            label: "IDE",
-            icon: <Code2 size={18} />,
-            content: <Ide assignment={assignment} />,
-        },
-        {
-            key: "ai",
-            label: "AI",
-            icon: <Bot size={18} />,
-            content: <Ai />,
-        },
-    ] as const satisfies readonly MenuItemConfig[]
-
-    type MenuItemKey = (typeof menuItemsConfig)[number]["key"]
-
-    const [menuItemKey, setMenuItemKey] = useState<MenuItemKey>("ide")
-
-    const selectedConfig = menuItemsConfig.find(
-        (item) => item.key === menuItemKey
-    )
+    const [activeView, setActiveView] = useState<WorkspaceView>("ide")
 
     return (
-        <div className="flex h-10">
-            <Sidebar
-                items={menuItemsConfig.map(({ key, label, icon }) => ({
-                    key,
-                    label,
-                    icon,
-                }))}
-                selectedKey={menuItemKey}
-                onSelect={setMenuItemKey}
-            />
-            <main className="flex-1">{selectedConfig?.content}</main>
-        </div>
+        <AssignmentProvider assignment={assignment}>
+            <div className="flex h-screen flex-col">
+                <Header />
+
+                <div className="flex flex-1 gap-4 p-4 overflow-hidden">
+                    <Sidebar
+                        activeView={activeView}
+                        onViewChange={setActiveView}
+                    />
+
+                    <Workspace view={activeView}>
+                        {{
+                            ide: <Ide />,
+                            ai: <Ai />,
+                        }}
+                    </Workspace>
+                </div>
+            </div>
+        </AssignmentProvider>
     )
 }
 
@@ -81,10 +64,8 @@ export default function Studio() {
         >
             <Suspense
                 fallback={
-                    <div className="min-h-screen grid grid-rows-[auto_1fr] bg-background">
-                        <main className="container mx-auto px-4 py-4 md:py-6">
-                            <Skeleton className="h-[600px] w-full rounded-lg" />
-                        </main>
+                    <div className="min-h-screen flex items-center justify-center">
+                        <Skeleton className="h-[90vh] w-[95vw] rounded-lg" />
                     </div>
                 }
             >

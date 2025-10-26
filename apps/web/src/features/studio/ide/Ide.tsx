@@ -1,8 +1,8 @@
 import { Play } from "lucide-react"
 import { useState } from "react"
-import type { AssignmentPublic } from "@workspace/database"
 import { Button } from "@workspace/ui/components/button.tsx"
 import { useCodeExecution } from "@/lib/judge0/hooks/useCodeExecution"
+import { useAssignment } from "../context"
 import { CodeEditor } from "./components/CodeEditor"
 import { CodeOutput } from "./components/CodeOutput"
 import { ConnectionStatus } from "./components/ConnectionStatus"
@@ -10,11 +10,8 @@ import { StdinInput } from "./components/StdinInput"
 import { useCode } from "./hooks/useCode"
 import { useCodeAutoSave } from "./hooks/useCodeAutoSave"
 
-interface Props {
-    assignment: AssignmentPublic
-}
-
-export default function Ide({ assignment }: Props) {
+export default function Ide() {
+    const assignment = useAssignment()
     const { code, setCode } = useCode(assignment)
     const { isSaving, isSaved } = useCodeAutoSave(assignment.slug, code)
 
@@ -32,7 +29,7 @@ export default function Ide({ assignment }: Props) {
     }
 
     return (
-        <div className="grid gap-4 md:gap-6 grid-rows-[auto_1fr] [grid-template-columns:minmax(0,1fr)] lg:[grid-template-columns:minmax(0,1fr)_minmax(0,1fr)] h-full">
+        <div className="grid p-10 gap-4 md:gap-6 grid-rows-[auto_1fr] [grid-template-columns:minmax(0,1fr)] lg:[grid-template-columns:minmax(0,1fr)_minmax(0,1fr)] h-full">
             {/* Toolbar */}
             <div className="col-span-1 lg:col-span-2 sticky top-0 bg-background z-10">
                 <div className="flex items-center gap-3">

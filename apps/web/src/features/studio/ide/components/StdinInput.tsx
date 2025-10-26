@@ -1,4 +1,3 @@
-// src/components/StdinInput.tsx
 import CodeMirror from "@uiw/react-codemirror"
 import {
     Card,

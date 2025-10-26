@@ -1,6 +1,6 @@
 import { useChat } from "@ai-sdk/react"
 import { DefaultChatTransport } from "ai"
-import { CopyIcon, RefreshCcwIcon } from "lucide-react"
+import { CopyIcon } from "lucide-react"
 import { Fragment, useState } from "react"
 import type { ModelId } from "@workspace/ai-models"
 import {
@@ -32,170 +32,159 @@ import {
     PromptInputTools,
 } from "@workspace/ui/components/ai-elements/prompt-input.tsx"
 import { Response } from "@workspace/ui/components/ai-elements/response.tsx"
-import {
-    Source,
-    Sources,
-    SourcesContent,
-    SourcesTrigger,
-} from "@workspace/ui/components/ai-elements/sources.tsx"
 import { models } from "@/lib/ai/api"
+
+interface TextPart {
+    type: "text"
+    text: string
+}
+
+interface UIMessage {
+    id: string
+    role: "system" | "user" | "assistant"
+    parts: TextPart[]
+}
+
+function getMessageText(message: UIMessage): string {
+    const textPart = message.parts.find((part) => part.type === "text")
+    return textPart?.text ?? ""
+}
+
+function MessageActions({ text }: { text: string }) {
+    return (
+        <Actions>
+            <Action
+                onClick={() => navigator.clipboard.writeText(text)}
+                label="Copy"
+            >
+                <CopyIcon className="size-3" />
+            </Action>
+        </Actions>
+    )
+}
+
+function ChatMessageItem({ message }: { message: UIMessage }) {
+    const text = getMessageText(message)
+
+    return (
+        <Fragment>
+            <Message from={message.role}>
+                <MessageContent>
+                    <Response>{text}</Response>
+                </MessageContent>
+            </Message>
+            {message.role === "assistant" && <MessageActions text={text} />}
+        </Fragment>
+    )
+}
+
+function MessagesList({ messages }: { messages: UIMessage[] }) {
+    return (
+        <>
+            {messages.map((message, _) => (
+                <ChatMessageItem key={message.id} message={message} />
+            ))}
+        </>
+    )
+}
+
+function ModelSelector({
+    value,
+    onChange,
+}: {
+    value: ModelId
+    onChange: (modelId: ModelId) => void
+}) {
+    return (
+        <PromptInputModelSelect onValueChange={onChange} value={value}>
+            <PromptInputModelSelectTrigger>
+                <PromptInputModelSelectValue />
+            </PromptInputModelSelectTrigger>
+            <PromptInputModelSelectContent>
+                {models.map((model) => (
+                    <PromptInputModelSelectItem key={model.id} value={model.id}>
+                        {model.label}
+                    </PromptInputModelSelectItem>
+                ))}
+            </PromptInputModelSelectContent>
+        </PromptInputModelSelect>
+    )
+}
+
+function ChatInput({
+    value,
+    onChange,
+    onSubmit,
+    model,
+    onModelChange,
+    disabled,
+}: {
+    value: string
+    onChange: (value: string) => void
+    onSubmit: (message: PromptInputMessage) => void
+    model: ModelId
+    onModelChange: (modelId: ModelId) => void
+    disabled: boolean
+}) {
+    return (
+        <PromptInput
+            onSubmit={onSubmit}
+            className="mt-4 flex-shrink-0"
+            globalDrop
+            multiple
+        >
+            <PromptInputBody>
+                <PromptInputTextarea
+                    onChange={(e) => onChange(e.target.value)}
+                    value={value}
+                />
+            </PromptInputBody>
+            <PromptInputFooter>
+                <PromptInputTools>
+                    <ModelSelector value={model} onChange={onModelChange} />
+                </PromptInputTools>
+                <PromptInputSubmit disabled={disabled} />
+            </PromptInputFooter>
+        </PromptInput>
+    )
+}
 
 export default function AiChat() {
     const [input, setInput] = useState("")
     const [model, setModel] = useState<ModelId>("deepseek-chat")
-    const { messages, sendMessage, status, regenerate } = useChat({
+
+    const { messages, sendMessage, status } = useChat({
         transport: new DefaultChatTransport({
             api: "/api/ai/chat",
         }),
     })
 
     const handleSubmit = (message: PromptInputMessage) => {
-        const hasText = Boolean(message.text)
+        if (!message.text) return
 
-        if (!hasText) {
-            return
-        }
-
-        void sendMessage(
-            {
-                text: message.text || "",
-            },
-            {
-                body: {
-                    model: model,
-                },
-            }
-        )
+        void sendMessage({ text: message.text }, { body: { model } })
         setInput("")
     }
 
     return (
-        <div className="max-w-4xl mx-auto p-6 relative size-full h-screen">
-            <div className="flex flex-col h-full">
-                <Conversation className="h-full">
+        <div className="w-full h-full flex flex-col p-6">
+            <div className="flex flex-col flex-1 max-w-4xl mx-auto w-full min-h-0">
+                <Conversation className="flex-1 min-h-0 overflow-y-auto">
                     <ConversationContent>
-                        {messages.map((message) => (
-                            <div key={message.id}>
-                                {message.role === "assistant" &&
-                                    message.parts.filter(
-                                        (part) => part.type === "source-url"
-                                    ).length > 0 && (
-                                        <Sources>
-                                            <SourcesTrigger
-                                                count={
-                                                    message.parts.filter(
-                                                        (part) =>
-                                                            part.type ===
-                                                            "source-url"
-                                                    ).length
-                                                }
-                                            />
-                                            {message.parts
-                                                .filter(
-                                                    (part) =>
-                                                        part.type ===
-                                                        "source-url"
-                                                )
-                                                .map((part, i) => (
-                                                    <SourcesContent
-                                                        key={`${message.id}-${i}`}
-                                                    >
-                                                        <Source
-                                                            key={`${message.id}-${i}`}
-                                                            href={part.url}
-                                                            title={part.url}
-                                                        />
-                                                    </SourcesContent>
-                                                ))}
-                                        </Sources>
-                                    )}
-                                {message.parts.map((part, i) => {
-                                    if (part.type != "text") return
-                                    return (
-                                        <Fragment key={`${message.id}-${i}`}>
-                                            <Message from={message.role}>
-                                                <MessageContent>
-                                                    <Response>
-                                                        {part.text}
-                                                    </Response>
-                                                </MessageContent>
-                                            </Message>
-                                            {message.role === "assistant" &&
-                                                i === messages.length - 1 && (
-                                                    <Actions className="mt-2">
-                                                        <Action
-                                                            onClick={() =>
-                                                                regenerate()
-                                                            }
-                                                            label="Retry"
-                                                        >
-                                                            <RefreshCcwIcon className="size-3" />
-                                                        </Action>
-                                                        <Action
-                                                            onClick={() =>
-                                                                navigator.clipboard.writeText(
-                                                                    part.text
-                                                                )
-                                                            }
-                                                            label="Copy"
-                                                        >
-                                                            <CopyIcon className="size-3" />
-                                                        </Action>
-                                                    </Actions>
-                                                )}
-                                        </Fragment>
-                                    )
-                                })}
-                            </div>
-                        ))}
+                        <MessagesList messages={messages as UIMessage[]} />
                         {status === "submitted" && <Loader />}
                     </ConversationContent>
                     <ConversationScrollButton />
                 </Conversation>
 
-                <PromptInput
+                <ChatInput
+                    value={input}
+                    onChange={setInput}
                     onSubmit={handleSubmit}
-                    className="mt-4"
-                    globalDrop
-                    multiple
-                >
-                    <PromptInputBody>
-                        <PromptInputTextarea
-                            onChange={(
-                                e: React.ChangeEvent<HTMLTextAreaElement>
-                            ) => setInput(e.target.value)}
-                            value={input}
-                        />
-                    </PromptInputBody>
-                    <PromptInputFooter>
-                        <PromptInputTools>
-                            <PromptInputModelSelect
-                                onValueChange={(modelId: ModelId) => {
-                                    setModel(modelId)
-                                }}
-                                value={model}
-                            >
-                                <PromptInputModelSelectTrigger>
-                                    <PromptInputModelSelectValue />
-                                </PromptInputModelSelectTrigger>
-                                <PromptInputModelSelectContent>
-                                    {models.map((model) => (
-                                        <PromptInputModelSelectItem
-                                            key={model.id}
-                                            value={model.id}
-                                        >
-                                            {model.label}
-                                        </PromptInputModelSelectItem>
-                                    ))}
-                                </PromptInputModelSelectContent>
-                            </PromptInputModelSelect>
-                        </PromptInputTools>
-                        <PromptInputSubmit
-                            disabled={!input && !status}
-                            status={status}
-                        />
-                    </PromptInputFooter>
-                </PromptInput>
+                    model={model}
+                    onModelChange={setModel}
+                    disabled={!input.trim()}
+                />
             </div>
         </div>
     )

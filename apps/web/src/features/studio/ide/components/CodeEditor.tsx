@@ -1,4 +1,3 @@
-// src/components/CodeEditor.tsx
 import CodeMirror from "@uiw/react-codemirror"
 import { type CodeLanguageKey } from "@workspace/code-languages"
 import {

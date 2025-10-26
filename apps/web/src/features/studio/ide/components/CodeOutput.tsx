@@ -1,4 +1,3 @@
-// src/components/CodeOutput.tsx
 import { AlertCircle, Loader2, Terminal } from "lucide-react"
 import { Alert, AlertDescription } from "@workspace/ui/components/alert.tsx"
 import {
@@ -15,7 +14,6 @@ interface CodeOutputProps {
     error: string | null
 }
 
-// src/components/CodeOutput.tsx
 export const CodeOutput = ({ result, isLoading, error }: CodeOutputProps) => {
     return (
         <Card className="h-full">

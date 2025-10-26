@@ -6,7 +6,8 @@ export default defineAssignment({
     codeLanguage: "python",
     order: 1,
     estimatedMinutes: 15,
-    descriptionMarkdown: `
+    filename: "fizzbuzz.py",
+    instructions: `
 ## FizzBuzz Challenge
 
 Write a program that prints the numbers from 1 to 100.
@@ -37,12 +38,16 @@ for i in range(1, 101):
     pass`,
     testCases: [
         {
+            slug: "fizzbuz-1",
+            assignmentSlug: "fizzbuz",
             input: "",
             expectedOutput: "1\n2\nFizz\n4\nBuzz",
             hidden: false,
             description: "First 5 lines are correct",
         },
         {
+            slug: "fizzbuz-2",
+            assignmentSlug: "fizzbuz",
             input: "",
             expectedOutput: "FizzBuzz",
             hidden: true,

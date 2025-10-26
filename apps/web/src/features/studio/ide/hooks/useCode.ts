@@ -9,6 +9,7 @@ export function useCode(assignment: AssignmentPublic) {
             assignmentSlug: assignment.slug,
         })
     )
+
     const [code, setCode] = useState(
         progress?.code ?? assignment.starterCode ?? ""
     )

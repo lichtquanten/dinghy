@@ -6,7 +6,8 @@ export default defineAssignment({
     codeLanguage: "javascript",
     order: 2,
     estimatedMinutes: 10,
-    descriptionMarkdown: `
+    filename: "reverse-string.py",
+    instructions: `
 ## Reverse a String
 
 Write a function that reverses a string.
@@ -31,18 +32,24 @@ reverseString("world")  // "dlrow"
 console.log(reverseString("hello"));`,
     testCases: [
         {
+            slug: "reverse-string-1",
+            assignmentSlug: "reverse-string",
             input: "hello",
             expectedOutput: "olleh",
             hidden: false,
             description: "Basic string reversal",
         },
         {
+            slug: "reverse-string-2",
+            assignmentSlug: "reverse-string",
             input: "",
             expectedOutput: "",
             hidden: false,
             description: "Empty string",
         },
         {
+            slug: "reverse-string-2",
+            assignmentSlug: "reverse-string",
             input: "a b c",
             expectedOutput: "c b a",
             hidden: true,

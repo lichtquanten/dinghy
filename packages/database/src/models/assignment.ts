@@ -9,6 +9,12 @@ import type {
 @modelOptions({ schemaOptions: { timestamps: true, collection: "testCases" } })
 export class TestCase {
     @prop({ required: true })
+    public slug!: string
+
+    @prop({ required: true })
+    public assignmentSlug!: string
+
+    @prop({ required: true })
     public input!: string
 
     @prop({ required: true })
@@ -38,7 +44,10 @@ export class Assignment {
     public codeLanguage!: CodeLanguageKey
 
     @prop({ required: true })
-    public descriptionMarkdown!: string
+    public instructions!: string
+
+    @prop({ required: true })
+    public filename!: string
 
     @prop({ default: "" })
     public starterCode!: string

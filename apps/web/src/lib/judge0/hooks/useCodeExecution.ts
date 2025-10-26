@@ -1,9 +1,9 @@
 // hooks/useCodeExecution.ts
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { type CodeLanguageKey, getJudge0Id } from "@workspace/code-languages"
-import { env } from "@/config/env"
 import { useSse } from "@/lib/hooks/useSse"
 import { submitCode } from "../api"
+import { SubmissionTracker } from "../submissionTracker"
 import type { SubmissionResult } from "../types"
 import { SseMessageSchema } from "../types"
 
@@ -16,15 +16,7 @@ export const useCodeExecution = (options?: UseCodeExecutionOptions) => {
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
-    const timeoutRef = useRef<number | null>(null)
-    const currentSubmissionId = useRef<string | null>(null)
-
-    const clearExecutionTimeout = useCallback(() => {
-        if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current)
-            timeoutRef.current = null
-        }
-    }, [])
+    const submissions = useMemo(() => new SubmissionTracker(), [])
 
     const { connectionState } = useSse("/api/judge0/stream", {
         events: ["submission"],
@@ -32,24 +24,20 @@ export const useCodeExecution = (options?: UseCodeExecutionOptions) => {
         onMessage: (data) => {
             try {
                 const message = SseMessageSchema.parse(data)
-
-                // Only process if this is the submission we're waiting for
                 if (
-                    message.submissionId === currentSubmissionId.current &&
-                    message.result
+                    message.result &&
+                    submissions.handleResult(
+                        message.submissionId,
+                        message.result
+                    )
                 ) {
-                    clearExecutionTimeout()
-
-                    const result = message.result
-                    if (result.error) {
-                        setError(result.error)
+                    if (message.result.error) {
+                        setError("Server error")
                     } else {
-                        setResult(result)
+                        setResult(message.result)
                         setError(null)
                     }
-
                     setIsLoading(false)
-                    currentSubmissionId.current = null
                 }
             } catch (err) {
                 console.error("Error parsing SSE message:", err)
@@ -58,59 +46,47 @@ export const useCodeExecution = (options?: UseCodeExecutionOptions) => {
     })
 
     const executeCode = useCallback(
-        async (code: string, language: CodeLanguageKey, stdin: string) => {
-            const isConnected = connectionState === "open"
-
-            if (!isConnected) {
-                setError("Not connected to execution server")
-                return
+        async (
+            code: string,
+            language: CodeLanguageKey,
+            stdin: string
+        ): Promise<SubmissionResult> => {
+            if (connectionState !== "open") {
+                const error = new Error("Not connected to execution server")
+                setError(error.message)
+                throw error
             }
 
-            // Reset state
-            clearExecutionTimeout()
             setIsLoading(true)
             setError(null)
             setResult(null)
 
-            const judge0Id = getJudge0Id(language)
-
             try {
-                const submission = await submitCode(code, judge0Id, stdin)
-                currentSubmissionId.current = submission.submissionId
-
-                timeoutRef.current = window.setTimeout(() => {
-                    if (
-                        currentSubmissionId.current === submission.submissionId
-                    ) {
-                        setError(
-                            "Code execution timed out. The server might be busy or your code might be taking too long to execute."
-                        )
-                        setIsLoading(false)
-                        currentSubmissionId.current = null
-                        options?.onTimeout?.(submission.submissionId)
-                    }
-                }, env.VITE_MAX_EXECUTION_WAIT_TIME * 1000)
+                const submission = await submitCode(
+                    code,
+                    getJudge0Id(language),
+                    stdin
+                )
+                return await submissions.waitForResult(
+                    submission.submissionId,
+                    options?.onTimeout
+                )
             } catch (err) {
-                clearExecutionTimeout()
+                const errorMessage =
+                    err instanceof Error
+                        ? err.message
+                        : "An unknown error occurred"
+                setError(errorMessage)
                 setIsLoading(false)
-                currentSubmissionId.current = null
-
-                if (err instanceof Error) {
-                    setError(err.message)
-                } else {
-                    setError("An unknown error occurred")
-                }
+                throw err
             }
         },
-        [connectionState, clearExecutionTimeout, options]
+        [connectionState, submissions, options]
     )
 
-    // Cleanup on unmount
     useEffect(() => {
-        return () => {
-            clearExecutionTimeout()
-        }
-    }, [clearExecutionTimeout])
+        return () => submissions.abort("Component unmounted")
+    }, [submissions])
 
     return {
         executeCode,

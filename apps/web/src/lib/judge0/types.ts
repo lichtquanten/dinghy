@@ -27,12 +27,12 @@ export const SubmissionResultSchema = z.object({
     stderr: b64text.optional().nullable(),
     compile_output: b64text.optional().nullable(),
     status: StatusSchema.optional(),
-    error: z.string().optional(),
+    error: z.string().optional().nullable(),
 })
 export type SubmissionResult = z.infer<typeof SubmissionResultSchema>
 
 export const SseMessageSchema = z.object({
-    submissionId: z.string().optional(),
+    submissionId: z.string(),
     result: SubmissionResultSchema.optional(),
 })
 export type SseMessage = z.infer<typeof SseMessageSchema>

@@ -6,7 +6,6 @@ import { useCodeExecution } from "@/lib/judge0/hooks/useCodeExecution"
 import { CodeEditor } from "./components/CodeEditor"
 import { CodeOutput } from "./components/CodeOutput"
 import { ConnectionStatus } from "./components/ConnectionStatus"
-import { LanguageSelector } from "./components/LanguageSelector"
 import { StdinInput } from "./components/StdinInput"
 import { useCode } from "./hooks/useCode"
 import { useCodeAutoSave } from "./hooks/useCodeAutoSave"
@@ -36,40 +35,32 @@ export default function Ide({ assignment }: Props) {
         <div className="grid gap-4 md:gap-6 grid-rows-[auto_1fr] [grid-template-columns:minmax(0,1fr)] lg:[grid-template-columns:minmax(0,1fr)_minmax(0,1fr)] h-full">
             {/* Toolbar */}
             <div className="col-span-1 lg:col-span-2 sticky top-0 bg-background z-10">
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:justify-between">
-                    <div className="w-full sm:w-auto">
-                        <LanguageSelector
-                            language={assignment.codeLanguage}
-                            onChange={() => {}}
-                        />
+                <div className="flex items-center gap-3">
+                    <div className="text-sm">
+                        {isSaving && (
+                            <span className="text-muted-foreground">
+                                Saving...
+                            </span>
+                        )}
+                        {isSaved && (
+                            <span className="text-green-600">Saved ✓</span>
+                        )}
                     </div>
-                    <div className="flex items-center gap-3">
-                        <div className="text-sm">
-                            {isSaving && (
-                                <span className="text-muted-foreground">
-                                    Saving...
-                                </span>
-                            )}
-                            {isSaved && (
-                                <span className="text-green-600">Saved ✓</span>
-                            )}
-                        </div>
-                        <ConnectionStatus isConnected={isConnected} />
-                        <Button
-                            onClick={handleRunCode}
-                            disabled={isLoading || !isConnected}
-                            className="gap-2"
-                        >
-                            {isLoading ? (
-                                <>Running...</>
-                            ) : (
-                                <>
-                                    <Play className="h-4 w-4" />
-                                    Run Code
-                                </>
-                            )}
-                        </Button>
-                    </div>
+                    <ConnectionStatus isConnected={isConnected} />
+                    <Button
+                        onClick={handleRunCode}
+                        disabled={isLoading || !isConnected}
+                        className="gap-2"
+                    >
+                        {isLoading ? (
+                            <>Running...</>
+                        ) : (
+                            <>
+                                <Play className="h-4 w-4" />
+                                Run Code
+                            </>
+                        )}
+                    </Button>
                 </div>
             </div>
 

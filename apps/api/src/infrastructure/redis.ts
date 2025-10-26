@@ -2,6 +2,11 @@ import { createClient } from "@redis/client"
 import { env } from "@/config/env.js"
 
 export const redisClient = createClient({ url: env.REDIS_URL })
+
+redisClient.on("error", (err) => {
+    console.error("Redis connection error:", err)
+})
+
 await redisClient.connect()
 
 process.once("SIGTERM", () => {

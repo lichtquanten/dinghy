@@ -23,13 +23,13 @@ export default function Ide() {
     }
 
     return (
-        <div className="flex h-full p-10 gap-4 overflow-hidden">
+        <div className="flex h-full flex-col md:flex-row p-10 gap-4 overflow-y-auto md:overflow-hidden">
             <EditorPane
                 code={code}
                 onCodeChange={setCode}
                 isConnected={isConnected}
             />
-            <div className="flex flex-col">
+            <div className="flex flex-col flex-1 relative">
                 <Toolkit code={code} />
                 <div className="absolute bottom-0 right-0">
                     <button onClick={handleSubmit} disabled={isSubmitting}>

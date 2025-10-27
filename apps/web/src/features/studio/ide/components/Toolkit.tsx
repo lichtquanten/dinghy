@@ -20,7 +20,7 @@ export default function Toolkit({ code }: ToolkitProps) {
             <Accordion
                 type="single"
                 defaultValue="instructions"
-                className="flex-1 flex flex-col"
+                className="flex-1 flex flex-col h-full"
                 collapsible
             >
                 <AccordionItem value="instructions">
@@ -52,7 +52,7 @@ export default function Toolkit({ code }: ToolkitProps) {
                 </AccordionItem>
 
                 <AccordionItem value="tests">
-                    <AccordionTrigger className="px-4 py-3 hover:bg-slate-100 bg-slate-100">
+                    <AccordionTrigger className="px-4 hover:bg-slate-100 bg-slate-100">
                         <div className="flex items-center gap-2.5">
                             <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                             <span className="text-sm font-medium">Tests</span>

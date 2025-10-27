@@ -16,11 +16,12 @@ interface ToolkitProps {
 
 export default function Toolkit({ code }: ToolkitProps) {
     return (
-        <div className="flex-1 flex flex-col border rounded-lg bg-slate-50 overflow-hidden">
+        <div className="flex-1 flex flex-col border rounded-lg bg-slate-50 overflow-y-auto">
             <Accordion
-                type="multiple"
-                defaultValue={["instructions", "output"]}
+                type="single"
+                defaultValue="instructions"
                 className="flex-1 flex flex-col"
+                collapsible
             >
                 <AccordionItem value="instructions">
                     <AccordionTrigger className="px-4 py-3 hover:bg-slate-100 bg-slate-100">
@@ -36,22 +37,7 @@ export default function Toolkit({ code }: ToolkitProps) {
                     </AccordionContent>
                 </AccordionItem>
 
-                <AccordionItem value="tests">
-                    <AccordionTrigger className="px-4 py-3 hover:bg-slate-100 bg-slate-100">
-                        <div className="flex items-center gap-2.5">
-                            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                            <span className="text-sm font-medium">Tests</span>
-                        </div>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                        <Tests code={code} />
-                    </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem
-                    value="playground"
-                    className="flex-1 flex flex-col"
-                >
+                <AccordionItem value="playground">
                     <AccordionTrigger className="px-4 py-3 hover:bg-slate-100 bg-slate-100">
                         <div className="flex items-center gap-2.5">
                             <Terminal className="w-4 h-4 text-blue-600" />
@@ -62,6 +48,18 @@ export default function Toolkit({ code }: ToolkitProps) {
                     </AccordionTrigger>
                     <AccordionContent className="flex-1">
                         <Playground code={code} />
+                    </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="tests">
+                    <AccordionTrigger className="px-4 py-3 hover:bg-slate-100 bg-slate-100">
+                        <div className="flex items-center gap-2.5">
+                            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                            <span className="text-sm font-medium">Tests</span>
+                        </div>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                        <Tests code={code} />
                     </AccordionContent>
                 </AccordionItem>
             </Accordion>

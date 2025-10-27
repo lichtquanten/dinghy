@@ -1,33 +1,19 @@
 // components/EditorPane.tsx
 import CodeMirror from "@uiw/react-codemirror"
-import { FileText, Play } from "lucide-react"
-import { type CodeLanguageKey } from "@workspace/code-languages"
-import { Button } from "@workspace/ui/components/button.tsx"
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from "@workspace/ui/components/tooltip.tsx"
+import { FileText } from "lucide-react"
+import { useAssignment } from "../../context"
 import { useCodeLanguage } from "../hooks/useCodeLanguage"
 
 interface EditorPaneProps {
     code: string
     onCodeChange: (value: string) => void
-    language: CodeLanguageKey
-    filename: string
-    runTests: () => void
     isConnected: boolean
     isRunning?: boolean
 }
 
-export default function EditorPane({
-    code,
-    onCodeChange,
-    language,
-    filename,
-}: EditorPaneProps) {
-    const { data: languageSupport } = useCodeLanguage(language)
+export default function EditorPane({ code, onCodeChange }: EditorPaneProps) {
+    const assignment = useAssignment()
+    const { data: languageSupport } = useCodeLanguage(assignment.codeLanguage)
 
     return (
         <div className="flex flex-col flex-[2] border-r">
@@ -36,7 +22,7 @@ export default function EditorPane({
                 <div className="flex items-center gap-2">
                     <FileText className="w-3.5 h-3.5 text-muted-foreground" />
                     <span className="text-xs font-medium text-foreground">
-                        {filename}
+                        {assignment.filename}
                     </span>
                 </div>
             </div>

@@ -1,22 +1,25 @@
+// Header.tsx
 import { UserButton } from "@clerk/clerk-react"
+import { useSuspenseQuery } from "@tanstack/react-query"
 import { ArrowLeft, HelpCircle } from "lucide-react"
+import { Suspense } from "react"
+import { ErrorBoundary } from "react-error-boundary"
 import { Button } from "@workspace/ui/components/button.tsx"
-import { useAssignment } from "../context"
+import { trpc } from "@/lib/trpc"
 
-export default function Header() {
-    const assignment = useAssignment()
+type HeaderShellProps = {
+    title: string | React.ReactNode
+}
 
+function HeaderShell({ title }: HeaderShellProps) {
     return (
         <header className="h-12 border-b border-border flex items-center justify-between px-4 bg-white shadow-sm">
             <div className="flex items-center gap-2">
                 <Button variant="ghost" size="icon" className="h-7 w-7">
                     <ArrowLeft className="h-4 w-4 text-muted-foreground" />
                 </Button>
-                <h1 className="text-sm font-medium text-foreground">
-                    {assignment.title}
-                </h1>
+                <h1 className="text-sm font-medium text-foreground">{title}</h1>
             </div>
-
             <div className="flex items-center gap-2">
                 <Button
                     variant="ghost"
@@ -29,5 +32,33 @@ export default function Header() {
                 <UserButton />
             </div>
         </header>
+    )
+}
+
+type HeaderContentProps = {
+    assignmentSlug: string
+}
+
+function HeaderContent({ assignmentSlug }: HeaderContentProps) {
+    const { data: assignment } = useSuspenseQuery(
+        trpc.assignment.getBySlug.queryOptions({
+            slug: assignmentSlug,
+        })
+    )
+
+    return <HeaderShell title={assignment.title} />
+}
+
+type HeaderProps = {
+    assignmentSlug: string
+}
+
+export default function Header({ assignmentSlug }: HeaderProps) {
+    return (
+        <ErrorBoundary fallback={<HeaderShell title="" />}>
+            <Suspense fallback={<HeaderShell title="Loading..." />}>
+                <HeaderContent assignmentSlug={assignmentSlug} />
+            </Suspense>
+        </ErrorBoundary>
     )
 }

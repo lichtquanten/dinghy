@@ -10,8 +10,9 @@ export default function Ide() {
     const assignment = useAssignment()
     const { isConnected } = useCodeExecution()
     const { code, setCode } = useCode(assignment)
-    useCodeAutoSave(assignment.slug, code)
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+
+    useCodeAutoSave(assignment.slug, code)
 
     const handleSubmit = () => {
         setIsSubmitting(true)

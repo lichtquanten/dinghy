@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 import { toPublicAssignment } from "@workspace/database"
 import { AssignmentModel } from "@/infrastructure/mongodb.js"
@@ -10,7 +11,6 @@ export const assignmentRouter = router({
         })
             .sort({ order: 1 })
             .lean()
-            .exec()
         return assignments.map(toPublicAssignment)
     }),
 
@@ -19,19 +19,20 @@ export const assignmentRouter = router({
         .query(async ({ input }) => {
             const assignment = await AssignmentModel.findOne({
                 slug: input.slug,
-            })
-                .lean()
-                .exec()
+            }).lean()
 
             if (!assignment) {
-                throw new Error("Assignment not found")
+                throw new TRPCError({
+                    code: "NOT_FOUND",
+                    message: "Assignment not found",
+                })
             }
 
             return toPublicAssignment(assignment)
         }),
 
     listAll: protectedProcedure.query(async () => {
-        return AssignmentModel.find().sort({ order: 1 }).lean().exec()
+        return AssignmentModel.find().sort({ order: 1 }).lean()
     }),
 })
 

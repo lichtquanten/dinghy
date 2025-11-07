@@ -1,10 +1,16 @@
-import { getModelForClass, modelOptions, prop } from "@typegoose/typegoose"
+import {
+    getModelForClass,
+    index,
+    modelOptions,
+    prop,
+} from "@typegoose/typegoose"
 import type { IModelOptions } from "@typegoose/typegoose/lib/types"
 import type { SubmissionStatus } from "../types/submission"
 
 @modelOptions({
     schemaOptions: { timestamps: true, collection: "submissions" },
 })
+@index({ userId: 1, assignmentSlug: 1 }, { unique: true })
 export class Submission {
     createdAt?: Date | undefined
     updatedAt?: Date | undefined

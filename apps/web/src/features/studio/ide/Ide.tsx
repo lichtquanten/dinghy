@@ -1,5 +1,6 @@
-import { useState } from "react"
+import { useMutation } from "@tanstack/react-query"
 import { useCodeExecution } from "@/lib/judge0/hooks/useCodeExecution"
+import { trpc } from "@/lib/trpc"
 import { useAssignment } from "../context"
 import EditorPane from "./components/EditorPane"
 import Toolkit from "./components/Toolkit"
@@ -10,33 +11,36 @@ export default function Ide() {
     const assignment = useAssignment()
     const { isConnected } = useCodeExecution()
     const { code, setCode } = useCode(assignment)
-    const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
     useCodeAutoSave(assignment.slug, code)
 
+    const { mutate: submitAssignment, isPending: isSubmitting } = useMutation({
+        ...trpc.submission.submit.mutationOptions(),
+        onSuccess: (data) => {
+            alert(data)
+            console.log(data)
+        },
+    })
+
     const handleSubmit = () => {
-        setIsSubmitting(true)
-        console.log("Submit", assignment, code)
-        // await submission
-        setIsSubmitting(false)
-        // redirect to assignments page
+        submitAssignment({
+            assignmentSlug: assignment.slug,
+            code: code,
+        })
     }
 
     return (
-        <div className="flex h-full flex-col md:flex-row p-10 gap-4 overflow-y-auto md:overflow-hidden">
+        <div className="flex h-full flex-wrap p-10 gap-4 overflow-y-auto">
             <EditorPane
                 code={code}
                 onCodeChange={setCode}
                 isConnected={isConnected}
             />
-            <div className="flex flex-col flex-1 relative">
-                <Toolkit code={code} />
-                <div className="absolute bottom-0 right-0">
-                    <button onClick={handleSubmit} disabled={isSubmitting}>
-                        Submit Assignment
-                    </button>
-                </div>
-            </div>
+            <Toolkit
+                code={code}
+                onSubmit={handleSubmit}
+                isSubmitting={isSubmitting}
+            />
         </div>
     )
 }

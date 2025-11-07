@@ -1,6 +1,7 @@
 import { z } from "zod"
 import { assignmentRouter } from "./routers/assignment.router.js"
 import { progressRouter } from "./routers/progress.router.js"
+import { submissionRouter } from "./routers/submission.router.js"
 import { userRouter } from "./routers/user.router.js"
 import { protectedProcedure, publicProcedure, router } from "./trpc.js"
 
@@ -8,6 +9,7 @@ export const appRouter = router({
     user: userRouter,
     assignment: assignmentRouter,
     progress: progressRouter,
+    submission: submissionRouter,
 
     health: publicProcedure.query(() => {
         return {

@@ -11,8 +11,12 @@ export function useCodeAutoSave(assignmentSlug: string, code: string) {
         mutate: saveCode,
         isPending,
         isSuccess,
-        data,
-    } = useMutation(trpc.progress.save.mutationOptions({}))
+    } = useMutation({
+        ...trpc.progress.save.mutationOptions({}),
+        onSuccess: (_, variables) => {
+            lastSavedCode.current = variables.code
+        },
+    })
 
     useEffect(() => {
         if (!debouncedCode || debouncedCode === lastSavedCode.current) return
@@ -22,12 +26,6 @@ export function useCodeAutoSave(assignmentSlug: string, code: string) {
             code: debouncedCode,
         })
     }, [debouncedCode, assignmentSlug, saveCode])
-
-    useEffect(() => {
-        if (data?.code) {
-            lastSavedCode.current = data.code
-        }
-    }, [data])
 
     return { isSaving: isPending, isSaved: isSuccess && !isPending }
 }

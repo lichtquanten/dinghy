@@ -5,16 +5,13 @@ import { protectedProcedure, router } from "@/trpc/trpc.js"
 export const progressRouter = router({
     get: protectedProcedure
         .input(z.object({ assignmentSlug: z.string() }))
-        .query(async ({ ctx, input }) => {
-            const progress = await ProgressModel.findOne({
-                userId: ctx.userId,
-                assignmentSlug: input.assignmentSlug,
-            })
-                .lean()
-                .exec()
-
-            return progress
-        }),
+        .query(
+            async ({ ctx, input }) =>
+                await ProgressModel.findOne({
+                    userId: ctx.userId,
+                    assignmentSlug: input.assignmentSlug,
+                }).lean()
+        ),
 
     save: protectedProcedure
         .input(
@@ -24,7 +21,7 @@ export const progressRouter = router({
             })
         )
         .mutation(async ({ ctx, input }) => {
-            const progress = await ProgressModel.findOneAndUpdate(
+            await ProgressModel.updateOne(
                 {
                     userId: ctx.userId,
                     assignmentSlug: input.assignmentSlug,
@@ -36,13 +33,8 @@ export const progressRouter = router({
                 },
                 {
                     upsert: true,
-                    new: true,
                 }
-            )
-                .lean()
-                .exec()
-
-            return progress
+            ).lean()
         }),
 })
 

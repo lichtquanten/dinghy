@@ -14,15 +14,10 @@ const assignmentSlug = "string-length"
 export type WorkspaceView = "ide" | "ai"
 
 const loadingMessages = [
-    "Summoning the code goblins...",
-    "Teaching robots to dance...",
     "Charging the flux capacitor...",
     "Downloading more RAM...",
     "Consulting the rubber duck...",
-    "Reversing the polarity...",
-    "Reticulating splines...",
     "Herding cats...",
-    "Spinning up the hamster wheel...",
     "Asking Stack Overflow...",
 ]
 

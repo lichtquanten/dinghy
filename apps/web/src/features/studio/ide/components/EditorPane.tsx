@@ -16,7 +16,7 @@ export default function EditorPane({ code, onCodeChange }: EditorPaneProps) {
     const { data: languageSupport } = useCodeLanguage(assignment.codeLanguage)
 
     return (
-        <div className="flex flex-col flex-[2] border-r">
+        <div className="flex flex-col flex-2 border-r">
             {/* Header */}
             <div className="h-11 border-b flex items-center justify-between px-4 bg-slate-50">
                 <div className="flex items-center gap-2">

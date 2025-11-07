@@ -1,4 +1,6 @@
 import { useMutation } from "@tanstack/react-query"
+import { useNavigate } from "react-router-dom"
+import { toast } from "sonner"
 import { useCodeExecution } from "@/lib/judge0/hooks/useCodeExecution"
 import { trpc } from "@/lib/trpc"
 import { useAssignment } from "../context"
@@ -11,14 +13,17 @@ export default function Ide() {
     const assignment = useAssignment()
     const { isConnected } = useCodeExecution()
     const { code, setCode } = useCode(assignment)
+    const navigate = useNavigate()
 
     useCodeAutoSave(assignment.slug, code)
 
     const { mutate: submitAssignment, isPending: isSubmitting } = useMutation({
         ...trpc.submission.submit.mutationOptions(),
-        onSuccess: (data) => {
-            alert(data)
-            console.log(data)
+        onSuccess: async () => {
+            await navigate("/hub")
+        },
+        onError: () => {
+            toast.error("Failed to submit assignment")
         },
     })
 

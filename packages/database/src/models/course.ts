@@ -1,9 +1,4 @@
-import {
-    getModelForClass,
-    modelOptions,
-    mongoose,
-    prop,
-} from "@typegoose/typegoose"
+import { getModelForClass, modelOptions, prop } from "@typegoose/typegoose"
 import type { IModelOptions } from "@typegoose/typegoose/lib/types"
 import { customAlphabet } from "nanoid"
 import { roles } from "../utils/roles.decorator"

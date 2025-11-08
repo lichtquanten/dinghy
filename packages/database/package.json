@@ -12,11 +12,14 @@
         "lint:fix": "eslint . --fix",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
-        "typecheck": "tsc --build; tsc --build --clean"
+        "typecheck": "tsc --build; tsc --build --clean",
+        "preseed": "tsdown",
+        "seed": "node dist/scripts/sync.js"
     },
     "dependencies": {
         "@typegoose/typegoose": "^12.20.0",
-        "mongoose": "^8.19.3"
+        "mongoose": "^8.19.3",
+        "@workspace/code-languages": "workspace:*"
     },
     "devDependencies": {
         "@workspace/eslint-config": "workspace:*",

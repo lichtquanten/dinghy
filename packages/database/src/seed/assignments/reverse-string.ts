@@ -1,7 +1,9 @@
-import { defineAssignment } from "../../models/assignment.js"
+import { defineAssignmentSeed } from "../../models/assignment.js"
 
-export default defineAssignment({
+export default defineAssignmentSeed({
     slug: "reverse-string",
+    courseSlug: "csci1xx",
+    dueDate: new Date("2026-01-01"),
     title: "Reverse a String",
     codeLanguage: "javascript",
     order: 2,
@@ -32,24 +34,18 @@ reverseString("world")  // "dlrow"
 console.log(reverseString("hello"));`,
     testCases: [
         {
-            slug: "reverse-string-1",
-            assignmentSlug: "reverse-string",
             input: "hello",
             expectedOutput: "olleh",
             hidden: false,
             description: "Basic string reversal",
         },
         {
-            slug: "reverse-string-2",
-            assignmentSlug: "reverse-string",
             input: "",
             expectedOutput: "",
             hidden: false,
             description: "Empty string",
         },
         {
-            slug: "reverse-string-2",
-            assignmentSlug: "reverse-string",
             input: "a b c",
             expectedOutput: "c b a",
             hidden: true,

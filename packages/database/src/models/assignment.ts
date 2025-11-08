@@ -1,19 +1,16 @@
 import { getModelForClass, modelOptions, prop } from "@typegoose/typegoose"
-import type { IModelOptions } from "@typegoose/typegoose/lib/types"
+import type { IModelOptions, Ref } from "@typegoose/typegoose/lib/types"
+import { Types } from "mongoose"
 import type {
     AssignmentPublic,
+    AssignmentSeed,
     AssignmentStatus,
     CodeLanguageKey,
 } from "../types/assignment"
+import type { Course } from "./course"
 
 @modelOptions({ schemaOptions: { timestamps: true, collection: "testCases" } })
 export class TestCase {
-    @prop({ required: true })
-    public slug!: string
-
-    @prop({ required: true })
-    public assignmentSlug!: string
-
     @prop({ required: true })
     public input!: string
 
@@ -37,10 +34,16 @@ export class Assignment {
     @prop({ required: true, unique: true })
     public slug!: string
 
+    @prop({ required: true, index: true, type: Types.ObjectId })
+    public courseId!: Ref<Course>
+
+    @prop({ required: true })
+    public dueDate!: Date
+
     @prop({ required: true })
     public title!: string
 
-    @prop({ required: true })
+    @prop({ required: true, type: String })
     public codeLanguage!: CodeLanguageKey
 
     @prop({ required: true })
@@ -55,7 +58,7 @@ export class Assignment {
     @prop({ type: () => [TestCase], required: true })
     public testCases!: TestCase[]
 
-    @prop({ default: "published" })
+    @prop({ default: "published", type: String })
     public status!: AssignmentStatus
 
     @prop()
@@ -70,8 +73,8 @@ export function getAssignmentModel(options?: IModelOptions) {
     return model
 }
 
-export function defineAssignment(assignment: Assignment) {
-    return assignment
+export function defineAssignmentSeed(seed: AssignmentSeed) {
+    return seed
 }
 
 export function toPublicAssignment(assignment: Assignment): AssignmentPublic {

@@ -4,8 +4,8 @@ export {
     Assignment,
     TestCase,
     getAssignmentModel,
-    defineAssignment,
     toPublicAssignment,
+    defineAssignmentSeed,
 } from "./models/assignment.js"
 
 export { Submission, getSubmissionModel } from "./models/submission.js"
@@ -41,4 +41,4 @@ export {
     type TestResult,
 } from "./types/submission.js"
 
-export { assignments } from "./seed/index.js"
+export { assignments } from "./seed/assignments/index.js"

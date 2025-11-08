@@ -1,4 +1,5 @@
 import { TRPCError } from "@trpc/server"
+import { Types } from "mongoose"
 import { z } from "zod"
 import { toPublicAssignment } from "@workspace/database"
 import { AssignmentModel } from "@/infrastructure/mongodb.js"
@@ -13,7 +14,26 @@ export const assignmentRouter = router({
             .lean()
         return assignments.map(toPublicAssignment)
     }),
+    get: publicProcedure
+        .input(
+            z.object({
+                id: z.string().refine((val) => Types.ObjectId.isValid(val), {
+                    message: "Invalid ID format",
+                }),
+            })
+        )
+        .query(async ({ input }) => {
+            const assignment = await AssignmentModel.findById(input.id).lean()
 
+            if (!assignment) {
+                throw new TRPCError({
+                    code: "NOT_FOUND",
+                    message: "Assignment not found",
+                })
+            }
+
+            return toPublicAssignment(assignment)
+        }),
     getBySlug: publicProcedure
         .input(z.object({ slug: z.string() }))
         .query(async ({ input }) => {

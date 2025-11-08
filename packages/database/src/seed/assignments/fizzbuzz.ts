@@ -1,7 +1,9 @@
-import { defineAssignment } from "../../models/assignment.js"
+import { defineAssignmentSeed } from "../../models/assignment.js"
 
-export default defineAssignment({
+export default defineAssignmentSeed({
     slug: "fizzbuzz",
+    courseSlug: "csci1xx",
+    dueDate: new Date("2026-01-01"),
     title: "FizzBuzz Challenge",
     codeLanguage: "python",
     order: 1,
@@ -38,16 +40,12 @@ for i in range(1, 101):
     pass`,
     testCases: [
         {
-            slug: "fizzbuz-1",
-            assignmentSlug: "fizzbuz",
             input: "",
             expectedOutput: "1\n2\nFizz\n4\nBuzz",
             hidden: false,
             description: "First 5 lines are correct",
         },
         {
-            slug: "fizzbuz-2",
-            assignmentSlug: "fizzbuz",
             input: "",
             expectedOutput: "FizzBuzz",
             hidden: true,

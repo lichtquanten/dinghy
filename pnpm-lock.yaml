@@ -354,6 +354,9 @@ importers:
       '@workspace/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
+      tsdown:
+        specifier: ^0.15.12
+        version: 0.15.12(typescript@5.9.3)
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -363,6 +366,9 @@ importers:
       '@typegoose/typegoose':
         specifier: ^12.20.0
         version: 12.20.0(mongoose@8.19.3)
+      '@workspace/code-languages':
+        specifier: workspace:*
+        version: link:../code-languages
       mongoose:
         specifier: ^8.19.3
         version: 8.19.3

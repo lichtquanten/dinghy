@@ -11,6 +11,9 @@ export class User {
     public name!: string
 
     @prop()
+    public courseId?: string
+
+    @prop()
     public avatar_url?: string
 
     @prop({ default: "active" })

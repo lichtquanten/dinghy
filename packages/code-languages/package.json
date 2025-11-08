@@ -4,6 +4,7 @@
     "type": "module",
     "private": true,
     "scripts": {
+        "build": "tsdown",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
         "format": "prettier --write .",
@@ -24,9 +25,13 @@
     "devDependencies": {
         "@workspace/eslint-config": "workspace:*",
         "@workspace/typescript-config": "workspace:*",
+        "tsdown": "^0.15.12",
         "typescript": "^5.9.3"
     },
     "exports": {
-        ".": "./src/index.ts"
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        }
     }
 }

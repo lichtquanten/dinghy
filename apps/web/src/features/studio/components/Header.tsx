@@ -36,13 +36,13 @@ function HeaderShell({ title }: HeaderShellProps) {
 }
 
 type HeaderContentProps = {
-    assignmentSlug: string
+    assignmentId: string
 }
 
-function HeaderContent({ assignmentSlug }: HeaderContentProps) {
+function HeaderContent({ assignmentId }: HeaderContentProps) {
     const { data: assignment } = useSuspenseQuery(
-        trpc.assignment.getBySlug.queryOptions({
-            slug: assignmentSlug,
+        trpc.assignment.get.queryOptions({
+            id: assignmentId,
         })
     )
 
@@ -50,14 +50,14 @@ function HeaderContent({ assignmentSlug }: HeaderContentProps) {
 }
 
 type HeaderProps = {
-    assignmentSlug: string
+    assignmentId: string
 }
 
-export default function Header({ assignmentSlug }: HeaderProps) {
+export default function Header({ assignmentId }: HeaderProps) {
     return (
         <ErrorBoundary fallback={<HeaderShell title="" />}>
             <Suspense fallback={<HeaderShell title="Loading..." />}>
-                <HeaderContent assignmentSlug={assignmentSlug} />
+                <HeaderContent assignmentId={assignmentId} />
             </Suspense>
         </ErrorBoundary>
     )

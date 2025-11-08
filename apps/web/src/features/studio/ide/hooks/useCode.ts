@@ -6,7 +6,7 @@ import { trpc } from "@/lib/trpc"
 export function useCode(assignment: AssignmentPublic) {
     const { data: progress } = useSuspenseQuery(
         trpc.progress.get.queryOptions({
-            assignmentSlug: assignment.slug,
+            assignmentId: assignment._id,
         })
     )
 

@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react"
 import { useDebounce } from "use-debounce"
 import { trpc } from "@/lib/trpc"
 
-export function useCodeAutoSave(assignmentSlug: string, code: string) {
+export function useCodeAutoSave(assignmentId: string, code: string) {
     const [debouncedCode] = useDebounce(code, 1000)
     const lastSavedCode = useRef("")
 
@@ -22,10 +22,10 @@ export function useCodeAutoSave(assignmentSlug: string, code: string) {
         if (!debouncedCode || debouncedCode === lastSavedCode.current) return
 
         saveCode({
-            assignmentSlug,
+            assignmentId,
             code: debouncedCode,
         })
-    }, [debouncedCode, assignmentSlug, saveCode])
+    }, [debouncedCode, assignmentId, saveCode])
 
     return { isSaving: isPending, isSaved: isSuccess && !isPending }
 }

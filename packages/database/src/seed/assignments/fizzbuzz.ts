@@ -1,12 +1,10 @@
 import { defineAssignmentSeed } from "../../models/assignment.js"
 
 export default defineAssignmentSeed({
-    slug: "fizzbuzz",
-    courseSlug: "csci1xx",
+    courseTitle: "CSCI 1xx",
     dueDate: new Date("2026-01-01"),
     title: "FizzBuzz Challenge",
     codeLanguage: "python",
-    order: 1,
     estimatedMinutes: 15,
     filename: "fizzbuzz.py",
     instructions: `

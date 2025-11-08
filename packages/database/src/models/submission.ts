@@ -2,6 +2,7 @@ import {
     getModelForClass,
     index,
     modelOptions,
+    mongoose,
     prop,
 } from "@typegoose/typegoose"
 import type { IModelOptions } from "@typegoose/typegoose/lib/types"
@@ -10,21 +11,22 @@ import type { SubmissionStatus } from "../types/submission"
 @modelOptions({
     schemaOptions: { timestamps: true, collection: "submissions" },
 })
-@index({ userId: 1, assignmentSlug: 1 }, { unique: true })
+@index({ userId: 1, assignmentId: 1 }, { unique: true })
 export class Submission {
+    _id!: string
     createdAt?: Date | undefined
     updatedAt?: Date | undefined
 
-    @prop({ required: true })
+    @prop({ required: true, type: String })
     public userId!: string
 
-    @prop({ required: true })
-    public assignmentSlug!: string
+    @prop({ required: true, type: mongoose.Types.ObjectId })
+    public assignmentId!: string
 
     @prop({ required: true })
     public code!: string
 
-    @prop({ default: "pending" })
+    @prop({ default: "pending", type: String })
     public status!: SubmissionStatus
 
     @prop()

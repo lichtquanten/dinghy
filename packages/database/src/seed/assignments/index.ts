@@ -4,4 +4,4 @@ export { default as reverseString } from "./reverse-string.js"
 import fizzbuzz from "./fizzbuzz.js"
 import reverseString from "./reverse-string.js"
 
-export const assignments = [fizzbuzz, reverseString]
+export default [fizzbuzz, reverseString]

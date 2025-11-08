@@ -1,4 +1,4 @@
-import type { Assignment as AssignmentClass } from "../models/assignment"
+import type { Assignment } from "../models/assignment"
 import type { TestCase as TestCaseClass } from "../models/assignment"
 
 export const CODE_LANGUAGES = [
@@ -22,12 +22,10 @@ export type TestCase = InstanceType<typeof TestCaseClass>
 
 export type PublicTestCase = Omit<InstanceType<typeof TestCaseClass>, "hidden">
 
-export type Assignment = InstanceType<typeof AssignmentClass>
-
-export interface AssignmentPublic extends Omit<AssignmentClass, "testCases"> {
+export interface AssignmentPublic extends Omit<Assignment, "testCases"> {
     testCases: Array<PublicTestCase>
 }
 
-export interface AssignmentSeed extends Omit<Assignment, "courseId"> {
-    courseSlug: string
+export interface AssignmentSeed extends Omit<Assignment, "_id" | "courseId"> {
+    courseTitle: string
 }

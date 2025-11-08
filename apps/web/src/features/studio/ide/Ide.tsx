@@ -15,7 +15,7 @@ export default function Ide() {
     const { code, setCode } = useCode(assignment)
     const navigate = useNavigate()
 
-    useCodeAutoSave(assignment.slug, code)
+    useCodeAutoSave(assignment._id, code)
 
     const { mutate: submitAssignment, isPending: isSubmitting } = useMutation({
         ...trpc.submission.submit.mutationOptions(),
@@ -29,7 +29,7 @@ export default function Ide() {
 
     const handleSubmit = () => {
         submitAssignment({
-            assignmentSlug: assignment.slug,
+            assignmentId: assignment._id,
             code: code,
         })
     }

@@ -18,8 +18,9 @@
     },
     "dependencies": {
         "@typegoose/typegoose": "^12.20.0",
+        "@workspace/code-languages": "workspace:*",
         "mongoose": "^8.19.3",
-        "@workspace/code-languages": "workspace:*"
+        "nanoid": "^5.1.6"
     },
     "devDependencies": {
         "@workspace/eslint-config": "workspace:*",

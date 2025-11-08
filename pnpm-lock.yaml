@@ -372,6 +372,9 @@ importers:
       mongoose:
         specifier: ^8.19.3
         version: 8.19.3
+      nanoid:
+        specifier: ^5.1.6
+        version: 5.1.6
     devDependencies:
       '@workspace/eslint-config':
         specifier: workspace:*

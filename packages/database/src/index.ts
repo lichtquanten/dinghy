@@ -16,14 +16,6 @@ export {
     defineProgress,
 } from "./models/progress.js"
 
-// Types - User
-export {
-    USER_STATUSES,
-    type UserStatus,
-    type User as UserType,
-    type UserPublic,
-} from "./types/user.js"
-
 export {
     CODE_LANGUAGES,
     ASSIGNMENT_STATUSES,
@@ -31,7 +23,6 @@ export {
     type AssignmentStatus,
     type TestCase as TestCaseType,
     type PublicTestCase,
-    type Assignment as AssignmentType,
     type AssignmentPublic,
 } from "./types/assignment.js"
 
@@ -40,5 +31,3 @@ export {
     type SubmissionStatus,
     type TestResult,
 } from "./types/submission.js"
-
-export { assignments } from "./seed/assignments/index.js"

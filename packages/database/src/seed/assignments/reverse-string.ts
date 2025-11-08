@@ -1,12 +1,10 @@
 import { defineAssignmentSeed } from "../../models/assignment.js"
 
 export default defineAssignmentSeed({
-    slug: "reverse-string",
-    courseSlug: "csci1xx",
-    dueDate: new Date("2026-01-01"),
+    courseTitle: "CSCI 1xx",
+    dueDate: new Date("2026-01-02"),
     title: "Reverse a String",
     codeLanguage: "javascript",
-    order: 2,
     estimatedMinutes: 10,
     filename: "reverse-string.py",
     instructions: `

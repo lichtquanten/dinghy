@@ -1,22 +1,21 @@
 import { z } from "zod"
 import { ProgressModel } from "@/infrastructure/mongodb.js"
+import { idSchema } from "@/lib/validators.js"
 import { protectedProcedure, router } from "@/trpc/trpc.js"
 
 export const progressRouter = router({
-    get: protectedProcedure
-        .input(z.object({ assignmentSlug: z.string() }))
-        .query(
-            async ({ ctx, input }) =>
-                await ProgressModel.findOne({
-                    userId: ctx.userId,
-                    assignmentSlug: input.assignmentSlug,
-                }).lean()
-        ),
+    get: protectedProcedure.input(z.object({ assignmentId: idSchema })).query(
+        async ({ ctx, input }) =>
+            await ProgressModel.findOne({
+                userId: ctx.userId,
+                assignmentId: input.assignmentId,
+            }).lean()
+    ),
 
     save: protectedProcedure
         .input(
             z.object({
-                assignmentSlug: z.string(),
+                assignmentId: idSchema,
                 code: z.string(),
             })
         )
@@ -24,7 +23,7 @@ export const progressRouter = router({
             await ProgressModel.updateOne(
                 {
                     userId: ctx.userId,
-                    assignmentSlug: input.assignmentSlug,
+                    assignmentId: input.assignmentId,
                 },
                 {
                     $set: {

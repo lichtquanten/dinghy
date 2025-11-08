@@ -1,13 +1,17 @@
-import { getModelForClass, modelOptions, prop } from "@typegoose/typegoose"
-import type { IModelOptions, Ref } from "@typegoose/typegoose/lib/types"
-import { Types } from "mongoose"
+import {
+    getModelForClass,
+    index,
+    modelOptions,
+    mongoose,
+    prop,
+} from "@typegoose/typegoose"
+import type { IModelOptions } from "@typegoose/typegoose/lib/types"
 import type {
     AssignmentPublic,
     AssignmentSeed,
     AssignmentStatus,
     CodeLanguageKey,
 } from "../types/assignment"
-import type { Course } from "./course"
 
 @modelOptions({ schemaOptions: { timestamps: true, collection: "testCases" } })
 export class TestCase {
@@ -24,24 +28,23 @@ export class TestCase {
     public description?: string
 }
 
+@index({ userId: 1, courseId: 1 }, { unique: true })
 @modelOptions({
     schemaOptions: { timestamps: true, collection: "assignments" },
 })
 export class Assignment {
+    _id!: string
     createdAt?: Date | undefined
     updatedAt?: Date | undefined
 
-    @prop({ required: true, unique: true })
-    public slug!: string
+    @prop({ required: true })
+    public title!: string
 
-    @prop({ required: true, index: true, type: Types.ObjectId })
-    public courseId!: Ref<Course>
+    @prop({ required: true, index: true, type: mongoose.Types.ObjectId })
+    public courseId!: string
 
     @prop({ required: true })
     public dueDate!: Date
-
-    @prop({ required: true })
-    public title!: string
 
     @prop({ required: true, type: String })
     public codeLanguage!: CodeLanguageKey
@@ -60,9 +63,6 @@ export class Assignment {
 
     @prop({ default: "published", type: String })
     public status!: AssignmentStatus
-
-    @prop()
-    public order?: number
 
     @prop()
     public estimatedMinutes?: number

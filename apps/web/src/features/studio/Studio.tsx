@@ -10,7 +10,7 @@ import Workspace from "./components/Workspace"
 import { AssignmentProvider } from "./context"
 import Ide from "./ide/Ide"
 
-const assignmentSlug = "string-length"
+const assignmentId = "68faa16130656000d092a086"
 export type WorkspaceView = "ide" | "ai"
 
 const loadingMessages = [
@@ -48,8 +48,8 @@ function LoadingSpinner() {
 
 function StudioContent() {
     const { data: assignment } = useSuspenseQuery(
-        trpc.assignment.getBySlug.queryOptions({
-            slug: assignmentSlug,
+        trpc.assignment.get.queryOptions({
+            id: assignmentId,
         })
     )
     const [activeView, setActiveView] = useState<WorkspaceView>("ide")
@@ -87,7 +87,7 @@ function ErrorFallback() {
 export default function Studio() {
     return (
         <div className="flex h-screen flex-col">
-            <Header assignmentSlug={assignmentSlug} />
+            <Header assignmentId={assignmentId} />
             <ErrorBoundary fallback={<ErrorFallback />}>
                 <Suspense
                     fallback={

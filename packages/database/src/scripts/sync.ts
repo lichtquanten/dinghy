@@ -2,8 +2,12 @@ import mongoose from "mongoose"
 import { z } from "zod"
 import { getAssignmentModel } from "../models/assignment"
 import { getCourseModel } from "../models/course"
-import { assignments } from "../seed/assignments"
-import { courses } from "../seed/courses"
+import { getEnrollmentModel } from "../models/enrollment"
+import { getUserModel } from "../models/user"
+import assignmentSeeds from "../seed/assignments"
+import courses from "../seed/courses"
+import enrollmentSeeds from "../seed/enrollments"
+import users from "../seed/users"
 
 const envSchema = z.object({
     MONGO_ROOT_URI: z.url(),
@@ -12,47 +16,61 @@ const envSchema = z.object({
 
 export const env = envSchema.parse(process.env)
 
+async function syncUsers() {
+    console.log(`Syncing ${users.length} users...\n`)
+    const UserModel = getUserModel()
+    for (const user of users) {
+        await UserModel.replaceOne({ _id: user._id }, user)
+    }
+}
+
 async function syncCourses() {
-    console.log("Syncing courses...\n")
+    console.log(`Syncing ${courses.length} courses...\n`)
     const CourseModel = getCourseModel()
-    const courseIdMap = new Map<string, mongoose.Types.ObjectId>()
+    const courseIdMap = new Map<string, string>()
 
     for (const course of courses) {
-        const doc = await CourseModel.findOneAndUpdate(
-            { slug: course.slug },
-            { $set: course, $setOnInsert: { createdAt: new Date() } },
-            { upsert: true, new: true }
+        const doc = await CourseModel.findOneAndReplace(
+            { title: course.title },
+            course
         )
-        courseIdMap.set(course.slug, doc._id)
-        console.log(`✓ ${course.slug} - ${course.title}`)
+        courseIdMap.set(course.title, doc!._id)
+        console.log(`✓ ${course.title}`)
     }
 
     return courseIdMap
 }
 
-async function syncAssignments(
-    courseIdMap: Map<string, mongoose.Types.ObjectId>
-) {
-    console.log(`\nSyncing ${assignments.length} assignments...\n`)
+async function syncEnrollment(courseIdMap: Map<string, string>) {
+    console.log(`Syncing ${enrollmentSeeds.length} enrollments...\n`)
+    const EnrollmentModel = getEnrollmentModel()
+    for (const enrollmentSeed of enrollmentSeeds) {
+        const { courseTitle, ...rest } = enrollmentSeed
+        const courseId = courseIdMap.get(courseTitle)
+        if (!courseId) {
+            throw new Error(`Course not found: ${courseTitle}`)
+        }
+        await EnrollmentModel.replaceOne({ courseId }, { courseId, ...rest })
+    }
+}
+
+async function syncAssignments(courseIdMap: Map<string, string>) {
+    console.log(`\nSyncing ${assignmentSeeds.length} assignments...\n`)
     const AssignmentModel = getAssignmentModel()
 
-    for (const assignmentSeed of assignments) {
-        const { courseSlug, ...rest } = assignmentSeed
+    for (const assignmentSeed of assignmentSeeds) {
+        const { courseTitle, ...rest } = assignmentSeed
 
-        const courseId = courseIdMap.get(courseSlug)
+        const courseId = courseIdMap.get(courseTitle)
         if (!courseId) {
-            throw new Error(`Course not found: ${courseSlug}`)
+            throw new Error(`Course not found: ${courseTitle}`)
         }
 
-        await AssignmentModel.updateOne(
-            { slug: rest.slug },
-            {
-                $set: { ...rest, courseId },
-                $setOnInsert: { createdAt: new Date() },
-            },
-            { upsert: true }
+        await AssignmentModel.replaceOne(
+            { courseId, title: rest.title },
+            { courseId, ...rest }
         )
-        console.log(`✓ ${rest.slug} - ${rest.title}`)
+        console.log(`✓ ${rest.title}`)
     }
 }
 
@@ -62,7 +80,9 @@ async function main() {
     await mongoose.connect(env.MONGO_ROOT_URI, { dbName: env.MONGO_DB_NAME })
     console.log("✓ Connected to MongoDB\n")
 
+    await syncUsers()
     const courseIdMap = await syncCourses()
+    await syncEnrollment(courseIdMap)
     await syncAssignments(courseIdMap)
 
     console.log("\n✓ All data synced successfully")

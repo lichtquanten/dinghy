@@ -1,25 +1,38 @@
-import { getModelForClass, modelOptions, prop } from "@typegoose/typegoose"
+import {
+    getModelForClass,
+    modelOptions,
+    mongoose,
+    prop,
+} from "@typegoose/typegoose"
 import type { IModelOptions } from "@typegoose/typegoose/lib/types"
+import { customAlphabet } from "nanoid"
+import { roles } from "../utils/roles.decorator"
+
+const nanoid = customAlphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
 @modelOptions({
     schemaOptions: { timestamps: true, collection: "courses" },
 })
 export class Course {
+    _id!: string
     createdAt?: Date | undefined
     updatedAt?: Date | undefined
 
     @prop({ required: true, unique: true })
-    public slug!: string
-
-    @prop({ required: true })
     public title!: string
+
+    @roles(["instructor"])
+    @prop({ required: true, unique: true, default: () => nanoid(6) })
+    public joinCode!: string
+
+    @prop({ type: String })
+    public createdBy?: string
 }
 
 export function getCourseModel(options?: IModelOptions) {
-    const model = getModelForClass(Course, options)
-    return model
+    return getModelForClass(Course, options)
 }
 
-export function defineCourse(course: Course) {
+export function defineCourse(course: Omit<Course, "_id">) {
     return course
 }

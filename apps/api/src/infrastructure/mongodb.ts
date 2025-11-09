@@ -1,9 +1,13 @@
 import { getModelForClass } from "@typegoose/typegoose"
 import mongoose from "mongoose"
-import { Assignment } from "@workspace/database"
-import { Progress } from "@workspace/database"
-import { Submission } from "@workspace/database"
-import { User } from "@workspace/database"
+import {
+    Assignment,
+    Course,
+    Enrollment,
+    Progress,
+    Submission,
+    User,
+} from "@workspace/database"
 import { env } from "../config/env.js"
 
 export async function connectMongoDB() {
@@ -20,6 +24,8 @@ export async function disconnectMongoDB() {
 }
 
 export const AssignmentModel = getModelForClass(Assignment)
+export const CourseModel = getModelForClass(Course)
+export const EnrollmentModel = getModelForClass(Enrollment)
 export const ProgressModel = getModelForClass(Progress)
 export const SubmissionModel = getModelForClass(Submission)
 export const UserModel = getModelForClass(User)

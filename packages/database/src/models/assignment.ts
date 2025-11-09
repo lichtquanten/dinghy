@@ -80,7 +80,7 @@ export function defineAssignmentSeed(seed: AssignmentSeed) {
 export function toPublicAssignment(assignment: Assignment): AssignmentPublic {
     const publicTestCases = assignment.testCases
         .filter((testCase) => !testCase.hidden)
-        .map(({ hidden: _hidden, ...rest }) => rest)
+        .map(({ hidden: _, ...rest }) => rest)
 
     return {
         ...assignment,

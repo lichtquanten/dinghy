@@ -1,19 +1,12 @@
 import { TRPCError } from "@trpc/server"
+import { z } from "zod"
 import { toPublicAssignment } from "@workspace/database"
-import { AssignmentModel } from "@/infrastructure/mongodb.js"
-import { idInput } from "@/lib/validators.js"
-import { protectedProcedure, publicProcedure, router } from "@/trpc/trpc.js"
+import { AssignmentModel, EnrollmentModel } from "@/infrastructure/mongodb.js"
+import { idInput, idSchema } from "@/lib/validators.js"
+import { protectedProcedure, router } from "@/trpc/trpc.js"
 
 export const assignmentRouter = router({
-    list: publicProcedure.query(async () => {
-        const assignments = await AssignmentModel.find({
-            status: "published",
-        })
-            .sort({ order: 1 })
-            .lean()
-        return assignments.map(toPublicAssignment)
-    }),
-    get: publicProcedure.input(idInput).query(async ({ input }) => {
+    get: protectedProcedure.input(idInput).query(async ({ input }) => {
         const assignment = await AssignmentModel.findById(input.id).lean()
 
         if (!assignment) {
@@ -26,9 +19,25 @@ export const assignmentRouter = router({
         return toPublicAssignment(assignment)
     }),
 
-    listAll: protectedProcedure.query(async () => {
-        return AssignmentModel.find().sort({ order: 1 }).lean()
-    }),
+    getByCourse: protectedProcedure
+        .input(z.object({ courseId: idSchema }))
+        .query(async ({ ctx, input }) => {
+            if (
+                !(await EnrollmentModel.exists({
+                    courseId: input.courseId,
+                    userId: ctx.user._id,
+                }))
+            ) {
+                throw new TRPCError({
+                    code: "FORBIDDEN",
+                    message: "User not enrolled in this course",
+                })
+            }
+            const assignments = await AssignmentModel.find({
+                courseId: input.courseId,
+            })
+            return assignments.map(toPublicAssignment)
+        }),
 })
 
 export type AssignmentRouter = typeof assignmentRouter

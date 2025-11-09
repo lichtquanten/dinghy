@@ -1,7 +1,6 @@
 import { getModelForClass, modelOptions, prop } from "@typegoose/typegoose"
 import type { IModelOptions } from "@typegoose/typegoose/lib/types"
 import { customAlphabet } from "nanoid"
-import { roles } from "../utils/roles.decorator"
 
 const nanoid = customAlphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
@@ -16,7 +15,6 @@ export class Course {
     @prop({ required: true, unique: true })
     public title!: string
 
-    @roles(["instructor"])
     @prop({ required: true, unique: true, default: () => nanoid(6) })
     public joinCode!: string
 
@@ -30,4 +28,11 @@ export function getCourseModel(options?: IModelOptions) {
 
 export function defineCourse(course: Omit<Course, "_id">) {
     return course
+}
+
+export function filterCourseForStudent(
+    course: Course
+): Omit<Course, "joinCode" | "createdBy"> {
+    const { joinCode: _, createdBy: __, ...rest } = course
+    return rest
 }

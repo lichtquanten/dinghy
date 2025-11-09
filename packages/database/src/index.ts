@@ -1,20 +1,15 @@
-export { User, getUserModel } from "./models/user.js"
+export { User } from "./models/user.js"
 
 export {
     Assignment,
     TestCase,
-    getAssignmentModel,
     toPublicAssignment,
     defineAssignmentSeed,
 } from "./models/assignment.js"
 
-export { Submission, getSubmissionModel } from "./models/submission.js"
+export { Submission } from "./models/submission.js"
 
-export {
-    Progress,
-    getUserProgressModel,
-    defineProgress,
-} from "./models/progress.js"
+export { Progress } from "./models/progress.js"
 
 export {
     CODE_LANGUAGES,
@@ -31,3 +26,6 @@ export {
     type SubmissionStatus,
     type TestResult,
 } from "./types/submission.js"
+
+export { Course, filterCourseForStudent } from "./models/course.js"
+export { Enrollment } from "./models/enrollment.js"

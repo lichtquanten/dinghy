@@ -26,7 +26,3 @@ export function getUserProgressModel(options?: IModelOptions) {
     const model = getModelForClass(Progress, options)
     return model
 }
-
-export function defineProgress(progress: Progress) {
-    return progress
-}

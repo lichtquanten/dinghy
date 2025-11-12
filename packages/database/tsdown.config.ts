@@ -1,7 +1,0 @@
-import { defineConfig } from "tsdown"
-
-export default defineConfig({
-    entry: ["src/index.ts", "src/scripts/sync.ts"],
-    dts: true,
-    hash: false,
-})

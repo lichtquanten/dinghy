@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("PRISMA_DB_URL")
+}
+
+model User {
+  id          String       @id @map("_id")
+  email       String       @unique
+  enrollments Enrollment[]
+  progresses  Progress[]
+  submissions Submission[]
+}
+
+model Course {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  title       String       @unique
+  joinCode    String
+  enrollments Enrollment[]
+  assignments Assignment[]
+}
+
+model Enrollment {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  user     User   @relation(fields: [userId], references: [id])
+  userId   String
+  course   Course @relation(fields: [courseId], references: [id])
+  courseId String @db.ObjectId
+
+  @@unique([userId, courseId])
+}
+
+model Assignment {
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  courseId     String       @db.ObjectId
+  course       Course       @relation(fields: [courseId], references: [id])
+  dueDate      DateTime
+  instructions String
+  filename     String
+  codeLanguage CodeLanguage
+  starterCode  String
+  testCases    TestCase[]
+  progresses   Progress[]
+  submissions  Submission[]
+
+  @@unique([title, courseId])
+}
+
+model TestCase {
+  id             String     @id @default(auto()) @map("_id") @db.ObjectId
+  assignment     Assignment @relation(fields: [assignmentId], references: [id])
+  assignmentId   String     @db.ObjectId
+  input          String
+  expectedOutput String
+  description    String
+}
+
+model Progress {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  user         User       @relation(fields: [userId], references: [id])
+  userId       String
+  assignment   Assignment @relation(fields: [assignmentId], references: [id])
+  assignmentId String     @db.ObjectId
+  code         String
+
+  @@unique([userId, assignmentId])
+}
+
+model Submission {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  user         User       @relation(fields: [userId], references: [id])
+  userId       String
+  assignment   Assignment @relation(fields: [assignmentId], references: [id])
+  assignmentId String     @db.ObjectId
+  code         String
+
+  @@unique([userId, assignmentId])
+}
+
+enum CodeLanguage {
+  javascript
+  typescript
+  python
+  java
+  cpp
+  c
+  rust
+  go
+  php
+  sql
+}

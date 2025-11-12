@@ -10,12 +10,12 @@
         }
     },
     "include": ["src"],
-    "exclude": ["node_modules", "../../packages/ui"],
+    "exclude": ["node_modules", "../../packages/db/dist", "../../packages/ui"],
 
     "references": [
+        { "path": "../../packages/db" },
         { "path": "../../packages/ai-models" },
         { "path": "../../packages/code-languages" },
-        { "path": "../../packages/database" },
         { "path": "../../packages/ui" }
     ]
 }

@@ -1,7 +1,8 @@
 import { initTRPC, TRPCError } from "@trpc/server"
 import superjson from "superjson"
-import { UserModel } from "@/infrastructure/mongodb.js"
-import type { Context } from "./context.js"
+import { clerkClient } from "@/infrastructure/auth.js"
+import { prisma } from "@/infrastructure/db.js"
+import { type Context } from "./context.js"
 
 const t = initTRPC.context<Context>().create({
     transformer: superjson,
@@ -19,17 +20,28 @@ const t = initTRPC.context<Context>().create({
 
 const requireAuth = t.middleware(async ({ ctx, next }) => {
     if (!ctx.userId) throw new TRPCError({ code: "UNAUTHORIZED" })
-    const user = await UserModel.findById(ctx.userId).lean()
-    if (!user)
+    const clerkUser = await clerkClient.users.getUser(ctx.userId)
+    const email = clerkUser.primaryEmailAddress?.emailAddress
+    if (!email)
         throw new TRPCError({
             code: "INTERNAL_SERVER_ERROR",
-            message: "User data not found",
+            message: `No primary email address associated with Clerk user ID: ${ctx.userId}`,
         })
+    const user = await prisma.user.upsert({
+        where: {
+            id: ctx.userId,
+        },
+        update: {},
+        create: {
+            id: ctx.userId,
+            email,
+        },
+    })
 
     return next({
         ctx: {
             ...ctx,
-            userId: ctx.userId,
+            userId: ctx.userId, // Type narrowing
             user: user,
         },
     })

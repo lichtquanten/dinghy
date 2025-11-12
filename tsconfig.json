@@ -4,7 +4,7 @@
         // { "path": "./tsconfig.tools.json" },
         { "path": "./packages/ai-models" },
         { "path": "./packages/code-languages" },
-        { "path": "./packages/database" },
+        { "path": "./packages/db" },
         { "path": "./packages/ui" },
         { "path": "./apps/api" },
         { "path": "./apps/web" }

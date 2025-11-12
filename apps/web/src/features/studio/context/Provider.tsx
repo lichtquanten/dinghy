@@ -1,9 +1,9 @@
 import { type ReactNode } from "react"
-import type { AssignmentPublic } from "@workspace/database"
+import type { RouterOutputs } from "@workspace/api"
 import { AssignmentContext } from "./context.js"
 
 interface AssignmentProviderProps {
-    assignment: AssignmentPublic
+    assignment: RouterOutputs["assignment"]["get"]
     children: ReactNode
 }
 

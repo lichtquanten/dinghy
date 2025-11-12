@@ -1,23 +1,21 @@
-import { TRPCError } from "@trpc/server"
-import { filterCourseForStudent } from "@workspace/database"
-import { CourseModel, EnrollmentModel } from "@/infrastructure/mongodb.js"
+import { prisma } from "@/infrastructure/db.js"
 import { protectedProcedure, router } from "@/trpc/trpc.js"
 
 export const courseRouter = router({
-    getMyCourses: protectedProcedure.query(async ({ ctx }) => {
-        if (ctx.user.role !== "student") {
-            throw new TRPCError({
-                code: "FORBIDDEN",
-                message: "This endpoint is only available to students",
-            })
-        }
-        const courseIds = await EnrollmentModel.distinct("courseId", {
-            userId: ctx.userId,
+    get: protectedProcedure.query(async ({ ctx }) => {
+        const enrollments = await prisma.enrollment.findMany({
+            where: {
+                userId: ctx.userId,
+            },
+            include: {
+                course: true,
+            },
         })
-        const courses = await CourseModel.find({
-            _id: { $in: courseIds },
-        }).lean()
-        return courses.map(filterCourseForStudent)
+
+        return enrollments.map((enrollment) => {
+            const { joinCode: _, ...rest } = enrollment.course
+            return rest
+        })
     }),
 })
 

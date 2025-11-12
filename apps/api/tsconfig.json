@@ -8,10 +8,12 @@
         }
     },
     "include": ["src"],
+    "exclude": ["node_modules", "../../packages/db/dist"],
 
     "references": [
+        { "path": "../../packages/db" },
         { "path": "../../packages/ai-models" },
         { "path": "../../packages/code-languages" },
-        { "path": "../../packages/database" }
+        { "path": "../../packages/db" }
     ]
 }

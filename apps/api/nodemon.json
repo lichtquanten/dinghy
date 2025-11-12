@@ -6,5 +6,7 @@
         "../../packages/code-languages/src"
     ],
     "ext": "js,json,ts",
-    "exec": "node dist/server.js"
+    "exec": "node dist/server.js",
+    "delay": "1000",
+    "killTimeout": 5000
 }

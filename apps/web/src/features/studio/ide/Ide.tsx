@@ -12,10 +12,10 @@ import { useCodeAutoSave } from "./hooks/useCodeAutoSave"
 export default function Ide() {
     const assignment = useAssignment()
     const { isConnected } = useCodeExecution()
-    const { code, setCode } = useCode(assignment)
+    const { code, setCode } = useCode(assignment.id, assignment.starterCode)
     const navigate = useNavigate()
 
-    useCodeAutoSave(assignment._id, code)
+    useCodeAutoSave(assignment.id, code)
 
     const { mutate: submitAssignment, isPending: isSubmitting } = useMutation({
         ...trpc.submission.submit.mutationOptions(),
@@ -29,7 +29,7 @@ export default function Ide() {
 
     const handleSubmit = () => {
         submitAssignment({
-            assignmentId: assignment._id,
+            assignmentId: assignment.id,
             code: code,
         })
     }

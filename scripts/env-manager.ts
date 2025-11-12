@@ -265,27 +265,78 @@ function mergeOne(target: string) {
     }
 
     const baseContent = readFileSync(baseFilePath, "utf8")
-    const baseParsed = dotenvx.parse(baseContent)
-
     const targetContent = readFileSync(targetFile, "utf8")
+
+    // Parse to get the key-value pairs
+    const baseParsed = dotenvx.parse(baseContent)
     const targetParsed = dotenvx.parse(targetContent)
 
+    // Merge the parsed values
     const merged = { ...baseParsed, ...targetParsed }
 
     const outputFile = path.join(envDir, target)
-    const outputContent =
-        Object.entries(merged)
-            .map(([k, v]) => {
-                // Always quote values to avoid any special character issues
-                const escaped = v
-                    .replace(/\\/g, "\\\\") // Escape backslashes first
-                    .replace(/"/g, '\\"') // Escape quotes
-                    .replace(/\n/g, "\\n") // Escape newlines
-                return `${k}="${escaped}"`
-            })
-            .join("\n") + "\n"
 
-    writeFileSync(outputFile, outputContent, { encoding: "utf8", mode: 0o600 })
+    // Read the original lines to preserve formatting
+    const baseLines = baseContent.split("\n")
+    const targetLines = targetContent.split("\n")
+
+    // Create a map of variables from target file (preserving original format)
+    const targetVars = new Map<string, string>()
+    for (const line of targetLines) {
+        const trimmed = line.trim()
+        if (trimmed && !trimmed.startsWith("#")) {
+            const match = trimmed.match(/^([^=]+)=(.*)$/)
+            if (match) {
+                targetVars.set(match[1].trim(), line)
+            }
+        }
+    }
+
+    // Start with base lines
+    const outputLines: string[] = []
+    const usedKeys = new Set<string>()
+
+    for (const line of baseLines) {
+        const trimmed = line.trim()
+        if (!trimmed || trimmed.startsWith("#")) {
+            outputLines.push(line)
+            continue
+        }
+
+        const match = trimmed.match(/^([^=]+)=/)
+        if (match) {
+            const key = match[1].trim()
+            usedKeys.add(key)
+
+            // If target has this key, use target's version
+            if (targetVars.has(key)) {
+                outputLines.push(targetVars.get(key)!)
+            } else {
+                outputLines.push(line)
+            }
+        } else {
+            outputLines.push(line)
+        }
+    }
+
+    // Add any target vars that weren't in base
+    for (const line of targetLines) {
+        const trimmed = line.trim()
+        if (trimmed && !trimmed.startsWith("#")) {
+            const match = trimmed.match(/^([^=]+)=/)
+            if (match) {
+                const key = match[1].trim()
+                if (!usedKeys.has(key)) {
+                    outputLines.push(line)
+                }
+            }
+        }
+    }
+
+    writeFileSync(outputFile, outputLines.join("\n"), {
+        encoding: "utf8",
+        mode: 0o600,
+    })
     console.log(`✓ Merged → ${outputFile}`)
 }
 

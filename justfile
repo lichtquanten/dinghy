@@ -70,7 +70,7 @@ build env="remote" profiles="api" *FLAGS="":
 
 # Start services [env: local|remote|staging|prod] [profiles: api, infra, proxy, etc.]
 up env="remote" profiles="api proxy" *FLAGS="":
- docker compose `just _env_file {{env}}` `just _compose_files {{env}}` `just _profile_flags "{{profiles}}"` up -d {{FLAGS}}
+ docker compose `just _env_file "{{env}}"` `just _compose_files "{{env}}"` `just _profile_flags "{{profiles}}"` up -d {{FLAGS}}
 
 # ============================================================================
 # Stop Services

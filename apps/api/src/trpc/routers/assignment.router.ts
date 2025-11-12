@@ -1,43 +1,48 @@
-import { TRPCError } from "@trpc/server"
 import { z } from "zod"
-import { toPublicAssignment } from "@workspace/database"
-import { AssignmentModel, EnrollmentModel } from "@/infrastructure/mongodb.js"
-import { idInput, idSchema } from "@/lib/validators.js"
+import { prisma } from "@/infrastructure/db.js"
+import { idInput } from "@/lib/validators.js"
+import {
+    requireAssignmentAccess,
+    requireCourseEnrollment,
+} from "@/trpc/lib/require-enrollment.js"
 import { protectedProcedure, router } from "@/trpc/trpc.js"
 
 export const assignmentRouter = router({
-    get: protectedProcedure.input(idInput).query(async ({ input }) => {
-        const assignment = await AssignmentModel.findById(input.id).lean()
-
-        if (!assignment) {
-            throw new TRPCError({
-                code: "NOT_FOUND",
-                message: "Assignment not found",
+    get: protectedProcedure.input(idInput).query(
+        async ({ ctx, input }) =>
+            await prisma.$transaction(async (tx) => {
+                await requireAssignmentAccess(tx, ctx.userId, input.id)
+                return await tx.assignment.findUnique({
+                    where: {
+                        id: input.id,
+                    },
+                    include: {
+                        testCases: true,
+                    },
+                })
             })
-        }
-
-        return toPublicAssignment(assignment)
-    }),
+    ),
 
     getByCourse: protectedProcedure
-        .input(z.object({ courseId: idSchema }))
-        .query(async ({ ctx, input }) => {
-            if (
-                !(await EnrollmentModel.exists({
-                    courseId: input.courseId,
-                    userId: ctx.user._id,
-                }))
-            ) {
-                throw new TRPCError({
-                    code: "FORBIDDEN",
-                    message: "User not enrolled in this course",
+        .input(z.object({ courseId: z.string() }))
+        .query(
+            async ({ ctx, input }) =>
+                await prisma.$transaction(async (tx) => {
+                    await requireCourseEnrollment(
+                        tx,
+                        ctx.userId,
+                        input.courseId
+                    )
+                    return tx.assignment.findMany({
+                        where: {
+                            courseId: input.courseId,
+                        },
+                        include: {
+                            testCases: true,
+                        },
+                    })
                 })
-            }
-            const assignments = await AssignmentModel.find({
-                courseId: input.courseId,
-            })
-            return assignments.map(toPublicAssignment)
-        }),
+        ),
 })
 
 export type AssignmentRouter = typeof assignmentRouter

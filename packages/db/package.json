@@ -1,0 +1,32 @@
+{
+    "name": "@workspace/db",
+    "version": "0.0.0",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "build": "prisma generate && tsdown",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "format": "prettier --write .",
+        "format:check": "prettier --check .",
+        "typecheck": "tsc --build; tsc --build --clean",
+        "preseed": "tsdown",
+        "seed": "node dist/scripts/seed.js"
+    },
+    "devDependencies": {
+        "@workspace/eslint-config": "workspace:*",
+        "@workspace/typescript-config": "workspace:*",
+        "prisma": "^6.19.0",
+        "tsdown": "^0.15.12"
+    },
+    "exports": {
+        "./browser": "./dist/browser/browser.js",
+        "./client": "./dist/node/generated/prisma/client.js",
+        "./commonInputTypes": "./dist/node/generated/prisma/commonInputTypes.js",
+        "./enums": "./dist/node/generated/prisma/enums.js",
+        "./models": "./dist/node/generated/prisma/models.js"
+    },
+    "dependencies": {
+        "@prisma/client": "^6.19.0"
+    }
+}

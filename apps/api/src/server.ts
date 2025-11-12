@@ -5,7 +5,8 @@ import { trpcServer } from "@hono/trpc-server"
 import { Hono } from "hono"
 import { logger } from "hono/logger"
 import { env } from "./config/env.js"
-import { connectMongoDB, disconnectMongoDB } from "./infrastructure/mongodb.js"
+import { disconnect as disconnectDb } from "./infrastructure/db.js"
+import { disconnect as disconnectRedis } from "./infrastructure/redis.js"
 import { aiRoutes } from "./integrations/ai/routes.js"
 import { judge0Routes } from "./integrations/judge0/routes.js"
 import { rateLimit } from "./middleware/rate-limit.js"
@@ -13,8 +14,6 @@ import { createContext } from "./trpc/context.js"
 import { appRouter } from "./trpc/router.js"
 
 const app = new Hono()
-
-await connectMongoDB()
 
 app.use(logger())
 app.use(rateLimit)
@@ -51,7 +50,8 @@ serve(
 
 const gracefulShutdown = async (signal: string) => {
     console.log(`${signal} received, shutting down gracefully...`)
-    await disconnectMongoDB()
+    await disconnectDb()
+    disconnectRedis()
     process.exit(0)
 }
 

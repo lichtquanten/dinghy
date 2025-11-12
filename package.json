@@ -3,16 +3,15 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "predev": "pnpm -r build",
-        "dev": "pnpm -r --parallel dev",
-        "watch": "pnpm -r --parallel watch",
-        "build": "pnpm -r build",
-        "lint": "pnpm -r --parallel lint",
-        "lint:fix": "pnpm -r --parallel lint:fix",
-        "format": "pnpm -r --parallel format",
-        "format:check": "pnpm -r --parallel format:check",
-        "typecheck": "tsc --build; tsc --build --clean",
-        "clean": "pnpm -r --parallel clean"
+        "predev": "pnpm run build",
+        "dev": "pnpm run -r --parallel dev",
+        "build": "pnpm run --filter db --filter code-languages build && pnpm run --filter api build && pnpm run --filter web build",
+        "lint": "pnpm run -r lint",
+        "lint:fix": "pnpm run -r lint:fix",
+        "format": "pnpm run -r format",
+        "format:check": "pnpm run -r format:check",
+        "typecheck": "pnpm run -r typecheck",
+        "clean": "pnpm run -r clean"
     },
     "dependencies": {
         "@dotenvx/dotenvx": "^1.51.1",
@@ -21,7 +20,7 @@
     "devDependencies": {
         "@eslint/js": "^9.39.1",
         "@types/node": "^24.10.0",
-        "@typescript-eslint/utils": "^8.46.3",
+        "@typescript-eslint/utils": "^8.46.4",
         "@workspace/eslint-config": "workspace:*",
         "@workspace/typescript-config": "workspace:*",
         "commander": "^14.0.2",
@@ -32,14 +31,13 @@
         "globals": "^16.5.0",
         "prettier": "^3.6.2",
         "tsup": "^8.5.0",
+        "turbo": "^2.6.1",
         "typescript": "^5.9.3",
-        "typescript-eslint": "^8.46.3"
+        "typescript-eslint": "^8.46.4"
     },
     "pnpm": {
         "onlyBuiltDependencies": [
             "@clerk/shared",
-            "@tailwindcss/oxide",
-            "core-js-pure",
             "esbuild"
         ]
     },

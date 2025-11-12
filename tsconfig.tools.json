@@ -7,6 +7,7 @@
         "eslint.config.ts",
         "apps/*/eslint.config.js",
         "packages/*/eslint.config.js",
+        "packages/*/prisma.config.ts",
         "apps/*/vite.config.ts",
         "apps/web/vite.config.ts",
         "prettier.config.js",

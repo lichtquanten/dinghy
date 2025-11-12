@@ -35,3 +35,5 @@ lerna-debug.log*
 **/dist/
 
 apps/api/public/
+
+packages/db/src/generated/prisma

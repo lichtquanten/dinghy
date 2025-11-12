@@ -93,7 +93,7 @@ packages/
 The project uses a two-layer environment system in `.env/source/`:
 
 - `base` - Shared configuration
-- `{local.dev,remote.dev,staging,prod}` - Environment-specific overrides
+- `{local_dev,remote_dev,staging,prod}` - Environment-specific overrides
 
 Source files are merged into `.env/` directory. After editing source files, run `just env-merge` to regenerate.
 

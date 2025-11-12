@@ -1,32 +1,42 @@
 import { TRPCError } from "@trpc/server"
-import mongoose from "mongoose"
 import { z } from "zod"
-import { SubmissionModel } from "@/infrastructure/mongodb.js"
-import { idSchema } from "@/lib/validators.js"
+import { Prisma } from "@workspace/db/client"
+import { prisma } from "@/infrastructure/db.js"
+import { requireAssignmentAccess } from "@/trpc/lib/require-enrollment.js"
 import { protectedProcedure, router } from "@/trpc/trpc.js"
 
 export const submissionRouter = router({
-    get: protectedProcedure.input(z.object({ assignmentId: idSchema })).query(
+    get: protectedProcedure.input(z.object({ assignmentId: z.string() })).query(
         async ({ ctx, input }) =>
-            await SubmissionModel.findOne({
-                userId: ctx.userId,
-                assignmentId: input.assignmentId,
-            }).lean()
+            await prisma.submission.findUnique({
+                where: {
+                    userId_assignmentId: {
+                        userId: ctx.userId,
+                        assignmentId: input.assignmentId,
+                    },
+                },
+            })
     ),
 
     hasSubmitted: protectedProcedure
         .input(
             z.object({
-                assignmentId: idSchema,
+                assignmentId: z.string(),
             })
         )
-        .query(async ({ ctx, input }) => {
-            const result = await SubmissionModel.exists({
-                userId: ctx.userId,
-                assignmentId: input.assignmentId,
-            })
-            return result !== null
-        }),
+        .query(async ({ ctx, input }) =>
+            Boolean(
+                await prisma.submission.findUnique({
+                    where: {
+                        userId_assignmentId: {
+                            userId: ctx.userId,
+                            assignmentId: input.assignmentId,
+                        },
+                    },
+                    select: {},
+                })
+            )
+        ),
     submit: protectedProcedure
         .input(
             z.object({
@@ -36,20 +46,29 @@ export const submissionRouter = router({
         )
         .mutation(async ({ ctx, input }) => {
             try {
-                const result = await SubmissionModel.create({
-                    userId: ctx.userId,
-                    assignmentId: input.assignmentId,
-                    code: input.code,
+                return await prisma.$transaction(async (tx) => {
+                    await requireAssignmentAccess(
+                        tx,
+                        ctx.userId,
+                        input.assignmentId
+                    )
+                    return tx.submission.create({
+                        data: {
+                            userId: ctx.userId,
+                            assignmentId: input.assignmentId,
+                            code: input.code,
+                        },
+                    })
                 })
-                return result.toObject()
             } catch (error) {
                 if (
-                    error instanceof mongoose.mongo.MongoServerError &&
-                    error.code === 11000
+                    error instanceof Prisma.PrismaClientKnownRequestError &&
+                    error.code === "P2002"
                 ) {
                     throw new TRPCError({
                         code: "CONFLICT",
-                        message: "You have already submitted this assignment",
+                        message:
+                            "User has already submitted this assignment and is attempting resubmission.",
                     })
                 }
                 throw error
@@ -58,13 +77,17 @@ export const submissionRouter = router({
     unsubmit: protectedProcedure
         .input(
             z.object({
-                assignmentId: idSchema,
+                assignmentId: z.string(),
             })
         )
         .mutation(async ({ ctx, input }) => {
-            await SubmissionModel.deleteOne({
-                userId: ctx.userId,
-                assignmentId: input.assignmentId,
+            await prisma.submission.delete({
+                where: {
+                    userId_assignmentId: {
+                        userId: ctx.userId,
+                        assignmentId: input.assignmentId,
+                    },
+                },
             })
         }),
 })

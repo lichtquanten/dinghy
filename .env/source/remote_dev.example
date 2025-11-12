@@ -18,6 +18,7 @@ PROXY_HEADER_VALUE=
 # MongoDB Configuration
 MONGO_ROOT_URI=""
 MONGO_API_URI=""
+PRISMA_DB_URL=""
 
 # Redis Configuration
 REDIS_URL=

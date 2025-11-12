@@ -1,6 +1,6 @@
 // components/panels/Tests.tsx
 import { useState } from "react"
-import type { PublicTestCase } from "@workspace/database"
+import type { TestCase } from "@workspace/db/browser"
 import { useAssignment } from "@/features/studio/context"
 import { useRunTest } from "../../hooks/useRunTest"
 import type { TestResult } from "../../hooks/useRunTest"
@@ -10,7 +10,7 @@ interface TestsProps {
 }
 
 interface TestCaseItemProps {
-    testCase: PublicTestCase
+    testCase: TestCase
     result: TestResult | null
     index: number
 }

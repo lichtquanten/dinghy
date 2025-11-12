@@ -10,7 +10,7 @@ import Workspace from "./components/Workspace"
 import { AssignmentProvider } from "./context"
 import Ide from "./ide/Ide"
 
-const assignmentId = "68faa16130656000d092a086"
+const assignmentId = "6913bd1391b016e0d856cced"
 export type WorkspaceView = "ide" | "ai"
 
 const loadingMessages = [
@@ -52,6 +52,7 @@ function StudioContent() {
             id: assignmentId,
         })
     )
+    if (!assignment) throw new Error("Assignment not found")
     const [activeView, setActiveView] = useState<WorkspaceView>("ide")
 
     return (

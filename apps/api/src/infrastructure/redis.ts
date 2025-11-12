@@ -13,16 +13,11 @@ export const redisClient = createClient({
     },
 })
 
-redisClient.on("error", (err) => {
-    console.error("Redis connection error:", err)
-})
-
 await redisClient.connect()
 
-process.once("SIGTERM", () => {
+export function disconnect() {
     redisClient.destroy()
-    process.exit(0)
-})
+}
 
 export const KEYS = {
     judge0: {

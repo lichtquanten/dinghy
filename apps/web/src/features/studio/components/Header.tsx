@@ -45,6 +45,7 @@ function HeaderContent({ assignmentId }: HeaderContentProps) {
             id: assignmentId,
         })
     )
+    if (!assignment) throw new Error("Assignment not found")
 
     return <HeaderShell title={assignment.title} />
 }

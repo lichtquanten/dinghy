@@ -16,9 +16,9 @@
         "clean": "rm -rf dist"
     },
     "devDependencies": {
-        "@types/react": "^19.2.2",
-        "@types/react-dom": "^19.2.2",
-        "@vitejs/plugin-react": "^5.1.0",
+        "@types/react": "^19.2.3",
+        "@types/react-dom": "^19.2.3",
+        "@vitejs/plugin-react": "^5.1.1",
         "@workspace/eslint-config": "workspace:*",
         "@workspace/typescript-config": "workspace:*",
         "eslint-plugin-react": "^7.37.5",
@@ -30,8 +30,8 @@
         "vite-tsconfig-paths": "^5.1.4"
     },
     "dependencies": {
-        "@ai-sdk/react": "^2.0.89",
-        "@clerk/clerk-react": "^5.53.8",
+        "@ai-sdk/react": "^2.0.92",
+        "@clerk/clerk-react": "^5.54.0",
         "@codemirror/lang-cpp": "^6.0.3",
         "@codemirror/lang-go": "^6.0.1",
         "@codemirror/lang-java": "^6.0.2",
@@ -50,11 +50,11 @@
         "@workspace/code-languages": "workspace:*",
         "@workspace/db": "workspace:*",
         "@workspace/ui": "workspace:*",
-        "ai": "^5.0.89",
+        "ai": "^5.0.92",
         "envsub": "^4.1.0",
         "js-base64": "^3.7.8",
-        "lucide-react": "^0.475.0",
         "ky": "^1.14.0",
+        "lucide-react": "^0.475.0",
         "react": "^19.2.0",
         "react-dom": "^19.2.0",
         "react-error-boundary": "^6.0.0",

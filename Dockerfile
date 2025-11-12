@@ -16,7 +16,7 @@ COPY apps/api/package.json ./apps/api/
 COPY apps/web/package.json ./apps/web/
 COPY packages/ai-models/package.json ./packages/ai-models/
 COPY packages/code-languages/package.json ./packages/code-languages/
-COPY packages/database/package.json ./packages/database/
+COPY packages/db/package.json ./packages/db/
 COPY packages/typescript-config/package.json ./packages/typescript-config/
 COPY packages/ui/package.json ./packages/ui/
 
@@ -71,7 +71,7 @@ COPY --chown=node:node .env/ .env/
 
 COPY --from=build --chown=node:node /app/apps/web/dist/ ./apps/api/public/
 COPY --from=build --chown=node:node /app/apps/api/dist/ ./apps/api/dist/
-COPY --from=build --chown=node:node /app/packages/database/dist/ ./packages/database/dist/
+COPY --from=build --chown=node:node /app/packages/db/dist/ ./packages/db/dist/
 
 USER node
 

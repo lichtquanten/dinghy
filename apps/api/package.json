@@ -4,7 +4,7 @@
     "type": "module",
     "scripts": {
         "inject-env-vars": "envsub public/index.html",
-        "dev": "concurrently \"tsdown --watch\" \"nodemon\"",
+        "dev": "concurrently \"tsdown --watch\" \"while true; do nodemon; sleep 2; done\"",
         "watch": "tsdown --watch",
         "build": "tsdown",
         "start": "node dist/server.js",

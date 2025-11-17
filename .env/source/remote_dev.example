@@ -9,7 +9,7 @@ RESTART_POLICY=
 
 # API Configuration
 API_HOST_PORT=
-API_URL=
+API_CALLBACK_URL=
 
 # Vite Proxy Configuration
 PROXY_HEADER_KEY=

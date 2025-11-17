@@ -22,7 +22,7 @@ export async function generateCallbackUrl(
         3600,
         JSON.stringify({ userId, timestamp, signature, used: false })
     )
-    const callbackUrl = new URL(env.API_URL)
+    const callbackUrl = new URL(env.API_CALLBACK_URL)
     callbackUrl.pathname = path.join(
         callbackUrl.pathname,
         "api",

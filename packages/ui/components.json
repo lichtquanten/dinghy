@@ -4,7 +4,6 @@
     "rsc": true,
     "tsx": true,
     "tailwind": {
-        "config": "",
         "css": "src/styles/globals.css",
         "baseColor": "neutral",
         "cssVariables": true
@@ -16,5 +15,8 @@
         "ui": "@workspace/ui/components",
         "lib": "@workspace/ui/lib",
         "hooks": "@workspace/ui/hooks"
+    },
+    "registries": {
+        "@react-bits": "https://reactbits.dev/r/{name}.json"
     }
 }

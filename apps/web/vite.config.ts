@@ -13,7 +13,7 @@ export default defineConfig({
         host: true,
         proxy: {
             "/api": {
-                target: process.env.API_URL,
+                target: process.env.API_INTERNAL_URL,
                 changeOrigin: true,
                 configure: (proxy, _) => {
                     if (headerKey && headerValue)

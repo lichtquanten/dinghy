@@ -6,7 +6,7 @@ import type { ModelId } from "@workspace/ai-models"
 import {
     Action,
     Actions,
-} from "@workspace/ui/components/ai-elements/actions.tsx"
+} from "@workspace/ui/components/ai-elements/actions.js"
 import {
     Conversation,
     ConversationContent,

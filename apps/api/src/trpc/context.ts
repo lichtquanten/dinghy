@@ -6,7 +6,7 @@ export function createContext(_: FetchCreateContextFnOptions, c: HonoContext) {
     const auth = getAuth(c)
 
     return {
-        userId: auth?.userId ?? null,
+        auth: auth,
     }
 }
 

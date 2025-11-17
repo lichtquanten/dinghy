@@ -1,12 +1,14 @@
 import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server"
 import { z } from "zod"
 import { assignmentRouter } from "./routers/assignment.router.js"
+import { courseRouter } from "./routers/course.router.js"
 import { progressRouter } from "./routers/progress.router.js"
 import { submissionRouter } from "./routers/submission.router.js"
 import { protectedProcedure, publicProcedure, router } from "./trpc.js"
 
 export const appRouter = router({
     assignment: assignmentRouter,
+    course: courseRouter,
     progress: progressRouter,
     submission: submissionRouter,
 

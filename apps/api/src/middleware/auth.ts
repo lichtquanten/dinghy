@@ -27,16 +27,16 @@ export const requireAuth = createMiddleware<{
         })
     const user = await prisma.user.upsert({
         where: {
-            id: auth.userId,
+            clerkId: auth.userId,
         },
         update: {},
         create: {
-            id: auth.userId,
+            clerkId: auth.userId,
             email,
         },
     })
     c.set("auth", auth)
-    c.set("userId", auth.userId)
+    c.set("userId", user.id)
     c.set("user", user)
     await next()
 })

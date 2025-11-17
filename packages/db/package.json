@@ -11,7 +11,7 @@
         "format:check": "prettier --check .",
         "typecheck": "tsc --build; tsc --build --clean",
         "preseed": "tsdown",
-        "seed": "node dist/scripts/seed.js"
+        "seed": "node dist/node/seed/seed.js"
     },
     "devDependencies": {
         "@workspace/eslint-config": "workspace:*",

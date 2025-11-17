@@ -24,18 +24,17 @@ export const submissionRouter = router({
                 assignmentId: z.string(),
             })
         )
-        .query(async ({ ctx, input }) =>
-            Boolean(
-                await prisma.submission.findUnique({
+        .query(
+            async ({ ctx, input }) =>
+                !!(await prisma.submission.findUnique({
                     where: {
                         userId_assignmentId: {
                             userId: ctx.userId,
                             assignmentId: input.assignmentId,
                         },
                     },
-                    select: {},
-                })
-            )
+                    select: { id: true },
+                }))
         ),
     submit: protectedProcedure
         .input(

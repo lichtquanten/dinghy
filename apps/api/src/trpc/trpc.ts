@@ -19,21 +19,25 @@ const t = initTRPC.context<Context>().create({
 })
 
 const requireAuth = t.middleware(async ({ ctx, next }) => {
-    if (!ctx.userId) throw new TRPCError({ code: "UNAUTHORIZED" })
-    const clerkUser = await clerkClient.users.getUser(ctx.userId)
+    if (!ctx.auth?.userId) throw new TRPCError({ code: "UNAUTHORIZED" })
+
+    const clerkUser = await clerkClient.users.getUser(ctx.auth.userId)
+
     const email = clerkUser.primaryEmailAddress?.emailAddress
+
     if (!email)
         throw new TRPCError({
             code: "INTERNAL_SERVER_ERROR",
-            message: `No primary email address associated with Clerk user ID: ${ctx.userId}`,
+            message: `No primary email address associated with Clerk user ID: ${ctx.auth.userId}`,
         })
+
     const user = await prisma.user.upsert({
         where: {
-            id: ctx.userId,
+            clerkId: ctx.auth.userId,
         },
         update: {},
         create: {
-            id: ctx.userId,
+            clerkId: ctx.auth.userId,
             email,
         },
     })
@@ -41,7 +45,7 @@ const requireAuth = t.middleware(async ({ ctx, next }) => {
     return next({
         ctx: {
             ...ctx,
-            userId: ctx.userId, // Type narrowing
+            userId: user.id,
             user: user,
         },
     })

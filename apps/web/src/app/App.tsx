@@ -4,6 +4,7 @@ import { Navigate, Route, Routes } from "react-router-dom"
 import { Skeleton } from "@workspace/ui/components/skeleton.tsx"
 import { Toaster } from "@workspace/ui/components/sonner.tsx"
 import HubPage from "@/features/hub/Hub"
+import JoinCourse from "@/features/JoinCourse"
 import LandingPage from "@/features/Landing"
 import StudioPage from "@/features/studio/Studio"
 
@@ -33,7 +34,7 @@ export function App() {
             <Routes>
                 <Route path="/" element={<RootRedirect />} />
                 <Route
-                    path="/studio"
+                    path="/studio/:assignmentId"
                     element={
                         <Protect fallback={<Navigate to="/" replace />}>
                             <StudioPage />
@@ -45,6 +46,14 @@ export function App() {
                     element={
                         <Protect fallback={<Navigate to="/" replace />}>
                             <HubPage />
+                        </Protect>
+                    }
+                />
+                <Route
+                    path="/joinCourse"
+                    element={
+                        <Protect fallback={<Navigate to="/" replace />}>
+                            <JoinCourse />
                         </Protect>
                     }
                 />

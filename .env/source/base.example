@@ -6,6 +6,7 @@ DOCKER_REGISTRY=
 
 # API Configuration
 API_CONTAINER_PORT=
+API_INTERNAL_URL=
 CALLBACK_SECRET=
 
 # Web Server Configuration

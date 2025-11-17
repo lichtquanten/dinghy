@@ -33,13 +33,31 @@ export const assignmentRouter = router({
                         ctx.userId,
                         input.courseId
                     )
-                    return tx.assignment.findMany({
+                    const assignments = await tx.assignment.findMany({
                         where: {
                             courseId: input.courseId,
                         },
-                        include: {
-                            testCases: true,
+                        select: {
+                            id: true,
+                            title: true,
+                            dueDate: true,
+                            submissions: {
+                                where: { userId: ctx.userId },
+                                select: { id: true },
+                            },
+                            progresses: {
+                                where: { userId: ctx.userId },
+                                select: { id: true },
+                            },
                         },
+                    })
+                    return assignments.map((assignment) => {
+                        const { submissions, progresses, ...rest } = assignment
+                        return {
+                            ...rest,
+                            isSubmitted: !!submissions,
+                            isStarted: !!progresses,
+                        }
                     })
                 })
         ),

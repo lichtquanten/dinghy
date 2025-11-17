@@ -23,10 +23,11 @@ COPY packages/ui/package.json ./packages/ui/
 # =============================================================================
 # DEVELOPMENT TARGET
 # =============================================================================
-FROM base AS development
+FROM package-json AS development
 COPY . .
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
-    pnpm install --frozen-lockfile
+    pnpm config set store-dir /pnpm/store && \
+    pnpm install --frozen-lockfile --prefer-offline
 
 CMD sh -c "if [ -n \"${ENV_FILE_ENCRYPTED}\" ]; then \
     set -a && \

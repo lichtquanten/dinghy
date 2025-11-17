@@ -1,0 +1,11 @@
+# Refresh shadcn components and dependencies
+
+default: refresh-shadcn
+
+refresh-shadcn:
+    rm -rf src/components/* src/hooks/* src/lib/utils/*
+    pnpx shadcn@beta add utils
+    pnpx shadcn@beta add sonner
+    pnpx shadcn@beta add -a -o -y
+    pnpx shadcn@beta add https://registry.ai-sdk.dev/all.json
+    pnpx shadcn@beta add https://reactbits.dev/r/DotGrid-TS-TW

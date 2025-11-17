@@ -232,6 +232,9 @@ importers:
       lucide-react:
         specifier: ^0.475.0
         version: 0.475.0(react@19.2.0)
+      motion:
+        specifier: ^12.23.24
+        version: 12.23.24(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       react:
         specifier: ^19.2.0
         version: 19.2.0
@@ -508,7 +511,7 @@ importers:
         specifier: ^12.9.2
         version: 12.9.2(@types/react@19.2.3)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       ai:
-        specifier: ^5.0.89
+        specifier: ^5.0.92
         version: 5.0.92(zod@3.25.76)
       class-variance-authority:
         specifier: ^0.7.1
@@ -525,6 +528,9 @@ importers:
       embla-carousel-react:
         specifier: ^8.6.0
         version: 8.6.0(react@19.2.0)
+      gsap:
+        specifier: ^3.13.0
+        version: 3.13.0
       input-otp:
         specifier: ^1.4.2
         version: 1.4.2(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -540,6 +546,9 @@ importers:
       next-themes:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      ogl:
+        specifier: ^1.0.11
+        version: 1.0.11
       react:
         specifier: ^19.2.0
         version: 19.2.0
@@ -561,6 +570,9 @@ importers:
       recharts:
         specifier: 2.15.4
         version: 2.15.4(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      shiki:
+        specifier: ^3.15.0
+        version: 3.15.0
       sonner:
         specifier: ^2.0.7
         version: 2.0.7(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -568,7 +580,7 @@ importers:
         specifier: ^1.4.0
         version: 1.4.0(@types/react@19.2.3)(react@19.2.0)
       tailwind-merge:
-        specifier: ^3.3.1
+        specifier: ^3.4.0
         version: 3.4.0
       tokenlens:
         specifier: ^1.3.1
@@ -607,6 +619,9 @@ importers:
       tailwindcss:
         specifier: ^4.1.17
         version: 4.1.17
+      tsdown:
+        specifier: ^0.15.12
+        version: 0.15.12(ms@2.1.3)(typescript@5.9.3)
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -3650,6 +3665,9 @@ packages:
   graphemer@1.4.0:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
 
+  gsap@3.13.0:
+    resolution: {integrity: sha512-QL7MJ2WMjm1PHWsoFrAQH/J8wUeqZvMtHO58qdekHpCfhvhSL4gSiz6vJf5EeMP0LOn3ZCprL2ki/gjED8ghVw==}
+
   hachure-fill@0.5.2:
     resolution: {integrity: sha512-3GKBOn+m2LX9iq+JC1064cSFprJY4jL1jCXTcpnfER5HYE2l/4EfWSGzkPa/ZDBmYI0ZOEj5VHV/eKnPGkHuOg==}
 
@@ -4528,6 +4546,9 @@ packages:
     peerDependenciesMeta:
       ms:
         optional: true
+
+  ogl@1.0.11:
+    resolution: {integrity: sha512-kUpC154AFfxi16pmZUK4jk3J+8zxwTWGPo03EoYA8QPbzikHoaC82n6pNTbd+oEaJonaE8aPWBlX7ad9zrqLsA==}
 
   ohash@2.0.11:
     resolution: {integrity: sha512-RdR9FQrFwNBNXAr4GixM8YaRZRJ5PUWbKYbE5eOsrwAjJW0q2REGcf79oYPsLyskQCZG1PLN+S/K1V00joZAoQ==}
@@ -9181,6 +9202,8 @@ snapshots:
 
   graphemer@1.4.0: {}
 
+  gsap@3.13.0: {}
+
   hachure-fill@0.5.2: {}
 
   handlebars@4.7.8:
@@ -10321,6 +10344,8 @@ snapshots:
   obug@0.1.1(ms@2.1.3):
     optionalDependencies:
       ms: 2.1.3
+
+  ogl@1.0.11: {}
 
   ohash@2.0.11: {}
 

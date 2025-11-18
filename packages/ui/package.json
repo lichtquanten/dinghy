@@ -4,8 +4,7 @@
     "type": "module",
     "private": true,
     "scripts": {
-        "refresh": "pnpx shadcn@beta add --all --overwrite --yes",
-        "typecheck": "tsc --build; tsc --build --clean"
+        "refresh": "pnpx shadcn@beta add --all --overwrite --yes"
     },
     "dependencies": {
         "@hookform/resolvers": "^5.2.2",

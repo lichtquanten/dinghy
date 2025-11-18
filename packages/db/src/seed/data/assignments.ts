@@ -34,4 +34,20 @@ export const assignments = [
             },
         ],
     }),
+    defineAssignment({
+        courseTitle: "CSCI 101",
+        title: "Find the Maximum",
+        dueDate: new Date("2026-01-12"),
+        instructions: "Find the maximum of some inputs",
+        filename: "max.cpp",
+        starterCode: "// Your code here",
+        codeLanguage: CodeLanguage.cpp,
+        testCases: [
+            {
+                input: "10 20 30 5 30 2",
+                expectedOutput: "30",
+                description: "",
+            },
+        ],
+    }),
 ]

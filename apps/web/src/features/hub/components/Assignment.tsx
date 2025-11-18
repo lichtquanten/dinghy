@@ -93,7 +93,7 @@ export function Assignment({
                 )}
             >
                 {!isCompleted && (
-                    <div className="absolute inset-0 bg-gradient-to-br from-foreground/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className="absolute inset-0 bg-linear-to-br from-foreground/2 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 )}
 
                 <CardHeader className="p-6">

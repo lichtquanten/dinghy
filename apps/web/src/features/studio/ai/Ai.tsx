@@ -129,7 +129,7 @@ function ChatInput({
     return (
         <PromptInput
             onSubmit={onSubmit}
-            className="mt-4 flex-shrink-0"
+            className="mt-4 shrink-0"
             globalDrop
             multiple
         >

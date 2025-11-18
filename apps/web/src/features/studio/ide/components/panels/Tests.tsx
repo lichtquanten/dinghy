@@ -22,7 +22,7 @@ function TestCaseItem({ testCase, result, index }: TestCaseItemProps) {
     return (
         <div className="flex items-start gap-2.5 p-3 hover:bg-slate-50 rounded-md transition-colors">
             <div
-                className={`w-4 h-4 rounded-full border-2 mt-0.5 flex-shrink-0 ${
+                className={`w-4 h-4 rounded-full border-2 mt-0.5 shrink-0 ${
                     passed
                         ? "bg-emerald-500 border-emerald-500"
                         : hasRun

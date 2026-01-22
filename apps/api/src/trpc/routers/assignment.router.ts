@@ -55,8 +55,8 @@ export const assignmentRouter = router({
                         const { submissions, progresses, ...rest } = assignment
                         return {
                             ...rest,
-                            isSubmitted: !!submissions,
-                            isStarted: !!progresses,
+                            isSubmitted: submissions.length > 0,
+                            isStarted: progresses.length > 0,
                         }
                     })
                 })

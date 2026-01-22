@@ -82,7 +82,6 @@ apps/
   api/              # Hono API server
   web/              # React frontend
 packages/
-  ai-models/   # Shared AI model config
   code-languages/   # Shared programming language configs
   database/         # Shared MongoDB models
   ui/               # Shared React components

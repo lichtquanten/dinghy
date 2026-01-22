@@ -2,7 +2,6 @@
     "files": [],
     "references": [
         // { "path": "./tsconfig.tools.json" },
-        { "path": "./packages/ai-models" },
         { "path": "./packages/code-languages" },
         { "path": "./packages/db" },
         { "path": "./packages/ui" },

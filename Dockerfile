@@ -14,7 +14,6 @@ FROM base AS package-json
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/api/package.json ./apps/api/
 COPY apps/web/package.json ./apps/web/
-COPY packages/ai-models/package.json ./packages/ai-models/
 COPY packages/code-languages/package.json ./packages/code-languages/
 COPY packages/db/package.json ./packages/db/
 COPY packages/typescript-config/package.json ./packages/typescript-config/

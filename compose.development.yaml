@@ -12,7 +12,6 @@ services:
         ]
     volumes:
       - ./apps/api/src:/app/apps/api/src
-      - ./packages/ai-models/src:/app/packages/ai-models/src
       - ./packages/code-languages/src:/app/packages/code-languages/src
       - ./packages/database/src:/app/packages/database/src
       - ./apps/web/src:/app/apps/web/src

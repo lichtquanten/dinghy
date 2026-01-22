@@ -5,14 +5,13 @@ import { Navigate, useNavigate, useParams } from "react-router-dom"
 import { ErrorFallback } from "@/lib/components/ErrorFallback"
 import { LoadingSpinner } from "@/lib/components/LoadingSpinner"
 import { trpc } from "@/lib/trpc"
-import Ai from "./ai/Ai"
 import Header from "./components/Header"
 import Sidebar from "./components/Sidebar"
 import Workspace from "./components/Workspace"
 import { AssignmentProvider } from "./context"
 import Ide from "./ide/Ide"
 
-export type WorkspaceView = "ide" | "ai"
+export type WorkspaceView = "ide"
 
 interface StudioContentProps {
     assignmentId: string
@@ -34,7 +33,6 @@ function StudioContent({ assignmentId }: StudioContentProps) {
                 <Workspace view={activeView}>
                     {{
                         ide: <Ide />,
-                        ai: <Ai />,
                     }}
                 </Workspace>
             </div>

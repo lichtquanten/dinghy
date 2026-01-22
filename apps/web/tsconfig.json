@@ -14,7 +14,6 @@
 
     "references": [
         { "path": "../../packages/db" },
-        { "path": "../../packages/ai-models" },
         { "path": "../../packages/code-languages" },
         { "path": "../../packages/ui" }
     ]

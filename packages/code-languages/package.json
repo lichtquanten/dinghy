@@ -20,7 +20,7 @@
         "@codemirror/lang-python": "^6.2.1",
         "@codemirror/lang-rust": "^6.0.2",
         "@codemirror/lang-sql": "^6.10.0",
-        "@codemirror/language": "^6.11.3"
+        "@codemirror/language": "^6.12.1"
     },
     "devDependencies": {
         "@workspace/eslint-config": "workspace:*",

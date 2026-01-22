@@ -4,7 +4,6 @@ interface WorkspaceProps {
     view: WorkspaceView
     children: {
         ide: React.ReactNode
-        ai: React.ReactNode
     }
 }
 

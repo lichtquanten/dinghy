@@ -34,12 +34,6 @@ const envSchema = z.object({
             message:
                 "CALLBACK_SECRET must be composed of valid hex characters.",
         }),
-
-    OLLAMA_API_URL: z.url().optional(),
-    ENABLE_GPT5_NANO: z.coerce.boolean().default(false),
-    ENABLE_DEEPSEEK: z.coerce.boolean().default(false),
-    ENABLE_TINY_LLM: z.coerce.boolean().default(false),
-    ENABLE_DEEPINFRA: z.coerce.boolean().default(false),
 })
 
 export const env = envSchema.parse(process.env)

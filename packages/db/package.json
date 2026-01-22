@@ -16,7 +16,7 @@
     "devDependencies": {
         "@workspace/eslint-config": "workspace:*",
         "@workspace/typescript-config": "workspace:*",
-        "prisma": "^6.19.0",
+        "prisma": "^6.19.2",
         "tsdown": "^0.15.12"
     },
     "exports": {
@@ -27,6 +27,6 @@
         "./models": "./dist/node/generated/prisma/models.js"
     },
     "dependencies": {
-        "@prisma/client": "^6.19.0"
+        "@prisma/client": "^6.19.2"
     }
 }

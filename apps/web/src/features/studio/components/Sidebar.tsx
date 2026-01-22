@@ -1,4 +1,4 @@
-import { Bot, Code2, type LucideIcon } from "lucide-react"
+import { Code2, type LucideIcon } from "lucide-react"
 import { cn } from "@workspace/ui/lib/utils.ts"
 import type { WorkspaceView } from "../Studio"
 
@@ -9,7 +9,6 @@ interface SidebarItemConfig {
 
 const SIDEBAR_ITEMS = {
     ide: { label: "IDE", icon: Code2 },
-    ai: { label: "AI", icon: Bot },
 } as const satisfies Record<WorkspaceView, SidebarItemConfig>
 
 interface SidebarProps {

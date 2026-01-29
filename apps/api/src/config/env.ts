@@ -22,6 +22,10 @@ const envSchema = z.object({
     JUDGE0_AUTHENTICATION_TOKEN: z.string().min(1),
     JUDGE0_RAPIDAPI_HOST: z.string().optional(),
 
+    WHEREBY_API_KEY: z.string().min(1),
+
+    LIVEBLOCKS_SECRET_KEY: z.string().min(1),
+
     API_CALLBACK_URL: z.url(),
 
     CALLBACK_SECRET: z

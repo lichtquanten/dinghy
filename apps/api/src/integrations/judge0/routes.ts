@@ -11,9 +11,9 @@ import {
     verifyAndConsumeCallback,
 } from "./security.js"
 
-export const judge0Routes = new Hono()
+export const routes = new Hono()
 
-judge0Routes.put("/callback/:submissionId", async (c) => {
+routes.put("/callback/:submissionId", async (c) => {
     const submissionId = c.req.param("submissionId")
     const signature = c.req.query("sig")
     const timestamp = c.req.query("ts")
@@ -41,7 +41,7 @@ judge0Routes.put("/callback/:submissionId", async (c) => {
     return c.json({ received: true })
 })
 
-judge0Routes.get("/stream", requireAuth, async (c) => {
+routes.get("/stream", requireAuth, async (c) => {
     const userId = c.var.userId
     const subscriber = redisClient.duplicate()
     await subscriber.connect()
@@ -86,7 +86,7 @@ judge0Routes.get("/stream", requireAuth, async (c) => {
     })
 })
 
-judge0Routes.post("/submissions", requireAuth, rateLimitJudge0, async (c) => {
+routes.post("/submissions", requireAuth, rateLimitJudge0, async (c) => {
     const body: Record<string, unknown> = await c.req.json()
     const submissionId = generateSubmissionId()
     body.callback_url = await generateCallbackUrl(submissionId, c.var.userId)
@@ -109,7 +109,7 @@ judge0Routes.post("/submissions", requireAuth, rateLimitJudge0, async (c) => {
     return c.json({ ...result, submissionId })
 })
 
-judge0Routes.all("/*", requireAuth, rateLimitJudge0, (c) => {
+routes.all("/*", requireAuth, rateLimitJudge0, (c) => {
     const headers: Record<string, string | undefined> = {
         [env.JUDGE0_AUTHENTICATION_HEADER]: env.JUDGE0_AUTHENTICATION_TOKEN,
         Authorization: undefined,

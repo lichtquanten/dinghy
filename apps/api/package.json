@@ -13,7 +13,10 @@
         "format": "prettier --write .",
         "format:check": "prettier --check .",
         "typecheck": "tsc --build; tsc --build --clean",
-        "clean": "rm -rf dist/"
+        "clean": "rm -rf dist/",
+        "openapi:fetch:whereby": "curl -L \"https://raw.githubusercontent.com/whereby/docs/refs/heads/main/.gitbook/assets/_api-reference-docs-openapi.json\" -o src/integrations/whereby/openapi.json",
+        "openapi:generate:whereby": "openapi-typescript src/integrations/whereby/openapi.json -o src/integrations/whereby/types.ts",
+        "openapi:check:whereby": "npm run openapi:generate:whereby && git diff --exit-code src/integrations/whereby/types.ts"
     },
     "dependencies": {
         "@clerk/backend": "^2.29.3",
@@ -22,14 +25,18 @@
         "@hono/node-server": "^1.19.9",
         "@hono/trpc-server": "^0.4.2",
         "@hono/zod-validator": "^0.7.6",
+        "@liveblocks/node": "^3.13.3",
         "@redis/client": "^5.10.0",
         "@trpc/server": "^11.8.1",
+        "@types/jsonwebtoken": "^9.0.10",
         "@workspace/code-languages": "workspace:*",
         "@workspace/db": "workspace:*",
         "envsub": "^4.1.0",
         "hono": "^4.11.4",
         "hono-rate-limiter": "^0.4.2",
         "ioredis": "^5.9.2",
+        "jsonwebtoken": "^9.0.3",
+        "openapi-fetch": "^0.15.0",
         "rate-limit-redis": "^4.3.1",
         "superjson": "^2.2.6",
         "zod": "^4.3.5"
@@ -38,6 +45,7 @@
         "@types/node": "^24.10.9",
         "concurrently": "^9.2.1",
         "nodemon": "^3.1.11",
+        "openapi-typescript": "^7.10.1",
         "tsdown": "^0.15.12",
         "tsup": "^8.5.1",
         "typescript": "^5.9.3"

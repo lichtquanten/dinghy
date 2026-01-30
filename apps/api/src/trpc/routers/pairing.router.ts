@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 import { prisma } from "@/infrastructure/db.js"
-import { deleteMeeting } from "@/integrations/whereby/client.js"
+import { destroySession } from "@/services/session.js"
 import { protectedProcedure, router } from "@/trpc/trpc.js"
 
 export const pairingRouter = router({
@@ -30,7 +30,7 @@ export const pairingRouter = router({
 
             const status = pairing.isCompleted
                 ? ("completed" as const)
-                : pairing.session
+                : pairing.isStarted
                   ? ("in_progress" as const)
                   : ("not_started" as const)
 
@@ -48,7 +48,7 @@ export const pairingRouter = router({
         .mutation(async ({ ctx, input }) => {
             const pairing = await prisma.pairing.findUnique({
                 where: { id: input.pairingId },
-                include: { session: { include: { wherebyMeeting: true } } },
+                include: { session: true },
             })
 
             if (!pairing) {
@@ -63,28 +63,59 @@ export const pairingRouter = router({
                 return
             }
 
-            if (pairing.session?.wherebyMeeting) {
-                await deleteMeeting(pairing.session.wherebyMeeting.id)
+            if (pairing.session) {
+                await destroySession(pairing.session.id)
+            }
+            await prisma.pairing.update({
+                where: { id: input.pairingId },
+                data: { isCompleted: true },
+            })
+        }),
+    advanceTask: protectedProcedure
+        .input(z.object({ pairingId: z.string(), fromTaskIndex: z.number() }))
+        .mutation(async ({ ctx, input }) => {
+            const pairing = await prisma.pairing.findUnique({
+                where: { id: input.pairingId },
+                include: {
+                    assignment: {
+                        include: { tasks: true },
+                    },
+                },
+            })
+
+            if (!pairing) {
+                throw new TRPCError({ code: "NOT_FOUND" })
             }
 
-            if (pairing.session) {
-                await prisma.$transaction([
-                    prisma.wherebyMeeting.delete({
-                        where: { sessionId: pairing.session.id },
-                    }),
-                    prisma.session.delete({
-                        where: { id: pairing.session.id },
-                    }),
-                    prisma.pairing.update({
-                        where: { id: input.pairingId },
-                        data: { isCompleted: true },
-                    }),
-                ])
-            } else {
-                await prisma.pairing.update({
-                    where: { id: input.pairingId },
-                    data: { isCompleted: true },
+            if (!pairing.memberIds.includes(ctx.userId)) {
+                throw new TRPCError({ code: "FORBIDDEN" })
+            }
+
+            const taskCount = pairing.assignment.tasks.length
+
+            if (input.fromTaskIndex >= taskCount - 1) {
+                throw new TRPCError({
+                    code: "BAD_REQUEST",
+                    message: "Already on last task",
                 })
             }
+
+            const result = await prisma.pairing.updateMany({
+                where: {
+                    id: input.pairingId,
+                    currentTaskIndex: input.fromTaskIndex,
+                },
+                data: { currentTaskIndex: input.fromTaskIndex + 1 },
+            })
+
+            if (result.count === 0) {
+                const current = await prisma.pairing.findUnique({
+                    where: { id: input.pairingId },
+                    select: { currentTaskIndex: true },
+                })
+                return { currentTaskIndex: current!.currentTaskIndex }
+            }
+
+            return { currentTaskIndex: input.fromTaskIndex + 1 }
         }),
 })

@@ -1,9 +1,11 @@
-// session.router.ts
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 import { prisma } from "@/infrastructure/db.js"
-import { authorizeUser } from "@/integrations/liveblocks/client.js"
-import { createMeeting as createWherebyMeeting } from "@/integrations/whereby/client.js"
+import {
+    createWherebyMeeting,
+    isExpiringSoon,
+    refreshWherebyMeeting,
+} from "@/services/session.js"
 import { protectedProcedure, router } from "@/trpc/trpc.js"
 
 export const sessionRouter = router({
@@ -13,17 +15,8 @@ export const sessionRouter = router({
             const pairing = await prisma.pairing.findUnique({
                 where: { id: input.pairingId },
                 include: {
-                    members: true,
                     session: {
                         include: { wherebyMeeting: true },
-                    },
-                    assignment: {
-                        include: {
-                            tasks: {
-                                orderBy: { order: "asc" },
-                                include: { testCases: true },
-                            },
-                        },
                     },
                 },
             })
@@ -36,122 +29,40 @@ export const sessionRouter = router({
                 throw new TRPCError({ code: "FORBIDDEN" })
             }
 
-            let session = pairing.session
-
-            if (!session) {
+            if (!pairing.session) {
                 const wherebyMeeting = await createWherebyMeeting()
-
-                session = await prisma.session.create({
-                    data: {
-                        pairingId: input.pairingId,
-                        wherebyMeeting: {
-                            create: {
-                                id: wherebyMeeting.meetingId,
-                                url: wherebyMeeting.roomUrl,
-                                expiresAt: wherebyMeeting.endDate,
-                            },
+                const [session] = await Promise.all([
+                    prisma.session.create({
+                        data: {
+                            pairingId: input.pairingId,
+                            wherebyMeetingId: wherebyMeeting.id,
                         },
-                    },
-                    include: { wherebyMeeting: true },
-                })
+                    }),
+                    prisma.pairing.update({
+                        where: { id: input.pairingId },
+                        data: { isStarted: true },
+                    }),
+                ])
+
+                return {
+                    sessionId: session.id,
+                    wherebyMeetingUrl: wherebyMeeting.url,
+                }
             }
 
-            if (!session.wherebyMeeting) {
-                throw new TRPCError({
-                    code: "INTERNAL_SERVER_ERROR",
-                    message: "Session missing whereby room",
-                })
-            }
-
-            const twoHoursFromNow = new Date(Date.now() + 2 * 60 * 60 * 1000)
-
-            if (session.wherebyMeeting.expiresAt < twoHoursFromNow) {
-                const wherebyMeeting = await createWherebyMeeting()
-
-                session.wherebyMeeting = await prisma.wherebyMeeting.update({
-                    where: { id: session.wherebyMeeting.id },
-                    data: {
-                        url: wherebyMeeting.roomUrl,
-                        expiresAt: wherebyMeeting.endDate,
-                    },
-                })
-            }
-
-            const { token } = await authorizeUser(
-                ctx.userId,
-                `pairing:${pairing.id}`
+            const { session } = pairing
+            const wherebyMeeting = isExpiringSoon(
+                session.wherebyMeeting.expiresAt
             )
-
-            const partner = pairing.members.find((m) => m.id !== ctx.userId)
-            if (!partner) {
-                throw new TRPCError({
-                    code: "INTERNAL_SERVER_ERROR",
-                    message: "Pairing has no partner",
-                })
-            }
+                ? await refreshWherebyMeeting(
+                      session.wherebyMeeting.id,
+                      session.id
+                  )
+                : session.wherebyMeeting
 
             return {
                 sessionId: session.id,
-                currentTaskIndex: session.currentTaskIndex,
-                wherebyMeetingUrl: session.wherebyMeeting.url,
-                liveblocksToken: token,
-                assignment: pairing.assignment,
-                partner: {
-                    id: partner.id,
-                    firstName: partner.firstName,
-                    lastInitial: partner.lastName[0],
-                },
+                wherebyMeetingUrl: wherebyMeeting.url,
             }
-        }),
-    advanceTask: protectedProcedure
-        .input(z.object({ sessionId: z.string(), fromTaskIndex: z.number() }))
-        .mutation(async ({ ctx, input }) => {
-            const session = await prisma.session.findUnique({
-                where: { id: input.sessionId },
-                include: {
-                    pairing: {
-                        include: {
-                            assignment: {
-                                include: { tasks: true },
-                            },
-                        },
-                    },
-                },
-            })
-
-            if (!session) {
-                throw new TRPCError({ code: "NOT_FOUND" })
-            }
-
-            if (!session.pairing.memberIds.includes(ctx.userId)) {
-                throw new TRPCError({ code: "FORBIDDEN" })
-            }
-
-            const taskCount = session.pairing.assignment.tasks.length
-
-            if (input.fromTaskIndex >= taskCount - 1) {
-                throw new TRPCError({
-                    code: "BAD_REQUEST",
-                    message: "Already on last task",
-                })
-            }
-
-            const result = await prisma.session.updateMany({
-                where: {
-                    id: input.sessionId,
-                    currentTaskIndex: input.fromTaskIndex,
-                },
-                data: { currentTaskIndex: input.fromTaskIndex + 1 },
-            })
-
-            if (result.count === 0) {
-                const current = await prisma.session.findUnique({
-                    where: { id: input.sessionId },
-                    select: { currentTaskIndex: true },
-                })
-                return { currentTaskIndex: current!.currentTaskIndex }
-            }
-
-            return { currentTaskIndex: input.fromTaskIndex + 1 }
         }),
 })

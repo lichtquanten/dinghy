@@ -5,6 +5,7 @@ generator client {
 
 datasource db {
   provider = "mongodb"
+  url = env("PRISMA_DB_URL")
 }
 
 model User {
@@ -96,26 +97,26 @@ model Pairing {
   memberIds        String[]   @db.ObjectId
   members          User[]     @relation(fields: [memberIds], references: [id])
 
+  isStarted        Boolean @default(false)
   isCompleted      Boolean @default(false)
+  currentTaskIndex Int     @default(0)
+
   session          Session?
 }
 
 model Session {
-  id               String  @id @default(auto()) @map("_id") @db.ObjectId
-  pairingId        String  @unique @db.ObjectId
-  pairing          Pairing @relation(fields: [pairingId], references: [id])
-
-  currentTaskIndex Int     @default(0)
-  wherebyMeeting   WherebyMeeting?
+  id               String         @id @default(auto()) @map("_id") @db.ObjectId
+  pairingId        String         @unique @db.ObjectId
+  pairing          Pairing        @relation(fields: [pairingId], references: [id])
+  wherebyMeetingId String         @unique @db.ObjectId
+  wherebyMeeting   WherebyMeeting @relation(fields: [wherebyMeetingId], references: [id])
 }
 
 model WherebyMeeting {
-  id               String  @id @map("_id") @db.ObjectId
-  sessionId        String  @unique @db.ObjectId
-  session          Session @relation(fields: [sessionId], references: [id])
-
-  url              String
-  expiresAt        DateTime
+  id        String   @id @map("_id") @db.ObjectId
+  session   Session?
+  url       String
+  expiresAt DateTime
 }
 
 enum CodeLanguage {

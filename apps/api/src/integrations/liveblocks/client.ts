@@ -10,7 +10,7 @@ const liveblocks = new Liveblocks({
     secret: env.LIVEBLOCKS_SECRET_KEY,
 })
 
-export async function authorizeUser(userId: string, roomId: string) {
+export async function getToken(userId: string, roomId: string) {
     const session = liveblocks.prepareSession(userId)
 
     session.allow(roomId, session.FULL_ACCESS)
@@ -21,5 +21,6 @@ export async function authorizeUser(userId: string, roomId: string) {
         throw new Error(`Failed to authorize Liveblocks session: ${status}`)
     }
 
-    return authSchema.parse(JSON.parse(body))
+    const { token } = authSchema.parse(JSON.parse(body))
+    return token
 }

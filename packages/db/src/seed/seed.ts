@@ -1,4 +1,5 @@
 import {
+    type Assignment,
     type Course,
     PrismaClient,
     type User,
@@ -6,6 +7,7 @@ import {
 import { assignments } from "./data/assignments.js"
 import { courses } from "./data/courses.js"
 import { enrollments } from "./data/enrollments.js"
+import { pairings } from "./data/pairings.js"
 import { users } from "./data/users.js"
 
 async function seedUsers(prisma: PrismaClient) {
@@ -19,7 +21,7 @@ async function seedUsers(prisma: PrismaClient) {
             create: userData,
         })
         userMap.set(user.email, user)
-        console.log(`✅ Seeded user: ${user.email}`)
+        console.log(`Seeded user: ${user.email}`)
     }
 
     return userMap
@@ -35,7 +37,7 @@ async function seedCourses(prisma: PrismaClient) {
             create: courseData,
         })
         courseMap.set(course.title, course)
-        console.log(`✅ Seeded course: ${course.title}`)
+        console.log(`Seeded course: ${course.title}`)
     }
 
     return courseMap
@@ -45,18 +47,20 @@ async function seedAssignments(
     prisma: PrismaClient,
     courseMap: Map<string, Course>
 ) {
+    const assignmentMap = new Map<string, Assignment>()
+
     for (const assignmentData of assignments) {
-        const { courseTitle, testCases, ...rest } = assignmentData
+        const { courseTitle, tasks, ...rest } = assignmentData
         const course = courseMap.get(courseTitle)
 
         if (!course) {
             console.warn(
-                `⚠️  Course "${courseTitle}" not found for assignment "${assignmentData.title}"`
+                `Course "${courseTitle}" not found for assignment "${assignmentData.title}"`
             )
             continue
         }
 
-        await prisma.assignment.upsert({
+        const assignment = await prisma.assignment.upsert({
             where: {
                 title_courseId: {
                     title: assignmentData.title,
@@ -67,13 +71,21 @@ async function seedAssignments(
             create: {
                 courseId: course.id,
                 ...rest,
-                testCases: { create: testCases },
+                tasks: {
+                    create: tasks.map(({ testCases, ...taskRest }) => ({
+                        ...taskRest,
+                        testCases: { create: testCases },
+                    })),
+                },
             },
         })
+        assignmentMap.set(`${courseTitle}:${assignment.title}`, assignment)
         console.log(
-            `✅ Seeded assignment: ${assignmentData.title} (${courseTitle})`
+            `Seeded assignment: ${assignmentData.title} (${courseTitle}) with ${tasks.length} tasks`
         )
     }
+
+    return assignmentMap
 }
 
 async function seedEnrollments(
@@ -87,7 +99,7 @@ async function seedEnrollments(
 
         if (!user || !course) {
             console.warn(
-                `⚠️  Skipping enrollment: ${enrollmentData.userEmail} -> ${enrollmentData.courseTitle}`
+                `Skipping enrollment: ${enrollmentData.userEmail} -> ${enrollmentData.courseTitle}`
             )
             continue
         }
@@ -99,7 +111,41 @@ async function seedEnrollments(
             update: {},
             create: { userId: user.id, courseId: course.id },
         })
-        console.log(`✅ Seeded enrollment: ${user.email} -> ${course.title}`)
+        console.log(`Seeded enrollment: ${user.email} -> ${course.title}`)
+    }
+}
+
+async function seedPairings(
+    prisma: PrismaClient,
+    userMap: Map<string, User>,
+    assignmentMap: Map<string, Assignment>
+) {
+    for (const pairingData of pairings) {
+        const assignmentKey = `${pairingData.courseTitle}:${pairingData.assignmentTitle}`
+        const assignment = assignmentMap.get(assignmentKey)
+        const members = pairingData.memberEmails
+            .map((email) => userMap.get(email))
+            .filter((u): u is User => u !== undefined)
+
+        if (!assignment || members.length !== pairingData.memberEmails.length) {
+            console.warn(
+                `Skipping pairing for assignment "${pairingData.assignmentTitle}" - missing assignment or users`
+            )
+            continue
+        }
+
+        await prisma.pairing.create({
+            data: {
+                assignmentId: assignment.id,
+                memberIds: members.map((m) => m.id),
+                isStarted: pairingData.isStarted ?? false,
+                isCompleted: pairingData.isCompleted ?? false,
+                currentTaskIndex: pairingData.currentTaskIndex ?? 0,
+            },
+        })
+        console.log(
+            `Seeded pairing: ${pairingData.assignmentTitle} (${members.map((m) => m.email).join(", ")})`
+        )
     }
 }
 
@@ -108,23 +154,26 @@ async function seedDatabase() {
 
     try {
         await prisma.$connect()
-        console.log("✅ Database connected successfully\n")
+        console.log("Database connected successfully\n")
 
-        console.log("📝 Seeding users...")
+        console.log("Seeding users...")
         const userMap = await seedUsers(prisma)
 
-        console.log("\n📚 Seeding courses...")
+        console.log("\nSeeding courses...")
         const courseMap = await seedCourses(prisma)
 
-        console.log("\n📋 Seeding assignments...")
-        await seedAssignments(prisma, courseMap)
+        console.log("\nSeeding assignments...")
+        const assignmentMap = await seedAssignments(prisma, courseMap)
 
-        console.log("\n👥 Seeding enrollments...")
+        console.log("\nSeeding enrollments...")
         await seedEnrollments(prisma, userMap, courseMap)
 
-        console.log("\n✅ Database seed completed successfully!")
+        console.log("\nSeeding pairings...")
+        await seedPairings(prisma, userMap, assignmentMap)
+
+        console.log("\nDatabase seed completed successfully!")
     } catch (error) {
-        console.error("❌ Database seed failed:", error)
+        console.error("Database seed failed:", error)
         process.exit(1)
     } finally {
         await prisma.$disconnect()

@@ -1,4 +1,4 @@
-import { ArrowRight, CheckCircle2, Clock, PlayCircle } from "lucide-react"
+import { ArrowRight, PlayCircle, User, Users } from "lucide-react"
 import type { RouterOutputs } from "@workspace/api"
 import { Badge } from "@workspace/ui/components/badge.js"
 import { Button } from "@workspace/ui/components/button.js"
@@ -9,9 +9,10 @@ type Assignment = RouterOutputs["assignment"]["getByCourse"][number]
 
 function formatDueDate(dueDate: Date) {
     const now = new Date()
-    const dueDateObj = new Date(dueDate)
-    const diffTime = dueDateObj.getTime() - now.getTime()
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+    const due = new Date(dueDate)
+    const diffDays = Math.ceil(
+        (due.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+    )
 
     if (diffDays < 0) {
         return {
@@ -19,80 +20,141 @@ function formatDueDate(dueDate: Date) {
             variant: "destructive" as const,
         }
     }
-    if (diffDays === 0) {
+    if (diffDays === 0)
         return { text: "Due Today", variant: "destructive" as const }
-    }
-    if (diffDays === 1) {
+    if (diffDays === 1)
         return { text: "Due Tomorrow", variant: "default" as const }
-    }
-    if (diffDays <= 3) {
-        return { text: `Due in ${diffDays} days`, variant: "default" as const }
-    }
-    if (diffDays <= 7) {
+    if (diffDays <= 7)
         return {
             text: `Due in ${diffDays} days`,
-            variant: "secondary" as const,
+            variant:
+                diffDays <= 3 ? ("default" as const) : ("secondary" as const),
         }
-    }
+
     return {
-        text: dueDateObj.toLocaleDateString("en-US", {
+        text: due.toLocaleDateString("en-US", {
             month: "short",
             day: "numeric",
             year:
-                dueDateObj.getFullYear() !== now.getFullYear()
-                    ? "numeric"
-                    : undefined,
+                due.getFullYear() !== now.getFullYear() ? "numeric" : undefined,
         }),
         variant: "outline" as const,
     }
 }
 
+// ============================================
+// Subcomponents
+// ============================================
+
+function PartnerDisplay({ pairing }: { pairing: Assignment["pairing"] }) {
+    if (!pairing) {
+        return (
+            <div className="flex items-center gap-1.5 text-muted-foreground">
+                <User className="w-4 h-4" />
+                <span className="italic">Waiting for partner...</span>
+            </div>
+        )
+    }
+
+    return (
+        <div className="flex items-center gap-1.5 text-muted-foreground">
+            <Users className="w-4 h-4" />
+            <span>
+                with{" "}
+                <span className="font-medium text-foreground">
+                    {pairing.partner.firstName} {pairing.partner.lastInitial}.
+                </span>
+            </span>
+        </div>
+    )
+}
+
+function DueDateDisplay({ dueDate }: { dueDate: Date }) {
+    const { text, variant } = formatDueDate(dueDate)
+    return (
+        <Badge variant={variant} className="font-medium">
+            Due: {text}
+        </Badge>
+    )
+}
+
+function ProgressBar({
+    currentIndex,
+    total,
+}: {
+    currentIndex: number
+    total: number
+}) {
+    const progress = ((currentIndex + 1) / total) * 100
+
+    return (
+        <div className="flex items-center gap-2">
+            <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
+                <div
+                    className="h-full bg-primary rounded-full transition-all"
+                    style={{ width: `${progress}%` }}
+                />
+            </div>
+            <span className="text-xs text-muted-foreground font-medium">
+                {currentIndex + 1}/{total}
+            </span>
+        </div>
+    )
+}
+
+function ActionButton({ isStarted }: { isStarted: boolean }) {
+    return (
+        <div className="transition-transform group-hover:rotate-12 group-hover:scale-110">
+            <Button
+                size="icon"
+                className="w-12 h-12 rounded-full shrink-0 shadow-lg"
+            >
+                {isStarted ? (
+                    <PlayCircle className="w-5 h-5" strokeWidth={2.5} />
+                ) : (
+                    <ArrowRight className="w-5 h-5" strokeWidth={3} />
+                )}
+            </Button>
+        </div>
+    )
+}
+
+// ============================================
+// Main component
+// ============================================
+
 interface AssignmentProps {
     assignment: Assignment
-    isCompleted?: boolean
     onClick?: () => void
 }
 
-export function Assignment({
-    assignment,
-    isCompleted = false,
-    onClick,
-}: AssignmentProps) {
-    const dueDate = formatDueDate(assignment.dueDate)
-    const StatusIcon = isCompleted
-        ? CheckCircle2
-        : assignment.isStarted
-          ? PlayCircle
-          : Clock
-    const statusText = isCompleted
-        ? "Submitted"
-        : assignment.isStarted
-          ? "In Progress"
-          : "Not Started"
-    const statusVariant = isCompleted
-        ? "outline"
-        : assignment.isStarted
-          ? "secondary"
-          : "outline"
+export function Assignment({ assignment, onClick }: AssignmentProps) {
+    const { pairing, title, dueDate, tasks } = assignment
+
+    const hasPartner = pairing !== null
+    const isCompleted = pairing?.isCompleted ?? false
+    const isStarted = pairing?.isStarted ?? false
+    const isClickable = hasPartner && !isCompleted && Boolean(onClick)
 
     return (
         <div
             className={cn(
                 "relative",
-                !isCompleted &&
-                    "group cursor-pointer transition-transform hover:scale-[1.02]"
+                isClickable &&
+                    "group cursor-pointer transition-transform hover:scale-[1.02]",
+                !hasPartner && "opacity-60"
             )}
-            onClick={!isCompleted ? onClick : undefined}
+            onClick={isClickable ? onClick : undefined}
+            role={isClickable ? "button" : undefined}
+            tabIndex={isClickable ? 0 : undefined}
         >
             <Card
                 className={cn(
                     "relative border overflow-hidden",
-                    isCompleted
-                        ? "bg-muted/30 backdrop-blur-sm"
-                        : "border-2 bg-background"
+                    isCompleted ? "bg-muted/30" : "border-2 bg-background"
                 )}
             >
-                {!isCompleted && (
+                {isClickable && (
                     <div className="absolute inset-0 bg-linear-to-br from-foreground/2 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 )}
 
@@ -100,64 +162,29 @@ export function Assignment({
                     <div className="flex items-center justify-between gap-6">
                         <div className="flex-1 min-w-0 space-y-3">
                             <div className="flex items-center gap-3">
-                                {isCompleted && (
-                                    <CheckCircle2 className="w-5 h-5 shrink-0" />
-                                )}
                                 <CardTitle className="text-2xl font-bold leading-tight">
-                                    {assignment.title}
+                                    {title}
                                 </CardTitle>
                             </div>
 
-                            <div className="flex items-center gap-4 text-sm">
-                                <div className="space-y-1">
-                                    <div className="text-xs text-muted-foreground uppercase tracking-wider font-bold">
-                                        Status
-                                    </div>
-                                    <Badge
-                                        variant={statusVariant}
-                                        className="font-semibold"
-                                    >
-                                        <StatusIcon className="w-3 h-3 mr-1.5" />
-                                        {statusText}
-                                    </Badge>
-                                </div>
-                                <div className="space-y-1">
-                                    <div className="text-xs text-muted-foreground uppercase tracking-wider font-bold">
-                                        Due Date
-                                    </div>
-                                    {isCompleted ? (
-                                        <span className="text-muted-foreground font-medium">
-                                            {new Date(
-                                                assignment.dueDate
-                                            ).toLocaleDateString("en-US", {
-                                                month: "short",
-                                                day: "numeric",
-                                            })}
-                                        </span>
-                                    ) : (
-                                        <Badge
-                                            variant={dueDate.variant}
-                                            className="font-semibold"
-                                        >
-                                            {dueDate.text}
-                                        </Badge>
-                                    )}
-                                </div>
+                            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+                                <PartnerDisplay pairing={pairing} />
+                                <span className="text-muted-foreground/50">
+                                    •
+                                </span>
+                                <DueDateDisplay dueDate={dueDate} />
                             </div>
+
+                            {isStarted && !isCompleted && pairing && (
+                                <ProgressBar
+                                    currentIndex={pairing.currentTaskIndex}
+                                    total={tasks.length}
+                                />
+                            )}
                         </div>
 
-                        {!isCompleted && (
-                            <div className="transition-transform group-hover:rotate-12 group-hover:scale-110">
-                                <Button
-                                    size="icon"
-                                    className="w-12 h-12 rounded-full shrink-0 shadow-lg"
-                                >
-                                    <ArrowRight
-                                        className="w-5 h-5"
-                                        strokeWidth={3}
-                                    />
-                                </Button>
-                            </div>
+                        {!isCompleted && hasPartner && (
+                            <ActionButton isStarted={isStarted} />
                         )}
                     </div>
                 </CardHeader>

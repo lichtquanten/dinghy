@@ -1,19 +1,22 @@
-// Hub.tsx
 import { UserButton } from "@clerk/clerk-react"
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { CheckCircle2, Clock } from "lucide-react"
-import { Suspense, useCallback } from "react"
+import { CheckCircle2, Clock, Plus } from "lucide-react"
+import { Suspense, useCallback, useState } from "react"
 import { ErrorBoundary } from "react-error-boundary"
-import { Navigate, useNavigate } from "react-router-dom"
-import { generatePath } from "react-router-dom"
-import type { RouterOutputs } from "@workspace/api"
+import { generatePath, Navigate, useNavigate } from "react-router-dom"
+import { Button } from "@workspace/ui/components/button.js"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@workspace/ui/components/select.js"
 import { ErrorFallback } from "@/lib/components/ErrorFallback"
 import { LoadingSpinner } from "@/lib/components/LoadingSpinner"
 import { trpc } from "@/lib/trpc"
 import { Assignment } from "./components/Assignment"
 import { AssignmentGroup } from "./components/AssignmentGroup"
-
-type Assignment = RouterOutputs["assignment"]["getByCourse"][number]
 
 function EmptyTodoState() {
     return (
@@ -40,43 +43,94 @@ function EmptyCompletedState() {
 }
 
 function HubContent() {
-    const { data: courses } = useSuspenseQuery(trpc.course.get.queryOptions())
     const navigate = useNavigate()
-    const [course] = courses
+
+    const { data: courses } = useSuspenseQuery(trpc.course.get.queryOptions())
+
+    const [selectedCourseId, setSelectedCourseId] = useState<string | null>(
+        null
+    )
+
+    const activeCourse =
+        courses.find((c) => c.id === selectedCourseId) ?? courses[0] ?? null
 
     const { data: assignments } = useSuspenseQuery(
         trpc.assignment.getByCourse.queryOptions(
-            { courseId: course!.id },
-            { enabled: !!course?.id }
+            { courseId: activeCourse?.id ?? "" },
+            { enabled: Boolean(activeCourse?.id) }
         )
     )
 
     const handleAssignmentClick = useCallback(
-        async (assignmentId: string) => {
+        (assignmentId: string) => {
             const path = generatePath("/studio/:assignmentId", { assignmentId })
-            await navigate(path)
+            void navigate(path)
         },
         [navigate]
     )
 
-    if (courses.length > 1) {
-        throw new Error("Enrollment in multiple courses not supported.")
-    }
-
-    if (!course) {
+    if (courses.length === 0) {
         return <Navigate to="/joinCourse" replace />
     }
 
-    const todoAssignments = assignments.filter((a) => !a.isSubmitted)
-    const completedAssignments = assignments.filter((a) => a.isSubmitted)
+    if (!activeCourse) {
+        return null
+    }
+
+    const todoAssignments = assignments.filter((a) => !a.pairing?.isCompleted)
+    const completedAssignments = assignments.filter((a) =>
+        Boolean(a.pairing?.isCompleted)
+    )
 
     return (
         <div className="max-w-6xl mx-auto px-8 py-16">
-            <div className="mb-16 text-center">
+            <div className="mb-16 text-center space-y-6">
                 <h1 className="text-6xl font-black tracking-tight">
-                    {course.title}
+                    {activeCourse.title}
                 </h1>
+
+                <div className="flex items-center justify-center gap-3">
+                    {courses.length > 1 && (
+                        <>
+                            <span className="text-sm text-muted-foreground">
+                                Course
+                            </span>
+
+                            <Select
+                                value={activeCourse.id}
+                                onValueChange={setSelectedCourseId}
+                            >
+                                <SelectTrigger className="w-65">
+                                    <SelectValue placeholder="Select a course" />
+                                </SelectTrigger>
+
+                                <SelectContent>
+                                    {courses.map((course) => (
+                                        <SelectItem
+                                            key={course.id}
+                                            value={course.id}
+                                        >
+                                            <span className="truncate">
+                                                {course.title}
+                                            </span>
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </>
+                    )}
+
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => navigate("/joinCourse")}
+                        title="Join another course"
+                    >
+                        <Plus className="w-4 h-4" />
+                    </Button>
+                </div>
             </div>
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 <AssignmentGroup
                     title="To Do"
@@ -99,6 +153,7 @@ function HubContent() {
                         ))}
                     </div>
                 </AssignmentGroup>
+
                 <AssignmentGroup
                     title="Completed"
                     icon={<CheckCircle2 className="w-7 h-7" />}
@@ -113,7 +168,6 @@ function HubContent() {
                             <Assignment
                                 key={assignment.id}
                                 assignment={assignment}
-                                isCompleted
                             />
                         ))}
                     </div>
@@ -129,6 +183,7 @@ export default function Hub() {
             <div className="fixed top-4 right-4 z-50">
                 <UserButton />
             </div>
+
             <ErrorBoundary fallback={<ErrorFallback />}>
                 <Suspense
                     fallback={

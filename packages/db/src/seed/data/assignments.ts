@@ -1,4 +1,4 @@
-import { CodeLanguage, TaskMode } from "../../generated/prisma/client.js"
+import { CodeLanguage } from "../../generated/prisma/client.js"
 import { defineAssignment } from "../types.js"
 
 export const assignments = [
@@ -17,7 +17,6 @@ export const assignments = [
                 instructions:
                     "Write a function that takes a string as input and returns the reversed string.",
                 durationSecs: 600,
-                mode: TaskMode.collaborative,
                 testCases: [
                     {
                         input: "hello",
@@ -37,7 +36,6 @@ export const assignments = [
                 instructions:
                     "Review your partner's code. Check for edge cases and readability.",
                 durationSecs: 300,
-                mode: TaskMode.review,
                 testCases: [],
             },
         ],
@@ -56,7 +54,6 @@ export const assignments = [
                 instructions:
                     "For numbers 1 to n: return 'Fizz' for multiples of 3, 'Buzz' for multiples of 5, 'FizzBuzz' for both, otherwise the number.",
                 durationSecs: 900,
-                mode: TaskMode.collaborative,
                 testCases: [
                     {
                         input: "15",
@@ -83,7 +80,6 @@ export const assignments = [
                 instructions:
                     "Implement binary search to find a target value in a sorted array.",
                 durationSecs: 1200,
-                mode: TaskMode.collaborative,
                 testCases: [
                     {
                         input: "[1,2,3,4,5], 3",
@@ -102,7 +98,6 @@ export const assignments = [
                 title: "Review and Test",
                 instructions: "Review the implementation and test edge cases.",
                 durationSecs: 600,
-                mode: TaskMode.review,
                 testCases: [],
             },
         ],
@@ -122,7 +117,6 @@ export const assignments = [
                 instructions:
                     "Review linked list structure and think about the reversal approach.",
                 durationSecs: 400,
-                mode: TaskMode.solo,
                 testCases: [],
             },
             {
@@ -131,7 +125,6 @@ export const assignments = [
                 instructions:
                     "Implement the iterative approach to reverse a linked list.",
                 durationSecs: 1000,
-                mode: TaskMode.collaborative,
                 testCases: [
                     {
                         input: "1->2->3->4->5",
@@ -156,7 +149,6 @@ export const assignments = [
                 instructions:
                     "Review the solution. Discuss space and time complexity.",
                 durationSecs: 400,
-                mode: TaskMode.review,
                 testCases: [],
             },
         ],

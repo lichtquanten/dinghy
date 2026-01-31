@@ -1,14 +1,10 @@
-// components/panels/Playground.tsx
 import { useState } from "react"
-import { useAssignment } from "@/features/studio/context"
+import { Button } from "@workspace/ui/components/button.js"
 import { useCodeExecution } from "@/lib/judge0/hooks/useCodeExecution"
+import { useStudio } from "../hooks/StudioContext"
 
-interface PlaygroundProps {
-    code: string
-}
-
-export default function Playground({ code }: PlaygroundProps) {
-    const assignment = useAssignment()
+export function Playground() {
+    const { assignment, myCode } = useStudio()
     const {
         executeCode,
         isLoading,
@@ -27,7 +23,7 @@ export default function Playground({ code }: PlaygroundProps) {
             )
             return
         }
-        if (!code || code.trim() === "") {
+        if (!myCode || myCode.trim() === "") {
             setError("No code to run. Please write some code first.")
             return
         }
@@ -37,7 +33,7 @@ export default function Playground({ code }: PlaygroundProps) {
 
         try {
             const result = await executeCode(
-                code,
+                myCode,
                 assignment.codeLanguage,
                 stdin
             )
@@ -64,7 +60,7 @@ export default function Playground({ code }: PlaygroundProps) {
     const hasOutput = output !== null || displayError !== null
 
     return (
-        <div className="px-4 py-3 space-y-3 bg-white">
+        <div className="flex flex-col gap-3 p-4 bg-white border-t">
             <div className="space-y-2">
                 <label className="text-xs font-medium text-foreground block">
                     Standard Input (stdin)
@@ -74,17 +70,18 @@ export default function Playground({ code }: PlaygroundProps) {
                     onChange={(e) => setStdin(e.target.value)}
                     placeholder="Enter input for your program..."
                     className="w-full px-3 py-2 text-xs border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none font-mono"
-                    rows={4}
+                    rows={3}
                 />
             </div>
 
-            <button
+            <Button
                 onClick={runCode}
                 disabled={isLoading || !isConnected}
-                className="w-full text-xs px-3 py-1.5 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                size="sm"
+                className="w-full"
             >
                 {isLoading ? "Running..." : "Run Code"}
-            </button>
+            </Button>
 
             {hasOutput && (
                 <div className="space-y-2">

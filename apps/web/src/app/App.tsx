@@ -6,7 +6,7 @@ import { Toaster } from "@workspace/ui/components/sonner.tsx"
 import HubPage from "@/features/hub/Hub"
 import JoinCourse from "@/features/JoinCourse"
 import LandingPage from "@/features/Landing"
-import StudioPage from "@/features/studio/Studio"
+import { Studio } from "@/features/studio"
 
 function AuthLoadingSkeleton() {
     return (
@@ -37,7 +37,7 @@ export function App() {
                     path="/studio/:assignmentId"
                     element={
                         <Protect fallback={<Navigate to="/" replace />}>
-                            <StudioPage />
+                            <Studio />
                         </Protect>
                     }
                 />

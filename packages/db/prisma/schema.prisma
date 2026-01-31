@@ -66,17 +66,10 @@ model Task {
   title        String
   instructions String
   durationSecs Int
-  mode         TaskMode
 
   testCases    TestCase[]
 
   @@unique([assignmentId, order])
-}
-
-enum TaskMode {
-  solo
-  collaborative
-  review
 }
 
 model TestCase {

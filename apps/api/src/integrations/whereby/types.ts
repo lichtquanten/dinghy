@@ -6,11 +6,11 @@
 export interface paths {
     "/meetings": {
         parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
+            query?: never
+            header?: never
+            path?: never
+            cookie?: never
+        }
         /**
          * Get meetings
          * @description Returns a list of meetings.
@@ -18,39 +18,39 @@ export interface paths {
         get: {
             parameters: {
                 query?: {
-                    cursor?: string;
-                    limit?: number;
-                    fields?: components["schemas"]["Fields"];
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
+                    cursor?: string
+                    limit?: number
+                    fields?: components["schemas"]["Fields"]
+                }
+                header?: never
+                path?: never
+                cookie?: never
+            }
+            requestBody?: never
             responses: {
                 /** @description A JSON object with the page containing the array with the meetings results. */
                 200: {
                     headers: {
-                        [name: string]: unknown;
-                    };
+                        [name: string]: unknown
+                    }
                     content: {
                         "application/json": {
-                            results: components["schemas"]["Meeting"][];
+                            results: components["schemas"]["Meeting"][]
                             /**
                              * @description The cursor for paginating through the results. To fetch the next page,
                              *     set the `cursor` to the `cursor` returned by the previous request.
                              *     If there are no more results, the value returned is `null`.
                              */
-                            cursor: string;
-                        };
-                    };
-                };
-                401: components["responses"]["UnauthorizedError"];
-                404: components["responses"]["NotFoundError"];
-                429: components["responses"]["ThrottleError"];
-            };
-        };
-        put?: never;
+                            cursor: string
+                        }
+                    }
+                }
+                401: components["responses"]["UnauthorizedError"]
+                404: components["responses"]["NotFoundError"]
+                429: components["responses"]["ThrottleError"]
+            }
+        }
+        put?: never
         /**
          * Create meeting
          * @description Creates a transient room that is available between creation and an hour after the given end date. After this time the room will be automatically deleted.
@@ -58,11 +58,11 @@ export interface paths {
          */
         post: {
             parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
+                query?: never
+                header?: never
+                path?: never
+                cookie?: never
+            }
             /** @description Meeting to add. */
             requestBody?: {
                 content: {
@@ -72,18 +72,18 @@ export interface paths {
                          * @description When the meeting ends. By default in UTC but a timezone can be specified, e.g. 2025-05-07T17:42:49-05:00.
                          *     This has to be the same or after the current date.
                          */
-                        endDate: string;
+                        endDate: string
                         /**
                          * Format: date-time
                          * @deprecated
                          * @description (DEPRECATED - value is ignored) Start time now defaults to time of request
                          */
-                        startDate?: string;
+                        startDate?: string
                         /**
                          * @description The initial lock state of the room. If true, only hosts will be able to let in other participants
                          *     and change lock state.
                          */
-                        isLocked?: boolean;
+                        isLocked?: boolean
                         /**
                          * @description The mode and size of the created transient room.
                          *     `normal` is the default room mode and should be used for meetings up to 4 participants.
@@ -92,13 +92,13 @@ export interface paths {
                          * @example group
                          * @enum {string}
                          */
-                        roomMode?: "group" | "normal";
+                        roomMode?: "group" | "normal"
                         /**
                          * @description This will be used as the prefix for the room name. The string should be lowercase, and spaces
                          *     will be automatically removed. 39 character max
                          * @example example-prefix
                          */
-                        roomNamePrefix?: string;
+                        roomNamePrefix?: string
                         /**
                          * @description The format of the randomly generated room name.
                          *     `uuid` is the default room name pattern and follows the usual 8-4-4-4-12 pattern.
@@ -107,7 +107,7 @@ export interface paths {
                          * @example uuid
                          * @enum {string}
                          */
-                        roomNamePattern?: "uuid" | "human-short";
+                        roomNamePattern?: "uuid" | "human-short"
                         /**
                          * @description If provided, the room will be created with the given template type.
                          *     Each template defines a set of properties needed for a particular use-case. Currently the only supported template type is "viewerMode". This will set up a room with properties that are
@@ -115,7 +115,7 @@ export interface paths {
                          *     and fields like hostRoomUrl and viewerRoomUrl will be added to the response.
                          * @enum {string}
                          */
-                        templateType?: "viewerMode";
+                        templateType?: "viewerMode"
                         /** @description Options for how a meeting should be recorded. */
                         recording?: {
                             /**
@@ -125,7 +125,7 @@ export interface paths {
                              *       "cloud" - Recording should happen in the cloud
                              * @enum {string}
                              */
-                            type: "none" | "local" | "cloud";
+                            type: "none" | "local" | "cloud"
                             /**
                              * @description Information regarding where the recording should be stored. If this is not required, or should
                              *     be inherited, it should be set to null.
@@ -138,31 +138,31 @@ export interface paths {
                                  *     and `accessKeySecret` fields are not required for this option.
                                  * @enum {string}
                                  */
-                                provider: "s3" | "whereby";
+                                provider: "s3" | "whereby"
                                 /**
                                  * @description Authentication type to use for S3 storage. See [here](https://docs.whereby.com/meeting-content-and-quality/authentication-for-s3-storage) for more details
                                  * @enum {string}
                                  */
-                                authenticationType?: "accessKey" | "roleBased";
+                                authenticationType?: "accessKey" | "roleBased"
                                 /**
                                  * @description The name of the s3 bucket.
                                  *     Optionally subfolders can be also specified here, e.g. "my-bucket/recordings" will upload
                                  *     recordings to the "recordings" folder of the "my-bucket" bucket.
                                  */
-                                bucket?: string;
+                                bucket?: string
                                 /** @description The s3 access key id */
-                                accessKeyId?: string;
+                                accessKeyId?: string
                                 /** @description The s3 access key secret */
-                                accessKeySecret?: string;
+                                accessKeySecret?: string
                                 /**
                                  * @description The format of the recording. By default the value should be taken from the
                                  *     organization settings.
                                  * @enum {string}
                                  */
-                                fileFormat?: "mkv" | "mp4";
+                                fileFormat?: "mkv" | "mp4"
                                 /** @description The role ARN for OIDC authentication. Only available when `authenticationType` is set to `roleBased` */
-                                oidcRoleArn?: string;
-                            };
+                                oidcRoleArn?: string
+                            }
                             /**
                              * @description What type of trigger should happen in the meeting when all the information required to start a
                              *     recording has been provided. This only has effect when recording.type is set to `"cloud"`
@@ -176,8 +176,12 @@ export interface paths {
                              *                                     participant joins the meeting.
                              * @enum {string}
                              */
-                            startTrigger: "none" | "prompt" | "automatic" | "automatic-2nd-participant";
-                        };
+                            startTrigger:
+                                | "none"
+                                | "prompt"
+                                | "automatic"
+                                | "automatic-2nd-participant"
+                        }
                         /** @description A configuration object for Session Transcription */
                         liveTranscription?: {
                             /**
@@ -192,27 +196,27 @@ export interface paths {
                                  *     and `accessKeySecret` fields are not required for this option.
                                  * @enum {string}
                                  */
-                                provider: "s3" | "whereby";
+                                provider: "s3" | "whereby"
                                 /**
                                  * @description Authentication type to use for S3 storage. See here for more details: https://docs.whereby.com/meeting-content-and-quality/authentication-for-s3-storage
                                  * @enum {string}
                                  */
-                                authenticationType?: "accessKey" | "roleBased";
+                                authenticationType?: "accessKey" | "roleBased"
                                 /**
                                  * @description The name of the s3 bucket.
                                  *     Optionally subfolders can be also specified here, e.g. "my-bucket/transcriptions" will upload
                                  *     transcriptions to the "transcriptions" folder of the "my-bucket" bucket.
                                  */
-                                bucket?: string;
+                                bucket?: string
                                 /** @description The s3 access key id */
-                                accessKeyId?: string;
+                                accessKeyId?: string
                                 /** @description The s3 access key secret */
-                                accessKeySecret?: string;
+                                accessKeySecret?: string
                                 /** @description The s3 region */
-                                region?: string;
+                                region?: string
                                 /** @description The role ARN for OIDC authentication. Only available when `authenticationType` is set to `roleBased` */
-                                oidcRoleArn?: string;
-                            };
+                                oidcRoleArn?: string
+                            }
                             /**
                              * @description What type of trigger should happen in the meeting when all the information required to start a
                              *     Session Transcription has been provided.
@@ -225,24 +229,59 @@ export interface paths {
                              *                                     participant joins the meeting.
                              * @enum {string}
                              */
-                            startTrigger: "none" | "manual" | "automatic" | "automatic-2nd-participant";
+                            startTrigger:
+                                | "none"
+                                | "manual"
+                                | "automatic"
+                                | "automatic-2nd-participant"
                             /**
                              * @description What language should be used for the Session Transcription.
                              *     *Pricing (per unmuted participant minute) varies across languages.* [Learn more](https://docs.whereby.com/meeting-content-and-quality/transcribing/session-transcription)
                              *     - `null` - The value should be taken from the organization settings
                              * @enum {string}
                              */
-                            language?: "ca," | "zh," | "zh-TW," | "cs," | "da," | "nl," | "en," | "fi," | "fr," | "de," | "de-CH," | "el," | "hi," | "id," | "it," | "ja," | "ko," | "lv," | "ms," | "no," | "pl," | "pt," | "pt-BR," | "ro," | "ru," | "sk," | "es," | "sv," | "th," | "uk," | "vi,";
+                            language?:
+                                | "ca,"
+                                | "zh,"
+                                | "zh-TW,"
+                                | "cs,"
+                                | "da,"
+                                | "nl,"
+                                | "en,"
+                                | "fi,"
+                                | "fr,"
+                                | "de,"
+                                | "de-CH,"
+                                | "el,"
+                                | "hi,"
+                                | "id,"
+                                | "it,"
+                                | "ja,"
+                                | "ko,"
+                                | "lv,"
+                                | "ms,"
+                                | "no,"
+                                | "pl,"
+                                | "pt,"
+                                | "pt-BR,"
+                                | "ro,"
+                                | "ru,"
+                                | "sk,"
+                                | "es,"
+                                | "sv,"
+                                | "th,"
+                                | "uk,"
+                                | "vi,"
                             /** @description If true, live captions will be enabled for the meeting. This will be available for all participants. */
-                            liveCaptions?: boolean;
-                        };
+                            liveCaptions?: boolean
+                        }
                         /** @description A configuration object for live RTMP streaming of the meeting */
                         streaming?: {
                             /** @description The destination of the stream */
                             destination: {
                                 /** @description The destination RTMP URI of the stream. This should be set to match the inject url of your streaming provider (Youtube, Facebook, Twitch, etc). Example `rtmp://a.rtmp.youtube.com/live2/<stream_key>` */
-                                url: string;
-                            };
+                                url: string
+                            }
                             /**
                              * @description Specify the condition when live streaming should be started.- `null` - Should be passed when this is not required or should be inherited
                              *     from the organization preferences
@@ -252,40 +291,40 @@ export interface paths {
                              *                     meeting.
                              * @enum {string}
                              */
-                            startTrigger: "none" | "prompt" | "automatic";
-                        };
-                        fields?: components["schemas"]["Fields"];
-                    };
-                };
-            };
+                            startTrigger: "none" | "prompt" | "automatic"
+                        }
+                        fields?: components["schemas"]["Fields"]
+                    }
+                }
+            }
             responses: {
                 /** @description The resource was created successfully. */
                 201: {
                     headers: {
-                        [name: string]: unknown;
-                    };
+                        [name: string]: unknown
+                    }
                     content: {
-                        "application/json": components["schemas"]["Meeting"];
-                    };
-                };
-                401: components["responses"]["UnauthorizedError"];
-                403: components["responses"]["ForbiddenError"];
-                429: components["responses"]["ThrottleError"];
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+                        "application/json": components["schemas"]["Meeting"]
+                    }
+                }
+                401: components["responses"]["UnauthorizedError"]
+                403: components["responses"]["ForbiddenError"]
+                429: components["responses"]["ThrottleError"]
+            }
+        }
+        delete?: never
+        options?: never
+        head?: never
+        patch?: never
+        trace?: never
+    }
     "/meetings/{meetingId}": {
         parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
+            query?: never
+            header?: never
+            path?: never
+            cookie?: never
+        }
         /**
          * Get meeting
          * @description Returns the specified meeting.
@@ -293,78 +332,78 @@ export interface paths {
         get: {
             parameters: {
                 query?: {
-                    fields?: components["schemas"]["Fields"];
-                };
-                header?: never;
+                    fields?: components["schemas"]["Fields"]
+                }
+                header?: never
                 path: {
                     /**
                      * @description meeting ID.
                      * @example 9cf691bf-f2d5-4420-bda9-ee8607bb558b
                      */
-                    meetingId: components["parameters"]["meetingId"];
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
+                    meetingId: components["parameters"]["meetingId"]
+                }
+                cookie?: never
+            }
+            requestBody?: never
             responses: {
                 /** @description A JSON object representing the meeting. */
                 200: {
                     headers: {
-                        [name: string]: unknown;
-                    };
+                        [name: string]: unknown
+                    }
                     content: {
-                        "application/json": components["schemas"]["Meeting"];
-                    };
-                };
-                401: components["responses"]["UnauthorizedError"];
-                404: components["responses"]["NotFoundError"];
-                429: components["responses"]["ThrottleError"];
-            };
-        };
-        put?: never;
-        post?: never;
+                        "application/json": components["schemas"]["Meeting"]
+                    }
+                }
+                401: components["responses"]["UnauthorizedError"]
+                404: components["responses"]["NotFoundError"]
+                429: components["responses"]["ThrottleError"]
+            }
+        }
+        put?: never
+        post?: never
         /**
          * Delete meeting
          * @description Deletes the specified meeting. The endpoint is idempotent, meaning it will return the same response even if the meeting has already been deleted.
          */
         delete: {
             parameters: {
-                query?: never;
-                header?: never;
+                query?: never
+                header?: never
                 path: {
                     /**
                      * @description meeting ID.
                      * @example 9cf691bf-f2d5-4420-bda9-ee8607bb558b
                      */
-                    meetingId: components["parameters"]["meetingId"];
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
+                    meetingId: components["parameters"]["meetingId"]
+                }
+                cookie?: never
+            }
+            requestBody?: never
             responses: {
                 /** @description The resource was deleted successfully. */
                 204: {
                     headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                401: components["responses"]["UnauthorizedError"];
-                429: components["responses"]["ThrottleError"];
-            };
-        };
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+                        [name: string]: unknown
+                    }
+                    content?: never
+                }
+                401: components["responses"]["UnauthorizedError"]
+                429: components["responses"]["ThrottleError"]
+            }
+        }
+        options?: never
+        head?: never
+        patch?: never
+        trace?: never
+    }
     "/recordings": {
         parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
+            query?: never
+            header?: never
+            path?: never
+            cookie?: never
+        }
         /**
          * Get recordings
          * @description Returns the recordings.
@@ -372,135 +411,135 @@ export interface paths {
         get: {
             parameters: {
                 query?: {
-                    roomName?: string;
-                    cursor?: string;
-                    limit?: number;
+                    roomName?: string
+                    cursor?: string
+                    limit?: number
                     /**
                      * @description Sort results by a field. Accepted fields are: `roomName`, `startDate`, `duration` and `sizeInMegaBytes`. Accepted sort values are 'asc' and 'desc'.
                      * @example roomName:asc
                      */
-                    sortBy?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
+                    sortBy?: string
+                }
+                header?: never
+                path?: never
+                cookie?: never
+            }
+            requestBody?: never
             responses: {
                 /** @description A JSON object with the page containing the array with the recordings results. */
                 200: {
                     headers: {
-                        [name: string]: unknown;
-                    };
+                        [name: string]: unknown
+                    }
                     content: {
                         "application/json": {
-                            results: components["schemas"]["Recording"][];
+                            results: components["schemas"]["Recording"][]
                             /**
                              * @description The cursor for paginating through the results. To fetch the next page,
                              *     set the `cursor` to the `cursor` returned by the previous request.
                              *     If there are no more results, the value returned is `null`.
                              */
-                            cursor: string;
-                        };
-                    };
-                };
-                401: components["responses"]["UnauthorizedError"];
-                404: components["responses"]["NotFoundError"];
-                429: components["responses"]["ThrottleError"];
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+                            cursor: string
+                        }
+                    }
+                }
+                401: components["responses"]["UnauthorizedError"]
+                404: components["responses"]["NotFoundError"]
+                429: components["responses"]["ThrottleError"]
+            }
+        }
+        put?: never
+        post?: never
+        delete?: never
+        options?: never
+        head?: never
+        patch?: never
+        trace?: never
+    }
     "/recordings/{recordingId}": {
         parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
+            query?: never
+            header?: never
+            path?: never
+            cookie?: never
+        }
         /**
          * Get recording
          * @description Returns the specified recording metadata.
          */
         get: {
             parameters: {
-                query?: never;
-                header?: never;
+                query?: never
+                header?: never
                 path: {
                     /**
                      * @description Recording ID.
                      * @example a56f6ad7-37fe-4a37-9319-3174630ba57a
                      */
-                    recordingId: components["parameters"]["recordingId"];
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
+                    recordingId: components["parameters"]["recordingId"]
+                }
+                cookie?: never
+            }
+            requestBody?: never
             responses: {
                 /** @description A JSON object representing the recording. */
                 200: {
                     headers: {
-                        [name: string]: unknown;
-                    };
+                        [name: string]: unknown
+                    }
                     content: {
-                        "application/json": components["schemas"]["Recording"];
-                    };
-                };
-                401: components["responses"]["UnauthorizedError"];
-                404: components["responses"]["NotFoundError"];
-                429: components["responses"]["ThrottleError"];
-            };
-        };
-        put?: never;
-        post?: never;
+                        "application/json": components["schemas"]["Recording"]
+                    }
+                }
+                401: components["responses"]["UnauthorizedError"]
+                404: components["responses"]["NotFoundError"]
+                429: components["responses"]["ThrottleError"]
+            }
+        }
+        put?: never
+        post?: never
         /**
          * Delete recording
          * @description Deletes the specified recording. The endpoint is idempotent, meaning it will return the same response even if the recording has already been deleted.
          */
         delete: {
             parameters: {
-                query?: never;
-                header?: never;
+                query?: never
+                header?: never
                 path: {
                     /**
                      * @description Recording ID.
                      * @example a56f6ad7-37fe-4a37-9319-3174630ba57a
                      */
-                    recordingId: components["parameters"]["recordingId"];
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
+                    recordingId: components["parameters"]["recordingId"]
+                }
+                cookie?: never
+            }
+            requestBody?: never
             responses: {
                 /** @description The resource was deleted successfully. */
                 204: {
                     headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                401: components["responses"]["UnauthorizedError"];
-                429: components["responses"]["ThrottleError"];
-            };
-        };
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+                        [name: string]: unknown
+                    }
+                    content?: never
+                }
+                401: components["responses"]["UnauthorizedError"]
+                429: components["responses"]["ThrottleError"]
+            }
+        }
+        options?: never
+        head?: never
+        patch?: never
+        trace?: never
+    }
     "/recordings/{recordingId}/access-link": {
         parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
+            query?: never
+            header?: never
+            path?: never
+            cookie?: never
+        }
         /**
          * Get recording access link
          * @description Returns the access link for the specified recording. **Available for Whereby-hosted recordings only**
@@ -508,63 +547,63 @@ export interface paths {
         get: {
             parameters: {
                 query?: {
-                    validForSeconds?: number;
-                };
-                header?: never;
+                    validForSeconds?: number
+                }
+                header?: never
                 path: {
                     /**
                      * @description Recording ID.
                      * @example a56f6ad7-37fe-4a37-9319-3174630ba57a
                      */
-                    recordingId: components["parameters"]["recordingId"];
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
+                    recordingId: components["parameters"]["recordingId"]
+                }
+                cookie?: never
+            }
+            requestBody?: never
             responses: {
                 /** @description A JSON object representing the access link. */
                 200: {
                     headers: {
-                        [name: string]: unknown;
-                    };
+                        [name: string]: unknown
+                    }
                     content: {
                         "application/json": {
                             /**
                              * @description The access link.
                              * @example https://s3.eu-central-1.amazonaws.com/recordings/1.mp4?AWSAccessKeyId=AKIAJ...
                              */
-                            accessLink: string;
+                            accessLink: string
                             /**
                              * @description The timestamp when the access link expires.
                              * @example 1740819600000
                              */
-                            expires: number;
-                        };
-                    };
-                };
-                401: components["responses"]["UnauthorizedError"];
-                403: components["responses"]["ForbiddenError"];
-                404: components["responses"]["NotFoundError"];
-                429: components["responses"]["ThrottleError"];
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+                            expires: number
+                        }
+                    }
+                }
+                401: components["responses"]["UnauthorizedError"]
+                403: components["responses"]["ForbiddenError"]
+                404: components["responses"]["NotFoundError"]
+                429: components["responses"]["ThrottleError"]
+            }
+        }
+        put?: never
+        post?: never
+        delete?: never
+        options?: never
+        head?: never
+        patch?: never
+        trace?: never
+    }
     "/recordings/bulk-delete": {
         parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
+            query?: never
+            header?: never
+            path?: never
+            cookie?: never
+        }
+        get?: never
+        put?: never
         /**
          * Bulk delete recordings
          * @description Deletes multiple recordings at once. This is an asynchronous operation. The endpoint returns immediately, and schedules a background job to delete the recordings.
@@ -572,43 +611,43 @@ export interface paths {
          */
         post: {
             parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
+                query?: never
+                header?: never
+                path?: never
+                cookie?: never
+            }
             requestBody?: {
                 content: {
                     "application/json": {
-                        recordingIds: string[];
-                    };
-                };
-            };
+                        recordingIds: string[]
+                    }
+                }
+            }
             responses: {
                 /** @description The resources are scheduled for deletion. */
                 204: {
                     headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                401: components["responses"]["UnauthorizedError"];
-                429: components["responses"]["ThrottleError"];
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+                        [name: string]: unknown
+                    }
+                    content?: never
+                }
+                401: components["responses"]["UnauthorizedError"]
+                429: components["responses"]["ThrottleError"]
+            }
+        }
+        delete?: never
+        options?: never
+        head?: never
+        patch?: never
+        trace?: never
+    }
     "/transcriptions": {
         parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
+            query?: never
+            header?: never
+            path?: never
+            cookie?: never
+        }
         /**
          * Get transcriptions
          * @description Returns a list of transcriptions
@@ -616,54 +655,54 @@ export interface paths {
         get: {
             parameters: {
                 query?: {
-                    roomName?: string;
-                    cursor?: string;
-                    limit?: number;
+                    roomName?: string
+                    cursor?: string
+                    limit?: number
                     /**
                      * @description Sort results by a field. Accepted fields are: `roomName`, `startDate` and `durationInSeconds`. Accepted sort values are 'asc' and 'desc'.
                      * @example roomName:asc
                      */
-                    sortBy?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
+                    sortBy?: string
+                }
+                header?: never
+                path?: never
+                cookie?: never
+            }
+            requestBody?: never
             responses: {
                 /** @description A JSON array representing the transcriptions. */
                 200: {
                     headers: {
-                        [name: string]: unknown;
-                    };
+                        [name: string]: unknown
+                    }
                     content: {
                         "application/json": {
-                            results: components["schemas"]["Transcription"][];
-                        };
-                    };
-                };
-                401: components["responses"]["UnauthorizedError"];
-                429: components["responses"]["ThrottleError"];
-            };
-        };
-        put?: never;
+                            results: components["schemas"]["Transcription"][]
+                        }
+                    }
+                }
+                401: components["responses"]["UnauthorizedError"]
+                429: components["responses"]["ThrottleError"]
+            }
+        }
+        put?: never
         /**
          * Create transcription
          * @description Creates a new transcription for the specified recording.
          */
         post: {
             parameters: {
-                query?: never;
-                header?: never;
+                query?: never
+                header?: never
                 path: {
                     /**
                      * @description Recording ID.
                      * @example a56f6ad7-37fe-4a37-9319-3174630ba57a
                      */
-                    recordingId: components["parameters"]["recordingId"];
-                };
-                cookie?: never;
-            };
+                    recordingId: components["parameters"]["recordingId"]
+                }
+                cookie?: never
+            }
             requestBody?: {
                 content: {
                     "application/json": {
@@ -671,115 +710,115 @@ export interface paths {
                          * @description The recording ID for which the transcription should be created.
                          * @example a56f6ad7-37fe-4a37-9319-3174630ba57a
                          */
-                        recordingId: string;
-                    };
-                };
-            };
+                        recordingId: string
+                    }
+                }
+            }
             responses: {
                 /** @description The transcription job was scheduled successfully. */
                 201: {
                     headers: {
-                        [name: string]: unknown;
-                    };
+                        [name: string]: unknown
+                    }
                     content: {
-                        "application/json": unknown;
-                    };
-                };
-                401: components["responses"]["UnauthorizedError"];
-                404: components["responses"]["NotFoundError"];
-                429: components["responses"]["ThrottleError"];
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+                        "application/json": unknown
+                    }
+                }
+                401: components["responses"]["UnauthorizedError"]
+                404: components["responses"]["NotFoundError"]
+                429: components["responses"]["ThrottleError"]
+            }
+        }
+        delete?: never
+        options?: never
+        head?: never
+        patch?: never
+        trace?: never
+    }
     "/transcriptions/{transcriptionId}": {
         parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
+            query?: never
+            header?: never
+            path?: never
+            cookie?: never
+        }
         /**
          * Get transcription
          * @description Returns the specified transcription metadata.
          */
         get: {
             parameters: {
-                query?: never;
-                header?: never;
+                query?: never
+                header?: never
                 path: {
                     /**
                      * @description Transcription ID.
                      * @example b438fda0-83e2-4835-92f9-c845ee3d5ea7
                      */
-                    transcriptionId: components["parameters"]["transcriptionId"];
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
+                    transcriptionId: components["parameters"]["transcriptionId"]
+                }
+                cookie?: never
+            }
+            requestBody?: never
             responses: {
                 /** @description A JSON object representing the transcription. */
                 200: {
                     headers: {
-                        [name: string]: unknown;
-                    };
+                        [name: string]: unknown
+                    }
                     content: {
-                        "application/json": components["schemas"]["Transcription"];
-                    };
-                };
-                401: components["responses"]["UnauthorizedError"];
-                404: components["responses"]["NotFoundError"];
-                429: components["responses"]["ThrottleError"];
-            };
-        };
-        put?: never;
-        post?: never;
+                        "application/json": components["schemas"]["Transcription"]
+                    }
+                }
+                401: components["responses"]["UnauthorizedError"]
+                404: components["responses"]["NotFoundError"]
+                429: components["responses"]["ThrottleError"]
+            }
+        }
+        put?: never
+        post?: never
         /**
          * Delete transcription
          * @description Deletes the specified transcription. The endpoint is idempotent, meaning it will return the same response even if the transcription has already been deleted.
          */
         delete: {
             parameters: {
-                query?: never;
-                header?: never;
+                query?: never
+                header?: never
                 path: {
                     /**
                      * @description Transcription ID.
                      * @example b438fda0-83e2-4835-92f9-c845ee3d5ea7
                      */
-                    transcriptionId: components["parameters"]["transcriptionId"];
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
+                    transcriptionId: components["parameters"]["transcriptionId"]
+                }
+                cookie?: never
+            }
+            requestBody?: never
             responses: {
                 /** @description The resource was deleted successfully. */
                 204: {
                     headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                401: components["responses"]["UnauthorizedError"];
-                429: components["responses"]["ThrottleError"];
-            };
-        };
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+                        [name: string]: unknown
+                    }
+                    content?: never
+                }
+                401: components["responses"]["UnauthorizedError"]
+                429: components["responses"]["ThrottleError"]
+            }
+        }
+        options?: never
+        head?: never
+        patch?: never
+        trace?: never
+    }
     "/transcriptions/{transcriptionId}/access-link": {
         parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
+            query?: never
+            header?: never
+            path?: never
+            cookie?: never
+        }
         /**
          * Get transcription access link
          * @description Returns a URL that can be used to download the specified transcription. **Available for Whereby-hosted transcriptions only**.
@@ -787,63 +826,63 @@ export interface paths {
         get: {
             parameters: {
                 query?: {
-                    validForSeconds?: number;
-                };
-                header?: never;
+                    validForSeconds?: number
+                }
+                header?: never
                 path: {
                     /**
                      * @description Transcription ID.
                      * @example b438fda0-83e2-4835-92f9-c845ee3d5ea7
                      */
-                    transcriptionId: components["parameters"]["transcriptionId"];
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
+                    transcriptionId: components["parameters"]["transcriptionId"]
+                }
+                cookie?: never
+            }
+            requestBody?: never
             responses: {
                 /** @description A JSON object representing the access link. */
                 200: {
                     headers: {
-                        [name: string]: unknown;
-                    };
+                        [name: string]: unknown
+                    }
                     content: {
                         "application/json": {
                             /**
                              * @description The access link.
                              * @example https://s3.eu-central-1.amazonaws.com/recordings/1.mp4?AWSAccessKeyId=AKIAJ...
                              */
-                            accessLink: string;
+                            accessLink: string
                             /**
                              * @description The timestamp when the access link expires.
                              * @example 1740819600000
                              */
-                            expires: number;
-                        };
-                    };
-                };
-                401: components["responses"]["UnauthorizedError"];
-                403: components["responses"]["ForbiddenError"];
-                404: components["responses"]["NotFoundError"];
-                429: components["responses"]["ThrottleError"];
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+                            expires: number
+                        }
+                    }
+                }
+                401: components["responses"]["UnauthorizedError"]
+                403: components["responses"]["ForbiddenError"]
+                404: components["responses"]["NotFoundError"]
+                429: components["responses"]["ThrottleError"]
+            }
+        }
+        put?: never
+        post?: never
+        delete?: never
+        options?: never
+        head?: never
+        patch?: never
+        trace?: never
+    }
     "/transcriptions/bulk-delete": {
         parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
+            query?: never
+            header?: never
+            path?: never
+            cookie?: never
+        }
+        get?: never
+        put?: never
         /**
          * Bulk delete transcriptions
          * @description Deletes multiple transcriptions at once. This is an asynchronous operation. The endpoint returns immediately, and schedules a background job to delete the transcriptions.
@@ -851,43 +890,43 @@ export interface paths {
          */
         post: {
             parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
+                query?: never
+                header?: never
+                path?: never
+                cookie?: never
+            }
             requestBody?: {
                 content: {
                     "application/json": {
-                        transcriptionIds: string[];
-                    };
-                };
-            };
+                        transcriptionIds: string[]
+                    }
+                }
+            }
             responses: {
                 /** @description The resources are scheduled for deletion. */
                 204: {
                     headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                401: components["responses"]["UnauthorizedError"];
-                429: components["responses"]["ThrottleError"];
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+                        [name: string]: unknown
+                    }
+                    content?: never
+                }
+                401: components["responses"]["UnauthorizedError"]
+                429: components["responses"]["ThrottleError"]
+            }
+        }
+        delete?: never
+        options?: never
+        head?: never
+        patch?: never
+        trace?: never
+    }
     "/summaries": {
         parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
+            query?: never
+            header?: never
+            path?: never
+            cookie?: never
+        }
         /**
          * Get summaries
          * @description Returns a list of summaries
@@ -897,36 +936,36 @@ export interface paths {
         get: {
             parameters: {
                 query?: {
-                    cursor?: string;
-                    limit?: number;
+                    cursor?: string
+                    limit?: number
                     /**
                      * @description Sort results by a field. Accepted fields are: `roomName`, `startDate` and `durationInSeconds`. Accepted sort values are 'asc' and 'desc'.
                      * @example roomName:asc
                      */
-                    sortBy?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
+                    sortBy?: string
+                }
+                header?: never
+                path?: never
+                cookie?: never
+            }
+            requestBody?: never
             responses: {
                 /** @description A JSON array representing the summaries. */
                 200: {
                     headers: {
-                        [name: string]: unknown;
-                    };
+                        [name: string]: unknown
+                    }
                     content: {
                         "application/json": {
-                            results: components["schemas"]["Summary"][];
-                        };
-                    };
-                };
-                401: components["responses"]["UnauthorizedError"];
-                429: components["responses"]["ThrottleError"];
-            };
-        };
-        put?: never;
+                            results: components["schemas"]["Summary"][]
+                        }
+                    }
+                }
+                401: components["responses"]["UnauthorizedError"]
+                429: components["responses"]["ThrottleError"]
+            }
+        }
+        put?: never
         /**
          * Create summary
          * @description Creates a new summary for the specified transcription.
@@ -935,17 +974,17 @@ export interface paths {
          */
         post: {
             parameters: {
-                query?: never;
-                header?: never;
+                query?: never
+                header?: never
                 path: {
                     /**
                      * @description Transcription ID.
                      * @example b438fda0-83e2-4835-92f9-c845ee3d5ea7
                      */
-                    transcriptionId: components["parameters"]["transcriptionId"];
-                };
-                cookie?: never;
-            };
+                    transcriptionId: components["parameters"]["transcriptionId"]
+                }
+                cookie?: never
+            }
             requestBody?: {
                 content: {
                     "application/json": {
@@ -953,7 +992,7 @@ export interface paths {
                          * @description The transcription ID for which the summary should be created.
                          * @example b438fda0-83e2-4835-92f9-c845ee3d5ea7
                          */
-                        transcriptionId: string;
+                        transcriptionId: string
                         /**
                          * @description The template that the summary should be created from. The following summary templates are currently available:
                          *     - `General Bulleted`
@@ -966,38 +1005,44 @@ export interface paths {
                          * @example General Narrative
                          * @enum {string}
                          */
-                        template?: "SOAP" | "Extended SOAP" | "General Narrative" | "General Bulleted" | "Educational Lecture" | "Educational Tutoring";
-                    };
-                };
-            };
+                        template?:
+                            | "SOAP"
+                            | "Extended SOAP"
+                            | "General Narrative"
+                            | "General Bulleted"
+                            | "Educational Lecture"
+                            | "Educational Tutoring"
+                    }
+                }
+            }
             responses: {
                 /** @description The summary job was scheduled successfully. */
                 201: {
                     headers: {
-                        [name: string]: unknown;
-                    };
+                        [name: string]: unknown
+                    }
                     content: {
-                        "application/json": unknown;
-                    };
-                };
-                401: components["responses"]["UnauthorizedError"];
-                404: components["responses"]["NotFoundError"];
-                429: components["responses"]["ThrottleError"];
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+                        "application/json": unknown
+                    }
+                }
+                401: components["responses"]["UnauthorizedError"]
+                404: components["responses"]["NotFoundError"]
+                429: components["responses"]["ThrottleError"]
+            }
+        }
+        delete?: never
+        options?: never
+        head?: never
+        patch?: never
+        trace?: never
+    }
     "/summaries/{summaryId}": {
         parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
+            query?: never
+            header?: never
+            path?: never
+            cookie?: never
+        }
         /**
          * Get summary
          * @description Returns the specified summary.
@@ -1006,35 +1051,35 @@ export interface paths {
          */
         get: {
             parameters: {
-                query?: never;
-                header?: never;
+                query?: never
+                header?: never
                 path: {
                     /**
                      * @description Summary ID.
                      * @example c429ff78-9f03-49de-b427-546bcd848050
                      */
-                    summaryId: components["parameters"]["summaryId"];
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
+                    summaryId: components["parameters"]["summaryId"]
+                }
+                cookie?: never
+            }
+            requestBody?: never
             responses: {
                 /** @description A JSON object representing the summary. */
                 200: {
                     headers: {
-                        [name: string]: unknown;
-                    };
+                        [name: string]: unknown
+                    }
                     content: {
-                        "application/json": components["schemas"]["Summary"];
-                    };
-                };
-                401: components["responses"]["UnauthorizedError"];
-                404: components["responses"]["NotFoundError"];
-                429: components["responses"]["ThrottleError"];
-            };
-        };
-        put?: never;
-        post?: never;
+                        "application/json": components["schemas"]["Summary"]
+                    }
+                }
+                401: components["responses"]["UnauthorizedError"]
+                404: components["responses"]["NotFoundError"]
+                429: components["responses"]["ThrottleError"]
+            }
+        }
+        put?: never
+        post?: never
         /**
          * Delete summary
          * @description Deletes the specified summary. The endpoint is idempotent, meaning it will return the same response even if the summary has already been deleted.
@@ -1043,60 +1088,60 @@ export interface paths {
          */
         delete: {
             parameters: {
-                query?: never;
-                header?: never;
+                query?: never
+                header?: never
                 path: {
                     /**
                      * @description Summary ID.
                      * @example c429ff78-9f03-49de-b427-546bcd848050
                      */
-                    summaryId: components["parameters"]["summaryId"];
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
+                    summaryId: components["parameters"]["summaryId"]
+                }
+                cookie?: never
+            }
+            requestBody?: never
             responses: {
                 /** @description The resource was deleted successfully. */
                 204: {
                     headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                401: components["responses"]["UnauthorizedError"];
-                429: components["responses"]["ThrottleError"];
-            };
-        };
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+                        [name: string]: unknown
+                    }
+                    content?: never
+                }
+                401: components["responses"]["UnauthorizedError"]
+                429: components["responses"]["ThrottleError"]
+            }
+        }
+        options?: never
+        head?: never
+        patch?: never
+        trace?: never
+    }
     "/rooms/{roomName}/theme/tokens": {
         parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
+            query?: never
+            header?: never
+            path?: never
+            cookie?: never
+        }
+        get?: never
         /**
          * Set room colors
          * @description Set primary, secondary and focus room colors.
          */
         put: {
             parameters: {
-                query?: never;
-                header?: never;
+                query?: never
+                header?: never
                 path: {
                     /**
                      * @description Room name.
                      * @example /room-prefix-793e9ec1-c686-423d-9043-9b7a10c553fd
                      */
-                    roomName: components["parameters"]["roomName"];
-                };
-                cookie?: never;
-            };
+                    roomName: components["parameters"]["roomName"]
+                }
+                cookie?: never
+            }
             requestBody?: {
                 content: {
                     "application/json": {
@@ -1104,66 +1149,66 @@ export interface paths {
                         tokens?: {
                             colors?: {
                                 /** @description The HEX color code of the primary color. */
-                                primary?: string;
+                                primary?: string
                                 /** @description The HEX color code of the secondary color. */
-                                secondary?: string;
+                                secondary?: string
                                 /** @description The HEX color code of the focus color. */
-                                focus?: string;
-                            };
-                        };
+                                focus?: string
+                            }
+                        }
                         /**
                          * @description Use the given primary or secondary colors when `custom`. Use organization defaults when `default`
                          *     or not defined.
                          * @enum {string}
                          */
-                        tokensPreset?: "custom" | "default";
-                    };
-                };
-            };
+                        tokensPreset?: "custom" | "default"
+                    }
+                }
+            }
             responses: {
                 /** @description The tokens were saved successfully. */
                 204: {
                     headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                401: components["responses"]["UnauthorizedError"];
-                429: components["responses"]["ThrottleError"];
-            };
-        };
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+                        [name: string]: unknown
+                    }
+                    content?: never
+                }
+                401: components["responses"]["UnauthorizedError"]
+                429: components["responses"]["ThrottleError"]
+            }
+        }
+        post?: never
+        delete?: never
+        options?: never
+        head?: never
+        patch?: never
+        trace?: never
+    }
     "/rooms/{roomName}/theme/logo": {
         parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
+            query?: never
+            header?: never
+            path?: never
+            cookie?: never
+        }
+        get?: never
         /**
          * Set room logo
          * @description Upload room logo.
          */
         put: {
             parameters: {
-                query?: never;
-                header?: never;
+                query?: never
+                header?: never
                 path: {
                     /**
                      * @description Room name.
                      * @example /room-prefix-793e9ec1-c686-423d-9043-9b7a10c553fd
                      */
-                    roomName: components["parameters"]["roomName"];
-                };
-                cookie?: never;
-            };
+                    roomName: components["parameters"]["roomName"]
+                }
+                cookie?: never
+            }
             requestBody?: {
                 content: {
                     "multipart/form-data": {
@@ -1171,61 +1216,61 @@ export interface paths {
                          * Format: binary
                          * @description The logo image. We recommend PNG images at least 400px wide.
                          */
-                        image?: string;
-                    };
+                        image?: string
+                    }
                     "application/json": {
                         /**
                          * @description Reset room logo to default.
                          * @enum {string}
                          */
-                        theme?: "default";
-                    };
-                };
-            };
+                        theme?: "default"
+                    }
+                }
+            }
             responses: {
                 /** @description The logo was saved successfully. */
                 204: {
                     headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                401: components["responses"]["UnauthorizedError"];
-                429: components["responses"]["ThrottleError"];
-            };
-        };
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+                        [name: string]: unknown
+                    }
+                    content?: never
+                }
+                401: components["responses"]["UnauthorizedError"]
+                429: components["responses"]["ThrottleError"]
+            }
+        }
+        post?: never
+        delete?: never
+        options?: never
+        head?: never
+        patch?: never
+        trace?: never
+    }
     "/rooms/{roomName}/theme/room-background": {
         parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
+            query?: never
+            header?: never
+            path?: never
+            cookie?: never
+        }
+        get?: never
         /**
          * Set room background
          * @description Use [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData/append) to upload a custom background image. JSON objects can be used to set Whereby provided defaults.
          */
         put: {
             parameters: {
-                query?: never;
-                header?: never;
+                query?: never
+                header?: never
                 path: {
                     /**
                      * @description Room name.
                      * @example /room-prefix-793e9ec1-c686-423d-9043-9b7a10c553fd
                      */
-                    roomName: components["parameters"]["roomName"];
-                };
-                cookie?: never;
-            };
+                    roomName: components["parameters"]["roomName"]
+                }
+                cookie?: never
+            }
             requestBody?: {
                 content: {
                     "multipart/form-data": {
@@ -1233,66 +1278,66 @@ export interface paths {
                          * Format: binary
                          * @description The background image. We recommend PNG images at least 1400px wide (max 600 kb).
                          */
-                        image?: string;
-                    };
+                        image?: string
+                    }
                     "application/json": {
                         /**
                          * @description Background color name. ['default', 'grey', 'purple', 'burgund']
                          * @enum {string}
                          */
-                        palette?: "default" | "grey" | "purple" | "burgund";
+                        palette?: "default" | "grey" | "purple" | "burgund"
                         /**
                          * @description Background image. ['default', 'mountains', 'characters', 'rocks']
                          * @enum {string}
                          */
-                        theme?: "default" | "mountains" | "characters" | "rocks";
-                    };
-                };
-            };
+                        theme?: "default" | "mountains" | "characters" | "rocks"
+                    }
+                }
+            }
             responses: {
                 /** @description The background image was saved successfully. */
                 204: {
                     headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                401: components["responses"]["UnauthorizedError"];
-                429: components["responses"]["ThrottleError"];
-            };
-        };
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+                        [name: string]: unknown
+                    }
+                    content?: never
+                }
+                401: components["responses"]["UnauthorizedError"]
+                429: components["responses"]["ThrottleError"]
+            }
+        }
+        post?: never
+        delete?: never
+        options?: never
+        head?: never
+        patch?: never
+        trace?: never
+    }
     "/rooms/{roomName}/theme/room-knock-page-background": {
         parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
+            query?: never
+            header?: never
+            path?: never
+            cookie?: never
+        }
+        get?: never
         /**
          * Set room knock page background
          * @description Use [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData/append) to upload a custom knock background image. JSON objects can be used to set Whereby provided defaults.
          */
         put: {
             parameters: {
-                query?: never;
-                header?: never;
+                query?: never
+                header?: never
                 path: {
                     /**
                      * @description Room name.
                      * @example /room-prefix-793e9ec1-c686-423d-9043-9b7a10c553fd
                      */
-                    roomName: components["parameters"]["roomName"];
-                };
-                cookie?: never;
-            };
+                    roomName: components["parameters"]["roomName"]
+                }
+                cookie?: never
+            }
             requestBody?: {
                 content: {
                     "multipart/form-data": {
@@ -1301,48 +1346,48 @@ export interface paths {
                          * @description The knock page background image. We recommend PNG
                          *     images at least 1400px wide (max 600 kb).
                          */
-                        image?: string;
-                    };
+                        image?: string
+                    }
                     "application/json": {
                         /**
                          * @description Knock page background color name. ['default', 'grey', 'purple', 'burgund']
                          * @enum {string}
                          */
-                        palette?: "default" | "grey" | "purple" | "burgund";
+                        palette?: "default" | "grey" | "purple" | "burgund"
                         /**
                          * @description Knock page background image. ['default', 'mountains', 'characters', 'rocks']
                          * @enum {string}
                          */
-                        theme?: "default" | "mountains" | "characters" | "rocks";
-                    };
-                };
-            };
+                        theme?: "default" | "mountains" | "characters" | "rocks"
+                    }
+                }
+            }
             responses: {
                 /** @description The knock page background image was saved successfully. */
                 204: {
                     headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                401: components["responses"]["UnauthorizedError"];
-                429: components["responses"]["ThrottleError"];
-            };
-        };
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+                        [name: string]: unknown
+                    }
+                    content?: never
+                }
+                401: components["responses"]["UnauthorizedError"]
+                429: components["responses"]["ThrottleError"]
+            }
+        }
+        post?: never
+        delete?: never
+        options?: never
+        head?: never
+        patch?: never
+        trace?: never
+    }
     "/insights/rooms": {
         parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
+            query?: never
+            header?: never
+            path?: never
+            cookie?: never
+        }
         /**
          * Get room insights
          * @description Gets a summary of insights collected for rooms.
@@ -1353,50 +1398,50 @@ export interface paths {
                     /** @description Filter results by room name. */
                     roomName?: {
                         /** @description Example: roomName[exact]=/room-prefix-793e9ec1-c686-423d-9043-9b7a10c553fd */
-                        exact?: string;
+                        exact?: string
                         /** @description Example: roomName[startsWith]=/room-prefix */
-                        startsWith?: string;
+                        startsWith?: string
                         /** @description Example: roomName[contains]=793e9ec1 */
-                        contains?: string;
-                    };
+                        contains?: string
+                    }
                     /** @description Filter rooms by the date they were created. */
                     createdAt?: {
                         /**
                          * Format: date-time
                          * @description Example: createdAt[from]=2025-01-01T00:00:00.000Z
                          */
-                        from?: string;
+                        from?: string
                         /**
                          * Format: date-time
                          * @description Example: createdAt[to]=2025-05-01T00:01:00.000Z
                          */
-                        to?: string;
-                    };
+                        to?: string
+                    }
                     /**
                      * @description Sort results by a field.
                      * @example totalSessions:asc
                      */
-                    sortBy?: string;
+                    sortBy?: string
                     /**
                      * @description The cursor for paginating through the results. To fetch the next page,
                      *     set the `cursor` to the `cursor` returned by the previous request.
                      * @example 8f4031bfc7640c5f267b11b6fe0c2507
                      */
-                    cursor?: string;
+                    cursor?: string
                     /** @description Limit the number of results. */
-                    limit?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
+                    limit?: number
+                }
+                header?: never
+                path?: never
+                cookie?: never
+            }
+            requestBody?: never
             responses: {
                 /** @description Array of sorted rooms with their insights. */
                 200: {
                     headers: {
-                        [name: string]: unknown;
-                    };
+                        [name: string]: unknown
+                    }
                     content: {
                         "application/json": {
                             /**
@@ -1404,91 +1449,91 @@ export interface paths {
                              *     set the `cursor` to the `cursor` returned by the previous request.
                              *     If there are no more results, the value returned is `null`.
                              */
-                            cursor?: string;
+                            cursor?: string
                             results?: {
                                 /**
                                  * @description The name of the room.
                                  * @example /room-prefix-793e9ec1-c686-423d-9043-9b7a10c553fd
                                  */
-                                roomName: string;
+                                roomName: string
                                 /**
                                  * @description The date the room was created.
                                  * @example 2025-01-01T00:00:00.000Z
                                  */
-                                createdAt: string;
+                                createdAt: string
                                 /**
                                  * @description The date the room was set to expire.
                                  * @example 2025-01-01T01:00:00.000Z
                                  */
-                                endAt: string;
+                                endAt: string
                                 /**
                                  * @description The date the first session started in this room.
                                  * @example 2025-01-01T00:15:00.000Z
                                  */
-                                firstSessionStartedAt: string;
+                                firstSessionStartedAt: string
                                 /**
                                  * @description The date the last session started in this room.
                                  * @example 2025-01-01T00:45:00.000Z
                                  */
-                                lastSessionStartedAt: string;
+                                lastSessionStartedAt: string
                                 /**
                                  * @description The total number of minutes participants have been in the room, rounded up per individual connection.
                                  * @example 124
                                  */
-                                totalParticipantMinutes: number;
+                                totalParticipantMinutes: number
                                 /**
                                  * @description The total number of minutes the room was recorded.
                                  * @example 120
                                  */
-                                totalRecorderMinutes: number;
+                                totalRecorderMinutes: number
                                 /**
                                  * @description The total number of minutes the room was streamed.
                                  * @example 120
                                  */
-                                totalStreamerMinutes: number;
+                                totalStreamerMinutes: number
                                 /**
                                  * @description The total number of distinct participants in the room.
                                  * @example 4
                                  */
-                                totalUniqueParticipants: number;
+                                totalUniqueParticipants: number
                                 /**
                                  * @description The total number of distinct recorders in the room.
                                  * @example 2
                                  */
-                                totalUniqueRecorders: number;
+                                totalUniqueRecorders: number
                                 /**
                                  * @description The total number of distinct streamers in the room.
                                  * @example 1
                                  */
-                                totalUniqueStreamers: number;
+                                totalUniqueStreamers: number
                                 /**
                                  * @description The total number of sessions in the room.
                                  * @example 2
                                  */
-                                totalSessions: number;
-                            }[];
-                        };
-                    };
-                };
-                401: components["responses"]["UnauthorizedError"];
-                429: components["responses"]["ThrottleError"];
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+                                totalSessions: number
+                            }[]
+                        }
+                    }
+                }
+                401: components["responses"]["UnauthorizedError"]
+                429: components["responses"]["ThrottleError"]
+            }
+        }
+        put?: never
+        post?: never
+        delete?: never
+        options?: never
+        head?: never
+        patch?: never
+        trace?: never
+    }
     "/insights/room-sessions": {
         parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
+            query?: never
+            header?: never
+            path?: never
+            cookie?: never
+        }
         /**
          * Get room session insights
          * @description Gets a summary of usage for each session of a given room.
@@ -1500,37 +1545,37 @@ export interface paths {
                      * @description Room name.
                      * @example /room-prefix-793e9ec1-c686-423d-9043-9b7a10c553fd
                      */
-                    roomName: string;
+                    roomName: string
                     /**
                      * @description Room session identifier.
                      * @example e2f29530-46ec-4cee-8b27-e565cb5bb2e9
                      */
-                    roomSessionId?: string;
+                    roomSessionId?: string
                     /**
                      * @description Sort results by a field.
                      * @example totalUniqueParticipants:asc
                      */
-                    sortBy?: string;
+                    sortBy?: string
                     /**
                      * @description The cursor for paginating through the results. To fetch the next page,
                      *     set the `cursor` to the `cursor` returned by the previous request.
                      * @example 8f4031bfc7640c5f267b11b6fe0c2507
                      */
-                    cursor?: string;
+                    cursor?: string
                     /** @description Limit the number of results. */
-                    limit?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
+                    limit?: number
+                }
+                header?: never
+                path?: never
+                cookie?: never
+            }
+            requestBody?: never
             responses: {
                 /** @description Array of sorted sessions with their insights. */
                 200: {
                     headers: {
-                        [name: string]: unknown;
-                    };
+                        [name: string]: unknown
+                    }
                     content: {
                         "application/json": {
                             /**
@@ -1538,81 +1583,81 @@ export interface paths {
                              *     set the `cursor` to the `cursor` returned by the previous request.
                              *     If there are no more results, the value returned is `null`.
                              */
-                            cursor?: string;
+                            cursor?: string
                             results?: {
                                 /**
                                  * @description The identifier of the session.
                                  * @example e2f29530-46ec-4cee-8b27-e565cb5bb2e9
                                  */
-                                roomSessionId: string;
+                                roomSessionId: string
                                 /**
                                  * @description The name of the room.
                                  * @example /room-prefix-793e9ec1-c686-423d-9043-9b7a10c553fd
                                  */
-                                roomName: string;
+                                roomName: string
                                 /**
                                  * @description The date the session started.
                                  * @example 2025-01-01T00:00:00.000Z
                                  */
-                                startedAt?: string;
+                                startedAt?: string
                                 /**
                                  * @description The date when the session ended.
                                  * @example 2025-01-01T01:00:00.000Z
                                  */
-                                endedAt?: string;
+                                endedAt?: string
                                 /**
                                  * @description The total number of minutes participants have been in the session, rounded up per individual connection.
                                  * @example 124
                                  */
-                                totalParticipantMinutes: number;
+                                totalParticipantMinutes: number
                                 /**
                                  * @description The total number of minutes the session was recorded.
                                  * @example 120
                                  */
-                                totalRecorderMinutes: number;
+                                totalRecorderMinutes: number
                                 /**
                                  * @description The total number of minutes the session was streamed.
                                  * @example 120
                                  */
-                                totalStreamerMinutes: number;
+                                totalStreamerMinutes: number
                                 /**
                                  * @description The total number of distinct participants in the session.
                                  * @example 4
                                  */
-                                totalUniqueParticipants: number;
+                                totalUniqueParticipants: number
                                 /**
                                  * @description The total number of distinct recorders in the session.
                                  * @example 3
                                  */
-                                totalUniqueRecorders: number;
+                                totalUniqueRecorders: number
                                 /**
                                  * @description The total number of distinct streamers in the session.
                                  * @example 2
                                  */
-                                totalUniqueStreamers: number;
-                            }[];
-                        };
-                    };
-                };
-                401: components["responses"]["UnauthorizedError"];
-                429: components["responses"]["ThrottleError"];
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+                                totalUniqueStreamers: number
+                            }[]
+                        }
+                    }
+                }
+                401: components["responses"]["UnauthorizedError"]
+                429: components["responses"]["ThrottleError"]
+            }
+        }
+        put?: never
+        post?: never
+        delete?: never
+        options?: never
+        head?: never
+        patch?: never
+        trace?: never
+    }
     "/insights/participants": {
         parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
+            query?: never
+            header?: never
+            path?: never
+            cookie?: never
+        }
         /**
          * Get participants
          * @description Gets a list of participants, by either a given session id or external id.
@@ -1624,34 +1669,34 @@ export interface paths {
                      * @description session ID. Either roomSessionId or externalId is required.
                      * @example e2f29530-46ec-4cee-8b27-e565cb5bb2e9
                      */
-                    roomSessionId: string;
+                    roomSessionId: string
                     /** @description an externalId that was originally passed in query params by the participant when joining. Either roomSessionId or externalId is required. */
-                    externalId?: string;
+                    externalId?: string
                     /**
                      * @description Sort results by a field. Accepted values are `joinedAt` and `leftAt`. Accepted sort values are `asc` and `desc`.
                      * @example joinedAt:asc
                      */
-                    sortBy?: string;
+                    sortBy?: string
                     /**
                      * @description The cursor for paginating through the results. To fetch the next page,
                      *     set the `cursor` to the `cursor` returned by the previous request.
                      * @example 8f4031bfc7640c5f267b11b6fe0c2507
                      */
-                    cursor?: string;
+                    cursor?: string
                     /** @description Limit the number of results. */
-                    limit?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
+                    limit?: number
+                }
+                header?: never
+                path?: never
+                cookie?: never
+            }
+            requestBody?: never
             responses: {
                 /** @description Array of sorted sessions participants with insights. */
                 200: {
                     headers: {
-                        [name: string]: unknown;
-                    };
+                        [name: string]: unknown
+                    }
                     content: {
                         "application/json": {
                             /**
@@ -1659,70 +1704,70 @@ export interface paths {
                              *     set the `cursor` to the `cursor` returned by the previous request.
                              *     If there are no more results, the value returned is `null`.
                              */
-                            cursor?: string;
+                            cursor?: string
                             results?: {
                                 /**
                                  * @description The identifier of the session.
                                  * @example e2f29530-46ec-4cee-8b27-e565cb5bb2e9
                                  */
-                                roomSessionId: string;
+                                roomSessionId: string
                                 /**
                                  * @description The identifier of the participant.
                                  * @example /4b3bd908-cb88-11ec-9d64-0242ac120002
                                  */
-                                participantId: string;
+                                participantId: string
                                 /** @description The identifier of the device. */
-                                deviceId: string;
+                                deviceId: string
                                 /**
                                  * @description The identifier of the user.
                                  * @example 32ba120a-a691-4e8e-aec3-a610239271de
                                  */
-                                userId: string;
+                                userId: string
                                 /**
                                  * @description The role name of the participant.
                                  * @example granted_visited
                                  */
-                                roleName: string;
+                                roleName: string
                                 /**
                                  * @description The display name of the participant.
                                  * @example John Doe
                                  */
-                                displayName: string;
+                                displayName: string
                                 /**
                                  * @description The timestamp the participant joined the session.
                                  * @example 2025-01-01T00:00:00.000Z
                                  */
-                                joinedAt: string;
+                                joinedAt: string
                                 /**
                                  * @description The timestamp the participant left the session.
                                  * @example 2025-01-01T01:00:00.000Z
                                  */
-                                leftAt: string;
+                                leftAt: string
                                 /** @description The external identifier of the participant. */
-                                externalId: string;
-                            }[];
-                        };
-                    };
-                };
-                401: components["responses"]["UnauthorizedError"];
-                429: components["responses"]["ThrottleError"];
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+                                externalId: string
+                            }[]
+                        }
+                    }
+                }
+                401: components["responses"]["UnauthorizedError"]
+                429: components["responses"]["ThrottleError"]
+            }
+        }
+        put?: never
+        post?: never
+        delete?: never
+        options?: never
+        head?: never
+        patch?: never
+        trace?: never
+    }
     "/insights/participant": {
         parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
+            query?: never
+            header?: never
+            path?: never
+            cookie?: never
+        }
         /**
          * Get details for a participant in a session
          * @description Returns session data such as user agent, bandwidth and packet loss for the participant.
@@ -1734,64 +1779,64 @@ export interface paths {
                      * @description session ID.
                      * @example e2f29530-46ec-4cee-8b27-e565cb5bb2e9
                      */
-                    roomSessionId: string;
+                    roomSessionId: string
                     /**
                      * @description participant ID.
                      * @example 32ba120a-a691-4e8e-aec3-a610239271de
                      */
-                    participantId: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
+                    participantId: string
+                }
+                header?: never
+                path?: never
+                cookie?: never
+            }
+            requestBody?: never
             responses: {
                 /** @description Array of sorted sessions participants with insights. */
                 200: {
                     headers: {
-                        [name: string]: unknown;
-                    };
+                        [name: string]: unknown
+                    }
                     content: {
                         "application/json": {
                             /** @description Display name of the participant. */
-                            displayName: string;
+                            displayName: string
                             /**
                              * @description The role of the participant.
                              * @example host
                              */
-                            userRole: string;
+                            userRole: string
                             /**
                              * @description User agent string of the participant.
                              * @example Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36
                              */
-                            userAgent: string;
+                            userAgent: string
                             /** @description Timestamp the participant joined the session. */
-                            timeStamp: string;
+                            timeStamp: string
                             /**
                              * @description The interval (in milliseconds) the samples are collected in.
                              * @example 2000
                              */
-                            sampleRateMs: number;
+                            sampleRateMs: number
                             /** @description Data object arrays with network data. `packetLossSend`, `packetLossRecv`, `bitrateSend` and `bitrateRecv`. */
-                            samples: Record<string, never>;
-                        }[];
-                    };
-                };
-                401: components["responses"]["UnauthorizedError"];
-                429: components["responses"]["ThrottleError"];
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+                            samples: Record<string, never>
+                        }[]
+                    }
+                }
+                401: components["responses"]["UnauthorizedError"]
+                429: components["responses"]["ThrottleError"]
+            }
+        }
+        put?: never
+        post?: never
+        delete?: never
+        options?: never
+        head?: never
+        patch?: never
+        trace?: never
+    }
 }
-export type webhooks = Record<string, never>;
+export type webhooks = Record<string, never>
 export interface components {
     schemas: {
         /**
@@ -1799,7 +1844,7 @@ export interface components {
          *     - `hostRoomUrl` - Include hostRoomUrl field in the meeting response.
          *     - `viewerRoomUrl` - Include viewerRoomUrl field in the meeting response.
          */
-        Fields: ("hostRoomUrl" | "viewerRoomUrl")[];
+        Fields: ("hostRoomUrl" | "viewerRoomUrl")[]
         /**
          * @example {
          *       "meetingId": "9cf691bf-f2d5-4420-bda9-ee8607bb558b",
@@ -1810,27 +1855,27 @@ export interface components {
          */
         Meeting: {
             /** @description The ID of the meeting. */
-            meetingId: string;
+            meetingId: string
             /**
              * @description The name of the room.
              * @example /room-prefix-793e9ec1-c686-423d-9043-9b7a10c553fd
              */
-            roomName?: string;
+            roomName?: string
             /**
              * Format: uri
              * @description The URL to room where the meeting will be hosted.
              */
-            roomUrl: string;
+            roomUrl: string
             /**
              * Format: date-time
              * @description When the meeting starts. Always in UTC, regardless of the input timezone.
              */
-            startDate?: string;
+            startDate?: string
             /**
              * Format: date-time
              * @description When the meeting ends. Always in UTC, regardless of the input timezone.
              */
-            endDate: string;
+            endDate: string
             /**
              * Format: uri
              * @description The URL to the room where the meeting will be hosted which will also make the user the host of the
@@ -1839,14 +1884,14 @@ export interface components {
              *     slack is added to allow a host joining the meeting ahead of time or if the meeting goes over time).
              *     This field is optional and will only be returned if requested through the fields parameter.
              */
-            hostRoomUrl?: string;
+            hostRoomUrl?: string
             /**
              * Format: uri
              * @description The URL to the room where the meeting will be hosted which will make the user a viewer of the meeting. A viewer will not be able
              *     to turn on the camera or microphone, but will be able to join the meeting. This field is optional and will only be returned if requested through the fields parameter.
              */
-            viewerRoomUrl?: string;
-        };
+            viewerRoomUrl?: string
+        }
         /**
          * @example {
          *       "recordingId": "a56f6ad7-37fe-4a37-9319-3174630ba57a",
@@ -1857,7 +1902,7 @@ export interface components {
          *       "sizeInMegaBytes": 100
          *     }
          */
-        Recording: Record<string, never>;
+        Recording: Record<string, never>
         /**
          * @example {
          *       "transcriptionId": "b438fda0-83e2-4835-92f9-c845ee3d5ea7",
@@ -1875,23 +1920,23 @@ export interface components {
          */
         Transcription: {
             /** @description The ID of the transcription. */
-            transcriptionId: string;
+            transcriptionId: string
             /** @description The ID of the room session. */
-            roomSessionId: string;
+            roomSessionId: string
             /** @description The filename of the transcription that was written to either Whereby or self hosted storage buckets (see: `storageType`). */
-            filename?: string;
+            filename?: string
             /** @description The name of the room. */
-            roomName: string;
+            roomName: string
             /**
              * Format: date-time
              * @description When the transcription starts. Always in UTC, regardless of the input timezone.
              */
-            startDate: string;
+            startDate: string
             /**
              * Format: date-time
              * @description When the transcription ends. Always in UTC, regardless of the input timezone.
              */
-            endDate: string;
+            endDate: string
             /**
              * @description The state of the transcription
              *      - `ready` - The transcription is ready to be downloaded
@@ -1899,32 +1944,32 @@ export interface components {
              *      - `in_progress` - The transcription is still being generated
              * @enum {string}
              */
-            state: "ready" | "failed" | "in_progress";
+            state: "ready" | "failed" | "in_progress"
             /**
              * Format: date-time
              * @description When the transcription was created. Always in UTC, regardless of the input timezone.
              */
-            createdAt: string;
+            createdAt: string
             /**
              * @description The total billable time in seconds for this transcription.
              * @example 42
              */
-            durationInSeconds?: number;
+            durationInSeconds?: number
             /**
              * @description The type of the transcription
              *      - `LIVE_TRANSCRIPTION` - Session Transcription
              *      - `RECORDING_TRANSCRIPTION` - generated based on a recording
              * @enum {string}
              */
-            type: "LIVE_TRANSCRIPTION" | "RECORDING_TRANSCRIPTION";
+            type: "LIVE_TRANSCRIPTION" | "RECORDING_TRANSCRIPTION"
             /**
              * @description The storage type of the transcription
              *      - `WHEREBY_HOSTED` - files kept with Whereby
              *      - `SELF_HOSTED` - files stored in external location
              * @enum {string}
              */
-            storageType?: "WHEREBY_HOSTED" | "SELF_HOSTED";
-        };
+            storageType?: "WHEREBY_HOSTED" | "SELF_HOSTED"
+        }
         /**
          * @example {
          *       "summaryId": "c429ff78-9f03-49de-b427-546bcd848050",
@@ -1942,81 +1987,81 @@ export interface components {
          *       "template": "General Narrative"
          *     }
          */
-        Summary: Record<string, never>;
-    };
+        Summary: Record<string, never>
+    }
     responses: {
         /** @description Access token is missing or invalid */
         UnauthorizedError: {
             headers: {
-                [name: string]: unknown;
-            };
-            content?: never;
-        };
+                [name: string]: unknown
+            }
+            content?: never
+        }
         /** @description Not allowed to perform action */
         ForbiddenError: {
             headers: {
-                [name: string]: unknown;
-            };
-            content?: never;
-        };
+                [name: string]: unknown
+            }
+            content?: never
+        }
         /** @description You are rate limited */
         ThrottleError: {
             headers: {
-                [name: string]: unknown;
-            };
+                [name: string]: unknown
+            }
             content: {
                 "application/json": {
                     /** @description Error description */
-                    error?: string;
+                    error?: string
                     /** @description Extra info about the rate limit */
                     data?: {
                         /**
                          * @description Milliseconds left until rate limit is finished.
                          *     Wait this long until trying again.
                          */
-                        msLeft?: number;
-                    };
-                };
-            };
-        };
+                        msLeft?: number
+                    }
+                }
+            }
+        }
         /** @description The requested resource doesn't exist */
         NotFoundError: {
             headers: {
-                [name: string]: unknown;
-            };
-            content?: never;
-        };
-    };
+                [name: string]: unknown
+            }
+            content?: never
+        }
+    }
     parameters: {
         /**
          * @description meeting ID.
          * @example 9cf691bf-f2d5-4420-bda9-ee8607bb558b
          */
-        meetingId: string;
+        meetingId: string
         /**
          * @description Room name.
          * @example /room-prefix-793e9ec1-c686-423d-9043-9b7a10c553fd
          */
-        roomName: string;
+        roomName: string
         /**
          * @description Recording ID.
          * @example a56f6ad7-37fe-4a37-9319-3174630ba57a
          */
-        recordingId: string;
+        recordingId: string
         /**
          * @description Transcription ID.
          * @example b438fda0-83e2-4835-92f9-c845ee3d5ea7
          */
-        transcriptionId: string;
+        transcriptionId: string
         /**
          * @description Summary ID.
          * @example c429ff78-9f03-49de-b427-546bcd848050
          */
-        summaryId: string;
-    };
-    requestBodies: never;
-    headers: never;
-    pathItems: never;
+        summaryId: string
+    }
+    requestBodies: never
+    headers: never
+    pathItems: never
 }
-export type $defs = Record<string, never>;
-export type operations = Record<string, never>;
+export type $defs = Record<string, never>
+export type operations = Record<string, never>

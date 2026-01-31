@@ -5,7 +5,8 @@ export const assignments = [
     defineAssignment({
         courseTitle: "CSCI 101",
         title: "String Reversal",
-        description: "Learn to manipulate strings by implementing a string reversal function",
+        description:
+            "Learn to manipulate strings by implementing a string reversal function",
         dueDate: new Date("2026-02-15"),
         starterCode: "function reverseString(str) {\n  // Your code here\n}",
         codeLanguage: CodeLanguage.javascript,
@@ -13,7 +14,8 @@ export const assignments = [
             {
                 order: 0,
                 title: "Implement String Reversal",
-                instructions: "Write a function that takes a string as input and returns the reversed string.",
+                instructions:
+                    "Write a function that takes a string as input and returns the reversed string.",
                 durationSecs: 600,
                 mode: TaskMode.collaborative,
                 testCases: [
@@ -32,7 +34,8 @@ export const assignments = [
             {
                 order: 1,
                 title: "Code Review",
-                instructions: "Review your partner's code. Check for edge cases and readability.",
+                instructions:
+                    "Review your partner's code. Check for edge cases and readability.",
                 durationSecs: 300,
                 mode: TaskMode.review,
                 testCases: [],
@@ -50,13 +53,15 @@ export const assignments = [
             {
                 order: 0,
                 title: "Implement FizzBuzz Logic",
-                instructions: "For numbers 1 to n: return 'Fizz' for multiples of 3, 'Buzz' for multiples of 5, 'FizzBuzz' for both, otherwise the number.",
+                instructions:
+                    "For numbers 1 to n: return 'Fizz' for multiples of 3, 'Buzz' for multiples of 5, 'FizzBuzz' for both, otherwise the number.",
                 durationSecs: 900,
                 mode: TaskMode.collaborative,
                 testCases: [
                     {
                         input: "15",
-                        expectedOutput: '["1","2","Fizz","4","Buzz","Fizz","7","8","Fizz","Buzz","11","Fizz","13","14","FizzBuzz"]',
+                        expectedOutput:
+                            '["1","2","Fizz","4","Buzz","Fizz","7","8","Fizz","Buzz","11","Fizz","13","14","FizzBuzz"]',
                         description: "Test with n=15",
                     },
                 ],
@@ -68,13 +73,15 @@ export const assignments = [
         title: "Binary Search",
         description: "Implement binary search algorithm",
         dueDate: new Date("2026-03-15"),
-        starterCode: "def binary_search(arr, target):\n    # Your code here\n    pass",
+        starterCode:
+            "def binary_search(arr, target):\n    # Your code here\n    pass",
         codeLanguage: CodeLanguage.python,
         tasks: [
             {
                 order: 0,
                 title: "Implement Binary Search",
-                instructions: "Implement binary search to find a target value in a sorted array.",
+                instructions:
+                    "Implement binary search to find a target value in a sorted array.",
                 durationSecs: 1200,
                 mode: TaskMode.collaborative,
                 testCases: [
@@ -105,13 +112,15 @@ export const assignments = [
         title: "Linked List Reversal",
         description: "Implement a function to reverse a singly linked list",
         dueDate: new Date("2026-03-22"),
-        starterCode: "class ListNode {\n    constructor(val) {\n        this.val = val;\n        this.next = null;\n    }\n}\n\nfunction reverseList(head) {\n    // Your code here\n}",
+        starterCode:
+            "class ListNode {\n    constructor(val) {\n        this.val = val;\n        this.next = null;\n    }\n}\n\nfunction reverseList(head) {\n    // Your code here\n}",
         codeLanguage: CodeLanguage.javascript,
         tasks: [
             {
                 order: 0,
                 title: "Understand Linked Lists",
-                instructions: "Review linked list structure and think about the reversal approach.",
+                instructions:
+                    "Review linked list structure and think about the reversal approach.",
                 durationSecs: 400,
                 mode: TaskMode.solo,
                 testCases: [],
@@ -119,7 +128,8 @@ export const assignments = [
             {
                 order: 1,
                 title: "Implement Reversal",
-                instructions: "Implement the iterative approach to reverse a linked list.",
+                instructions:
+                    "Implement the iterative approach to reverse a linked list.",
                 durationSecs: 1000,
                 mode: TaskMode.collaborative,
                 testCases: [
@@ -143,7 +153,8 @@ export const assignments = [
             {
                 order: 2,
                 title: "Review and Discuss",
-                instructions: "Review the solution. Discuss space and time complexity.",
+                instructions:
+                    "Review the solution. Discuss space and time complexity.",
                 durationSecs: 400,
                 mode: TaskMode.review,
                 testCases: [],

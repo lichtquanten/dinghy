@@ -23,7 +23,7 @@ export function LoadingSpinner() {
     return (
         <div className="flex flex-col items-center gap-6">
             <Spinner className="size-16 text-primary" />
-            <div className="h-8 flex items-center justify-center min-w-[300px]">
+            <div className="h-8 flex items-center justify-center min-w-75">
                 <motion.p
                     key={messageIndex}
                     initial={{ opacity: 0, y: 10 }}

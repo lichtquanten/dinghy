@@ -1,40 +1,24 @@
-import { useSuspenseQuery } from "@tanstack/react-query"
-import { useAtomValue, useSetAtom } from "jotai"
-import { Suspense, useEffect, useState } from "react"
+import { createStore, Provider, useAtomValue, useSetAtom } from "jotai"
+import { Suspense, useState } from "react"
 import { ErrorBoundary } from "react-error-boundary"
 import { Navigate, useParams } from "react-router-dom"
 import { Button } from "@workspace/ui/components/button.js"
 import { ErrorFallback } from "@/lib/components/ErrorFallback"
 import { LoadingSpinner } from "@/lib/components/LoadingSpinner"
-import { trpc } from "@/lib/trpc"
-import { currentModeAtom, initializeStudioAtom, setModeAtom } from "./atoms"
+import {
+    currentModeAtom,
+    myCodeAtom,
+    setModeAtom,
+    startTimeAtom,
+} from "./atoms"
 import { Mode } from "./components/Mode"
 import { Task } from "./components/Task/Task"
 import { Workspace } from "./components/Workspace/Workspace"
+import { useAssignment } from "./hooks/assignment"
 import { useStudioTimer } from "./hooks/useStudioTimer"
 
-interface StudioContentProps {
-    assignmentId: string
-}
-
-function StudioContent({ assignmentId }: StudioContentProps) {
-    const { data: assignment } = useSuspenseQuery(
-        trpc.assignment.get.queryOptions({
-            id: assignmentId,
-        })
-    )
-
-    const initialize = useSetAtom(initializeStudioAtom)
-
-    useEffect(() => {
-        if (assignment) {
-            initialize(assignment)
-        }
-    }, [assignment, initialize])
-
+function StudioContent() {
     useStudioTimer()
-
-    if (!assignment) throw new Error("Assignment not found")
 
     return (
         <div className="h-screen flex flex-col">
@@ -45,6 +29,23 @@ function StudioContent({ assignmentId }: StudioContentProps) {
             </div>
             <DevModeSwitcher />
         </div>
+    )
+}
+
+function StudioInitializer() {
+    const { data: assignment } = useAssignment()
+
+    const [store] = useState(() => {
+        const s = createStore()
+        s.set(myCodeAtom, assignment.starterCode)
+        s.set(startTimeAtom, Date.now())
+        return s
+    })
+
+    return (
+        <Provider store={store}>
+            <StudioContent />
+        </Provider>
     )
 }
 
@@ -64,13 +65,12 @@ export default function Studio() {
                     </div>
                 }
             >
-                <StudioContent assignmentId={assignmentId} />
+                <StudioInitializer key={assignmentId} />
             </Suspense>
         </ErrorBoundary>
     )
 }
 
-// Temporary dev controls for testing different modes
 function DevModeSwitcher() {
     const [isVisible, setIsVisible] = useState(true)
 

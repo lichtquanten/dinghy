@@ -1,4 +1,4 @@
-import { useAtomValue } from "jotai"
+import { useSuspenseQuery } from "@tanstack/react-query"
 import { PanelLeft, PanelLeftClose } from "lucide-react"
 import { useState } from "react"
 import {
@@ -8,11 +8,8 @@ import {
     AccordionTrigger,
 } from "@workspace/ui/components/accordion.js"
 import { Button } from "@workspace/ui/components/button.js"
-import {
-    assignmentAtom,
-    currentTaskAtom,
-    currentTaskIndexAtom,
-} from "../../atoms"
+import { trpc } from "@/lib/trpc"
+import { useAssignmentId, useCurrentTask } from "../../hooks/assignment"
 import { Instructions } from "./Instructions"
 import { Overview } from "./Overview"
 import { Progress } from "./Progress"
@@ -20,11 +17,14 @@ import { TestCases } from "./TestCases"
 
 export function Task() {
     const [isOpen, setIsOpen] = useState(true)
-    const assignment = useAtomValue(assignmentAtom)
-    const currentTask = useAtomValue(currentTaskAtom)
-    const currentTaskIndex = useAtomValue(currentTaskIndexAtom)
+    const assignmentId = useAssignmentId()
+    const { data: assignment } = useSuspenseQuery(
+        trpc.assignment.get.queryOptions({ id: assignmentId })
+    )
 
-    if (!assignment || !currentTask) return null
+    const currentTask = useCurrentTask()
+
+    if (!currentTask) return null
 
     if (!isOpen) {
         return (
@@ -45,7 +45,8 @@ export function Task() {
             <div className="h-14 border-b px-4 flex items-center justify-between">
                 <div>
                     <div className="text-xs text-muted-foreground">
-                        Task {currentTaskIndex + 1} of {assignment.tasks.length}
+                        Task {assignment.pairing!.currentTaskIndex + 1} of{" "}
+                        {assignment.tasks.length}
                     </div>
                     <div className="font-semibold text-sm">
                         {currentTask.title}
@@ -102,7 +103,9 @@ export function Task() {
                         <AccordionContent>
                             <Progress
                                 tasks={assignment.tasks}
-                                currentTaskIndex={currentTaskIndex}
+                                currentTaskIndex={
+                                    assignment.pairing!.currentTaskIndex
+                                }
                             />
                         </AccordionContent>
                     </AccordionItem>

@@ -1,12 +1,18 @@
+import { useSuspenseQuery } from "@tanstack/react-query"
 import { useAtomValue } from "jotai"
 import { useCodeExecution } from "@/lib/judge0/hooks/useCodeExecution"
-import { assignmentAtom, currentTaskAtom, myCodeAtom } from "../atoms"
+import { trpc } from "@/lib/trpc"
+import { myCodeAtom } from "../atoms"
+import { useAssignmentId, useCurrentTask } from "./assignment"
 
 export function useTestRunner() {
     const { executeCode, isConnected } = useCodeExecution()
+    const assignmentId = useAssignmentId()
+    const { data: assignment } = useSuspenseQuery(
+        trpc.assignment.get.queryOptions({ id: assignmentId })
+    )
     const myCode = useAtomValue(myCodeAtom)
-    const currentTask = useAtomValue(currentTaskAtom)
-    const assignment = useAtomValue(assignmentAtom)
+    const currentTask = useCurrentTask()
 
     const runTests = async () => {
         if (!isConnected) {
@@ -25,7 +31,7 @@ export function useTestRunner() {
             try {
                 const result = await executeCode(
                     myCode,
-                    assignment!.codeLanguage,
+                    assignment.codeLanguage,
                     testCase.input
                 )
 

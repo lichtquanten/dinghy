@@ -1,16 +1,20 @@
-import { useAtom, useAtomValue } from "jotai"
+import { useSuspenseQuery } from "@tanstack/react-query"
+import { useAtom } from "jotai"
 import { Button } from "@workspace/ui/components/button.js"
-import { assignmentAtom, myCodeAtom } from "../../atoms"
+import { trpc } from "@/lib/trpc"
+import { myCodeAtom } from "../../atoms"
+import { useAssignmentId } from "../../hooks/assignment"
 import { useTestRunner } from "../../hooks/useTestRunner"
 import { Playground } from "../Playground"
 import { Editor } from "./Editor"
 
 export function Solo() {
-    const assignment = useAtomValue(assignmentAtom)
+    const assignmentId = useAssignmentId()
+    const { data: assignment } = useSuspenseQuery(
+        trpc.assignment.get.queryOptions({ id: assignmentId })
+    )
     const [myCode, setMyCode] = useAtom(myCodeAtom)
     const { runTests } = useTestRunner()
-
-    if (!assignment) return null
 
     return (
         <div className="flex flex-col h-full">

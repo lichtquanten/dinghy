@@ -1,11 +1,17 @@
+import { useSuspenseQuery } from "@tanstack/react-query"
 import { useAtomValue } from "jotai"
 import { useState } from "react"
 import { Button } from "@workspace/ui/components/button.js"
 import { useCodeExecution } from "@/lib/judge0/hooks/useCodeExecution"
-import { assignmentAtom, myCodeAtom } from "../atoms"
+import { trpc } from "@/lib/trpc"
+import { myCodeAtom } from "../atoms"
+import { useAssignmentId } from "../hooks/assignment"
 
 export function Playground() {
-    const assignment = useAtomValue(assignmentAtom)
+    const assignmentId = useAssignmentId()
+    const { data: assignment } = useSuspenseQuery(
+        trpc.assignment.get.queryOptions({ id: assignmentId })
+    )
     const myCode = useAtomValue(myCodeAtom)
     const {
         executeCode,
@@ -27,10 +33,6 @@ export function Playground() {
         }
         if (!myCode || myCode.trim() === "") {
             setError("No code to run. Please write some code first.")
-            return
-        }
-        if (!assignment) {
-            setError("Assignment not loaded")
             return
         }
 

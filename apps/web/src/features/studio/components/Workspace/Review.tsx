@@ -1,11 +1,12 @@
 import { useAtomValue } from "jotai"
-import { myCodeAtom, partnerAtom, partnerCodeAtom } from "../../atoms"
+import { myCodeAtom, partnerCodeAtom } from "../../atoms"
+import { usePartner } from "../../hooks/assignment"
 import { Editor } from "./Editor"
 
 export function Review() {
     const myCode = useAtomValue(myCodeAtom)
     const partnerCode = useAtomValue(partnerCodeAtom)
-    const partner = useAtomValue(partnerAtom)
+    const partner = usePartner()
 
     return (
         <div className="flex h-full gap-4 p-4">

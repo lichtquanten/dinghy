@@ -1,17 +1,18 @@
-import { useStudio } from "../../hooks/StudioContext"
-import { CollabWorkspace } from "./CollabWorkspace"
-import { ReviewWorkspace } from "./ReviewWorkspace"
-import { SoloWorkspace } from "./SoloWorkspace"
+import { useAtomValue } from "jotai"
+import { currentModeAtom } from "../../atoms"
+import { Collab } from "./Collab"
+import { Review } from "./Review"
+import { Solo } from "./Solo"
 
 export function Workspace() {
-    const { currentMode } = useStudio()
+    const currentMode = useAtomValue(currentModeAtom)
 
     switch (currentMode) {
         case "solo":
-            return <SoloWorkspace />
+            return <Solo />
         case "review":
-            return <ReviewWorkspace />
+            return <Review />
         case "collaborative":
-            return <CollabWorkspace />
+            return <Collab />
     }
 }

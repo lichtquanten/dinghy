@@ -1,10 +1,16 @@
+import { useAtom, useAtomValue } from "jotai"
 import { Button } from "@workspace/ui/components/button.js"
-import { useStudio } from "../../hooks/StudioContext"
+import { assignmentAtom, myCodeAtom } from "../../atoms"
+import { useTestRunner } from "../../hooks/useTestRunner"
 import { Playground } from "../Playground"
 import { Editor } from "./Editor"
 
-export function SoloWorkspace() {
-    const { assignment, myCode, setMyCode, runTests } = useStudio()
+export function Solo() {
+    const assignment = useAtomValue(assignmentAtom)
+    const [myCode, setMyCode] = useAtom(myCodeAtom)
+    const { runTests } = useTestRunner()
+
+    if (!assignment) return null
 
     return (
         <div className="flex flex-col h-full">

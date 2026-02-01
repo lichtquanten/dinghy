@@ -2,13 +2,7 @@ import { motion } from "motion/react"
 import { useEffect, useState } from "react"
 import { Spinner } from "@workspace/ui/components/spinner.js"
 
-const LOADING_MESSAGES = [
-    "Charging the flux capacitor...",
-    "Downloading more RAM...",
-    "Consulting the rubber duck...",
-    "Herding cats...",
-    "Asking Stack Overflow...",
-] as const
+const LOADING_MESSAGES = ["Loading..."] as const
 
 export function LoadingSpinner() {
     const [messageIndex, setMessageIndex] = useState(0)

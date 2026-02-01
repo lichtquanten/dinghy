@@ -96,6 +96,7 @@ routes.post("/submissions", requireAuth, rateLimitJudge0, async (c) => {
         env.JUDGE0_URL
     )
 
+    console.log("sending")
     const response = await fetch(judge0Url, {
         method: "POST",
         headers: {
@@ -104,8 +105,10 @@ routes.post("/submissions", requireAuth, rateLimitJudge0, async (c) => {
         },
         body: JSON.stringify(body),
     })
+    console.log(response)
 
     const result = (await response.json()) as Record<string, unknown>
+    console.log(result)
     return c.json({ ...result, submissionId })
 })
 

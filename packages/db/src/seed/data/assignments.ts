@@ -8,8 +8,9 @@ export const assignments = [
         description:
             "Learn to manipulate strings by implementing a string reversal function",
         dueDate: new Date("2026-02-15"),
-        starterCode: "function reverseString(str) {\n  // Your code here\n}",
-        codeLanguage: CodeLanguage.javascript,
+        starterCode:
+            'def reverse_string(s):\n    # Your code here\n    pass\n\nif __name__ == "__main__":\n    input_str = input()\n    print(reverse_string(input_str))',
+        codeLanguage: CodeLanguage.python,
         tasks: [
             {
                 order: 0,

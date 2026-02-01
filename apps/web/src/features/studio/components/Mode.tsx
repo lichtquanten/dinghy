@@ -1,5 +1,14 @@
+import { useAtomValue, useSetAtom } from "jotai"
 import { Button } from "@workspace/ui/components/button.js"
-import { useStudio } from "../hooks/StudioContext"
+import {
+    canClickReadyAtom,
+    clickReadyAtom,
+    clickSubmitAtom,
+    currentModeAtom,
+    readyStateAtom,
+    timeoutRemainingAtom,
+    timeUntilReadyAtom,
+} from "../atoms"
 import type { TaskMode } from "../types"
 
 const MODE_CONFIG: Record<TaskMode, { label: string; instruction: string }> = {
@@ -24,15 +33,13 @@ function formatTime(seconds: number): string {
 }
 
 export function Mode() {
-    const {
-        currentMode,
-        readyState,
-        canClickReady,
-        timeUntilReady,
-        timeoutRemaining,
-        clickReady,
-        clickSubmit,
-    } = useStudio()
+    const currentMode = useAtomValue(currentModeAtom)
+    const readyState = useAtomValue(readyStateAtom)
+    const canClickReady = useAtomValue(canClickReadyAtom)
+    const timeUntilReady = useAtomValue(timeUntilReadyAtom)
+    const timeoutRemaining = useAtomValue(timeoutRemainingAtom)
+    const clickReady = useSetAtom(clickReadyAtom)
+    const clickSubmit = useSetAtom(clickSubmitAtom)
 
     const config = MODE_CONFIG[currentMode]
     const isCollaborative = currentMode === "collaborative"

@@ -1,10 +1,12 @@
+import { useAtomValue } from "jotai"
 import { useState } from "react"
 import { Button } from "@workspace/ui/components/button.js"
 import { useCodeExecution } from "@/lib/judge0/hooks/useCodeExecution"
-import { useStudio } from "../hooks/StudioContext"
+import { assignmentAtom, myCodeAtom } from "../atoms"
 
 export function Playground() {
-    const { assignment, myCode } = useStudio()
+    const assignment = useAtomValue(assignmentAtom)
+    const myCode = useAtomValue(myCodeAtom)
     const {
         executeCode,
         isLoading,
@@ -25,6 +27,10 @@ export function Playground() {
         }
         if (!myCode || myCode.trim() === "") {
             setError("No code to run. Please write some code first.")
+            return
+        }
+        if (!assignment) {
+            setError("Assignment not loaded")
             return
         }
 

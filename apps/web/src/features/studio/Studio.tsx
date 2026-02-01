@@ -1,16 +1,17 @@
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { Suspense, useState } from "react"
+import { useAtomValue, useSetAtom } from "jotai"
+import { Suspense, useEffect, useState } from "react"
 import { ErrorBoundary } from "react-error-boundary"
 import { Navigate, useParams } from "react-router-dom"
 import { Button } from "@workspace/ui/components/button.js"
 import { ErrorFallback } from "@/lib/components/ErrorFallback"
 import { LoadingSpinner } from "@/lib/components/LoadingSpinner"
 import { trpc } from "@/lib/trpc"
+import { currentModeAtom, initializeStudioAtom, setModeAtom } from "./atoms"
 import { Mode } from "./components/Mode"
 import { Task } from "./components/Task/Task"
 import { Workspace } from "./components/Workspace/Workspace"
-import { useStudio } from "./hooks/StudioContext"
-import { StudioProvider } from "./hooks/useStudio.js"
+import { useStudioTimer } from "./hooks/useStudioTimer"
 
 interface StudioContentProps {
     assignmentId: string
@@ -23,19 +24,27 @@ function StudioContent({ assignmentId }: StudioContentProps) {
         })
     )
 
+    const initialize = useSetAtom(initializeStudioAtom)
+
+    useEffect(() => {
+        if (assignment) {
+            initialize(assignment)
+        }
+    }, [assignment, initialize])
+
+    useStudioTimer()
+
     if (!assignment) throw new Error("Assignment not found")
 
     return (
-        <StudioProvider assignment={assignment}>
-            <div className="h-screen flex flex-col">
-                <Mode />
-                <div className="flex-1 flex overflow-hidden">
-                    <Task />
-                    <Workspace />
-                </div>
+        <div className="h-screen flex flex-col">
+            <Mode />
+            <div className="flex-1 flex overflow-hidden">
+                <Task />
+                <Workspace />
             </div>
             <DevModeSwitcher />
-        </StudioProvider>
+        </div>
     )
 }
 
@@ -93,7 +102,8 @@ function DevModeSwitcher() {
 }
 
 function ModeButtons() {
-    const { setMode, currentMode } = useStudio()
+    const currentMode = useAtomValue(currentModeAtom)
+    const setMode = useSetAtom(setModeAtom)
 
     return (
         <>

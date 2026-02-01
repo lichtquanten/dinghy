@@ -1,3 +1,4 @@
+import { useAtom, useAtomValue } from "jotai"
 import { useState } from "react"
 import { Button } from "@workspace/ui/components/button.js"
 import {
@@ -6,22 +7,28 @@ import {
     TabsList,
     TabsTrigger,
 } from "@workspace/ui/components/tabs.js"
-import { useStudio } from "../../hooks/StudioContext"
+import {
+    assignmentAtom,
+    myCodeAtom,
+    partnerAtom,
+    partnerCodeAtom,
+    sharedCodeAtom,
+} from "../../atoms"
+import { useTestRunner } from "../../hooks/useTestRunner"
 import { Editor } from "./Editor"
 
-export function CollabWorkspace() {
-    const {
-        assignment,
-        myCode,
-        partnerCode,
-        sharedCode,
-        setSharedCode,
-        runTests,
-        partner,
-    } = useStudio()
+export function Collab() {
+    const assignment = useAtomValue(assignmentAtom)
+    const myCode = useAtomValue(myCodeAtom)
+    const partnerCode = useAtomValue(partnerCodeAtom)
+    const partner = useAtomValue(partnerAtom)
+    const [sharedCode, setSharedCode] = useAtom(sharedCodeAtom)
+    const { runTests } = useTestRunner()
     const [referenceTab, setReferenceTab] = useState<"yours" | "partner">(
         "yours"
     )
+
+    if (!assignment) return null
 
     return (
         <div className="flex h-full gap-4 p-4">

@@ -1,8 +1,11 @@
-import { useStudio } from "../../hooks/StudioContext"
+import { useAtomValue } from "jotai"
+import { myCodeAtom, partnerAtom, partnerCodeAtom } from "../../atoms"
 import { Editor } from "./Editor"
 
-export function ReviewWorkspace() {
-    const { myCode, partnerCode, partner } = useStudio()
+export function Review() {
+    const myCode = useAtomValue(myCodeAtom)
+    const partnerCode = useAtomValue(partnerCodeAtom)
+    const partner = useAtomValue(partnerAtom)
 
     return (
         <div className="flex h-full gap-4 p-4">

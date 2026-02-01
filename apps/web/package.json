@@ -54,6 +54,7 @@
         "@workspace/ui": "workspace:*",
         "codemirror": "^6.0.2",
         "envsub": "^4.1.0",
+        "jotai": "^2.17.0",
         "js-base64": "^3.7.8",
         "ky": "^1.14.2",
         "lucide-react": "^0.475.0",

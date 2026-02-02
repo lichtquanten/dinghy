@@ -1,12 +1,13 @@
 import { TRPCError } from "@trpc/server"
-import type { Prisma, PrismaClient } from "@workspace/db/client"
+import type { MembershipRole, Prisma, PrismaClient } from "@workspace/db/client"
 
 type Tx = PrismaClient | Prisma.TransactionClient
 
-export async function requireCourseEnrollment(
+export async function requireCourseMembership(
     tx: Tx,
     userId: string,
-    courseId: string
+    courseId: string,
+    roles?: MembershipRole[]
 ) {
     if (!courseId) {
         throw new TRPCError({
@@ -27,25 +28,44 @@ export async function requireCourseEnrollment(
         })
     }
 
-    const enrollment = await tx.enrollment.findUnique({
+    const membership = await tx.courseMembership.findUnique({
         where: { userId_courseId: { userId, courseId } },
     })
 
-    if (!enrollment) {
+    if (!membership) {
         throw new TRPCError({
             code: "FORBIDDEN",
-            message:
-                "You must be enrolled in this course to access this resource",
+            message: "You must be a member of this course",
         })
     }
 
-    return enrollment
+    if (roles && !roles.includes(membership.role)) {
+        throw new TRPCError({
+            code: "FORBIDDEN",
+            message: `Requires ${roles.join(" or ")} role`,
+        })
+    }
+
+    return membership
+}
+
+export async function requireInstructor(
+    tx: Tx,
+    userId: string,
+    courseId: string
+) {
+    return requireCourseMembership(tx, userId, courseId, ["instructor"])
+}
+
+export async function requireStudent(tx: Tx, userId: string, courseId: string) {
+    return requireCourseMembership(tx, userId, courseId, ["student"])
 }
 
 export async function requireAssignmentAccess(
     tx: Tx,
     userId: string,
-    assignmentId: string
+    assignmentId: string,
+    roles?: MembershipRole[]
 ) {
     const assignment = await tx.assignment.findUnique({
         where: { id: assignmentId },
@@ -59,11 +79,12 @@ export async function requireAssignmentAccess(
         })
     }
 
-    const enrollment = await requireCourseEnrollment(
+    const membership = await requireCourseMembership(
         tx,
         userId,
-        assignment.courseId
+        assignment.courseId,
+        roles
     )
 
-    return { courseId: assignment.courseId, enrollment }
+    return { courseId: assignment.courseId, membership }
 }

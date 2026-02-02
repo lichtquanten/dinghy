@@ -3,10 +3,10 @@ import {
     type Course,
     PrismaClient,
     type User,
-} from "../generated/prisma/client.js"
+} from "@workspace/db/client"
 import { assignments } from "./data/assignments.js"
 import { courses } from "./data/courses.js"
-import { enrollments } from "./data/enrollments.js"
+import { memberships } from "./data/memberships.js"
 import { pairings } from "./data/pairings.js"
 import { users } from "./data/users.js"
 
@@ -88,30 +88,36 @@ async function seedAssignments(
     return assignmentMap
 }
 
-async function seedEnrollments(
+async function seedMemberships(
     prisma: PrismaClient,
     userMap: Map<string, User>,
     courseMap: Map<string, Course>
 ) {
-    for (const enrollmentData of enrollments) {
-        const user = userMap.get(enrollmentData.userEmail)
-        const course = courseMap.get(enrollmentData.courseTitle)
+    for (const membershipData of memberships) {
+        const user = userMap.get(membershipData.userEmail)
+        const course = courseMap.get(membershipData.courseTitle)
 
         if (!user || !course) {
             console.warn(
-                `Skipping enrollment: ${enrollmentData.userEmail} -> ${enrollmentData.courseTitle}`
+                `Skipping membership: ${membershipData.userEmail} -> ${membershipData.courseTitle}`
             )
             continue
         }
 
-        await prisma.enrollment.upsert({
+        await prisma.courseMembership.upsert({
             where: {
                 userId_courseId: { userId: user.id, courseId: course.id },
             },
-            update: {},
-            create: { userId: user.id, courseId: course.id },
+            update: { role: membershipData.role },
+            create: {
+                userId: user.id,
+                courseId: course.id,
+                role: membershipData.role,
+            },
         })
-        console.log(`Seeded enrollment: ${user.email} -> ${course.title}`)
+        console.log(
+            `Seeded membership: ${user.email} -> ${course.title} (${membershipData.role})`
+        )
     }
 }
 
@@ -123,11 +129,14 @@ async function seedPairings(
     for (const pairingData of pairings) {
         const assignmentKey = `${pairingData.courseTitle}:${pairingData.assignmentTitle}`
         const assignment = assignmentMap.get(assignmentKey)
-        const members = pairingData.memberEmails
+        const partners = pairingData.partnerEmails
             .map((email) => userMap.get(email))
             .filter((u): u is User => u !== undefined)
 
-        if (!assignment || members.length !== pairingData.memberEmails.length) {
+        if (
+            !assignment ||
+            partners.length !== pairingData.partnerEmails.length
+        ) {
             console.warn(
                 `Skipping pairing for assignment "${pairingData.assignmentTitle}" - missing assignment or users`
             )
@@ -137,14 +146,14 @@ async function seedPairings(
         await prisma.pairing.create({
             data: {
                 assignmentId: assignment.id,
-                memberIds: members.map((m) => m.id),
+                partnerIds: partners.map((m) => m.id),
                 isStarted: pairingData.isStarted ?? false,
                 isCompleted: pairingData.isCompleted ?? false,
                 currentTaskIndex: pairingData.currentTaskIndex ?? 0,
             },
         })
         console.log(
-            `Seeded pairing: ${pairingData.assignmentTitle} (${members.map((m) => m.email).join(", ")})`
+            `Seeded pairing: ${pairingData.assignmentTitle} (${partners.map((m) => m.email).join(", ")})`
         )
     }
 }
@@ -165,8 +174,8 @@ async function seedDatabase() {
         console.log("\nSeeding assignments...")
         const assignmentMap = await seedAssignments(prisma, courseMap)
 
-        console.log("\nSeeding enrollments...")
-        await seedEnrollments(prisma, userMap, courseMap)
+        console.log("\nSeeding memberships...")
+        await seedMemberships(prisma, userMap, courseMap)
 
         console.log("\nSeeding pairings...")
         await seedPairings(prisma, userMap, assignmentMap)

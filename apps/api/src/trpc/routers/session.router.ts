@@ -25,7 +25,7 @@ export const sessionRouter = router({
                 throw new TRPCError({ code: "NOT_FOUND" })
             }
 
-            if (!pairing.memberIds.includes(ctx.userId)) {
+            if (!pairing.partnerIds.includes(ctx.userId)) {
                 throw new TRPCError({ code: "FORBIDDEN" })
             }
 

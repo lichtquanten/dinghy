@@ -1,10 +1,10 @@
 {
-    "name": "@workspace/db",
+    "name": "@workspace/collab",
     "version": "0.0.0",
     "type": "module",
     "private": true,
     "scripts": {
-        "build": "prisma generate && tsdown",
+        "build": "tsdown",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
         "format": "prettier --write .",
@@ -12,18 +12,20 @@
         "typecheck": "tsc --build; tsc --build --clean",
         "clean": "rm -rf dist"
     },
+    "dependencies": {
+        "yjs": "^13.6.29",
+        "@workspace/db": "workspace:*"
+    },
     "devDependencies": {
-        "@prisma/client": "^6.19.2",
         "@workspace/eslint-config": "workspace:*",
         "@workspace/typescript-config": "workspace:*",
-        "prisma": "^6.19.2",
-        "tsdown": "^0.15.12"
+        "tsdown": "^0.15.12",
+        "typescript": "^5.9.3"
     },
     "exports": {
-        "./browser": "./dist/browser/browser.js",
-        "./client": "./dist/node/client.js",
-        "./commonInputTypes": "./dist/node/commonInputTypes.js",
-        "./enums": "./dist/node/enums.js",
-        "./models": "./dist/node/models.js"
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        }
     }
 }

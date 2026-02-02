@@ -18,7 +18,6 @@ export default defineConfig([
             "src/generated/prisma/commonInputTypes.ts",
             "src/generated/prisma/enums.ts",
             "src/generated/prisma/models.ts",
-            "src/seed/seed.ts",
         ],
         dts: true,
         hash: false,

@@ -5,7 +5,7 @@ import { protectedProcedure, router } from "@/trpc/trpc.js"
 
 export const courseRouter = router({
     get: protectedProcedure.query(async ({ ctx }) => {
-        const enrollments = await prisma.enrollment.findMany({
+        const memberships = await prisma.courseMembership.findMany({
             where: {
                 userId: ctx.userId,
             },
@@ -14,11 +14,12 @@ export const courseRouter = router({
             },
         })
 
-        return enrollments.map((enrollment) => {
-            const { joinCode: _, ...rest } = enrollment.course
-            return rest
+        return memberships.map((membership) => {
+            const { joinCode: _, ...rest } = membership.course
+            return { ...rest, role: membership.role }
         })
     }),
+
     join: protectedProcedure
         .input(
             z.object({
@@ -33,6 +34,7 @@ export const courseRouter = router({
                     },
                     select: { id: true, title: true },
                 })
+
                 if (!course) {
                     throw new TRPCError({
                         code: "NOT_FOUND",
@@ -40,26 +42,33 @@ export const courseRouter = router({
                             "Invalid course code. Please check and try again.",
                     })
                 }
-                const existingEnrollment = await tx.enrollment.findUnique({
-                    where: {
-                        userId_courseId: {
-                            userId: ctx.userId,
-                            courseId: course.id,
+
+                const existingMembership = await tx.courseMembership.findUnique(
+                    {
+                        where: {
+                            userId_courseId: {
+                                userId: ctx.userId,
+                                courseId: course.id,
+                            },
                         },
-                    },
-                })
-                if (existingEnrollment) {
+                    }
+                )
+
+                if (existingMembership) {
                     throw new TRPCError({
                         code: "CONFLICT",
-                        message: "You're already enrolled in this course.",
+                        message: "You're already a member of this course.",
                     })
                 }
-                await tx.enrollment.create({
+
+                await tx.courseMembership.create({
                     data: {
                         userId: ctx.userId,
                         courseId: course.id,
+                        role: "student",
                     },
                 })
+
                 return { courseTitle: course.title } as const
             })
         }),

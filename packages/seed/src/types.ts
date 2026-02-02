@@ -1,4 +1,4 @@
-import type { Prisma } from "../generated/prisma/client.js"
+import type { MembershipRole, Prisma } from "@workspace/db/client"
 
 export type SeedUser = Prisma.UserCreateInput
 
@@ -18,25 +18,23 @@ export type SeedAssignment = Omit<
     tasks: SeedTask[]
 }
 
-export type SeedEnrollment = Omit<
-    Prisma.EnrollmentCreateInput,
-    "user" | "course"
-> & {
+export type SeedMembership = {
     userEmail: string
     courseTitle: string
+    role: MembershipRole
 }
 
 export type SeedPairing = Omit<
     Prisma.PairingCreateInput,
-    "assignment" | "members" | "session"
+    "assignment" | "partners" | "session"
 > & {
     assignmentTitle: string
     courseTitle: string
-    memberEmails: string[]
+    partnerEmails: string[]
 }
 
 export const defineUser = (user: SeedUser) => user
 export const defineCourse = (course: SeedCourse) => course
 export const defineAssignment = (assignment: SeedAssignment) => assignment
-export const defineEnrollment = (enrollment: SeedEnrollment) => enrollment
+export const defineMembership = (membership: SeedMembership) => membership
 export const definePairing = (pairing: SeedPairing) => pairing

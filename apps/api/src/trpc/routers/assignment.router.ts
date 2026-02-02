@@ -5,15 +5,15 @@ import { prisma } from "@/infrastructure/db.js"
 import { idInput } from "@/lib/validators.js"
 import {
     requireAssignmentAccess,
-    requireCourseEnrollment,
-} from "@/trpc/lib/require-enrollment.js"
+    requireCourseMembership,
+} from "@/trpc/lib/permissions.js"
 import { protectedProcedure, router } from "@/trpc/trpc.js"
 
-type PairingWithMembers = Prisma.PairingGetPayload<{
-    include: { members: true }
+type PairingWithPartners = Prisma.PairingGetPayload<{
+    include: { partners: true }
 }>
 
-function formatPairing(pairings: PairingWithMembers[], userId: string) {
+function formatPairing(pairings: PairingWithPartners[], userId: string) {
     if (pairings.length > 1) {
         throw new TRPCError({
             code: "INTERNAL_SERVER_ERROR",
@@ -24,7 +24,7 @@ function formatPairing(pairings: PairingWithMembers[], userId: string) {
     const pairing = pairings[0]
     if (!pairing) return null
 
-    const partners = pairing.members.filter((m) => m.id !== userId)
+    const partners = pairing.partners.filter((m) => m.id !== userId)
 
     if (partners.length !== 1 || !partners[0]) {
         throw new TRPCError({
@@ -61,8 +61,8 @@ export const assignmentRouter = router({
                         include: { testCases: true },
                     },
                     pairings: {
-                        where: { memberIds: { has: ctx.userId } },
-                        include: { members: true },
+                        where: { partnerIds: { has: ctx.userId } },
+                        include: { partners: true },
                     },
                 },
             })
@@ -84,7 +84,7 @@ export const assignmentRouter = router({
         .input(z.object({ courseId: z.string() }))
         .query(async ({ ctx, input }) => {
             return prisma.$transaction(async (tx) => {
-                await requireCourseEnrollment(tx, ctx.userId, input.courseId)
+                await requireCourseMembership(tx, ctx.userId, input.courseId)
 
                 const assignments = await tx.assignment.findMany({
                     where: { courseId: input.courseId },
@@ -94,8 +94,8 @@ export const assignmentRouter = router({
                             include: { testCases: true },
                         },
                         pairings: {
-                            where: { memberIds: { has: ctx.userId } },
-                            include: { members: true },
+                            where: { partnerIds: { has: ctx.userId } },
+                            include: { partners: true },
                         },
                     },
                 })

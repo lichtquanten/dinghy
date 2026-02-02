@@ -15,7 +15,9 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/api/package.json ./apps/api/
 COPY apps/web/package.json ./apps/web/
 COPY packages/code-languages/package.json ./packages/code-languages/
+COPY packages/collab/package.json ./packages/collab/
 COPY packages/db/package.json ./packages/db/
+COPY packages/seed/package.json ./packages/seed/
 COPY packages/typescript-config/package.json ./packages/typescript-config/
 COPY packages/ui/package.json ./packages/ui/
 

@@ -13,8 +13,9 @@
     "exclude": ["node_modules", "../../packages/db/dist", "../../packages/ui"],
 
     "references": [
-        { "path": "../../packages/db" },
         { "path": "../../packages/code-languages" },
+        { "path": "../../packages/collab" },
+        { "path": "../../packages/db" },
         { "path": "../../packages/ui" }
     ]
 }

@@ -1,0 +1,28 @@
+{
+    "name": "@workspace/seed",
+    "version": "0.0.0",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "build": "tsdown",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "format": "prettier --write .",
+        "format:check": "prettier --check .",
+        "typecheck": "tsc --build; tsc --build --clean",
+        "clean": "rm -rf dist",
+        "preseed": "tsdown",
+        "seed": "node dist/seed.js"
+    },
+    "dependencies": {
+        "@workspace/collab": "workspace:*",
+        "@workspace/db": "workspace:*",
+        "yjs": "^13.6.29"
+    },
+    "devDependencies": {
+        "@workspace/eslint-config": "workspace:*",
+        "@workspace/typescript-config": "workspace:*",
+        "tsdown": "^0.15.12",
+        "typescript": "^5.9.3"
+    }
+}

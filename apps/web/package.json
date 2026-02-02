@@ -50,6 +50,7 @@
         "@uiw/react-codemirror": "^4.25.4",
         "@workspace/api": "workspace:*",
         "@workspace/code-languages": "workspace:*",
+        "@workspace/collab": "workspace:*",
         "@workspace/db": "workspace:*",
         "@workspace/ui": "workspace:*",
         "codemirror": "^6.0.2",

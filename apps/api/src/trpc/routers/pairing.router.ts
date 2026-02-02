@@ -11,16 +11,16 @@ export const pairingRouter = router({
             const pairing = await prisma.pairing.findFirst({
                 where: {
                     assignmentId: input.assignmentId,
-                    memberIds: { has: ctx.userId },
+                    partnerIds: { has: ctx.userId },
                 },
-                include: { members: true, session: true },
+                include: { partners: true, session: true },
             })
 
             if (!pairing) {
                 return null
             }
 
-            const partner = pairing.members.find((m) => m.id !== ctx.userId)
+            const partner = pairing.partners.find((m) => m.id !== ctx.userId)
             if (!partner) {
                 throw new TRPCError({
                     code: "INTERNAL_SERVER_ERROR",
@@ -55,7 +55,7 @@ export const pairingRouter = router({
                 throw new TRPCError({ code: "NOT_FOUND" })
             }
 
-            if (!pairing.memberIds.includes(ctx.userId)) {
+            if (!pairing.partnerIds.includes(ctx.userId)) {
                 throw new TRPCError({ code: "FORBIDDEN" })
             }
 
@@ -87,7 +87,7 @@ export const pairingRouter = router({
                 throw new TRPCError({ code: "NOT_FOUND" })
             }
 
-            if (!pairing.memberIds.includes(ctx.userId)) {
+            if (!pairing.partnerIds.includes(ctx.userId)) {
                 throw new TRPCError({ code: "FORBIDDEN" })
             }
 

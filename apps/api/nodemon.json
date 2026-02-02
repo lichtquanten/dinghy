@@ -1,8 +1,9 @@
 {
     "watch": [
         "dist",
-        "../../packages/database/dist",
-        "../../packages/code-languages/src"
+        "../../packages/collab/dist",
+        "../../packages/code-languages/dist",
+        "../../packages/db/dist"
     ],
     "ext": "js,json,ts",
     "exec": "node dist/server.js",

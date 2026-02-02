@@ -5,37 +5,54 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  url = env("PRISMA_DB_URL")
+  url      = env("PRISMA_DB_URL")
+}
+
+enum MembershipRole {
+  student
+  instructor
+}
+
+enum CodeLanguage {
+  javascript
+  typescript
+  python
+  java
+  cpp
+  c
+  rust
+  go
+  php
+  sql
 }
 
 model User {
-  id          String       @id @default(auto()) @map("_id") @db.ObjectId
-  clerkId     String       @unique
+  id          String             @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId     String             @unique
   firstName   String
   lastName    String
-  email       String       @unique
-
-  enrollments Enrollment[]
-
-  pairingIds  String[]     @db.ObjectId
-  pairings    Pairing[]    @relation(fields: [pairingIds], references: [id])
+  email       String             @unique
+  isAdmin     Boolean            @default(false)
+  memberships CourseMembership[]
+  pairingIds  String[]           @db.ObjectId
+  pairings    Pairing[]          @relation(fields: [pairingIds], references: [id])
 }
 
 model Course {
-  id          String       @id @default(auto()) @map("_id") @db.ObjectId
-  title       String       @unique
-  joinCode    String       @unique
-
-  enrollments Enrollment[]
+  id          String             @id @default(auto()) @map("_id") @db.ObjectId
+  title       String             @unique
+  joinCode    String             @unique
+  memberships CourseMembership[]
   assignments Assignment[]
 }
 
-model Enrollment {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  userId   String @db.ObjectId
-  user     User   @relation(fields: [userId], references: [id])
-  courseId String @db.ObjectId
-  course   Course @relation(fields: [courseId], references: [id])
+model CourseMembership {
+  id       String         @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String         @db.ObjectId
+  user     User           @relation(fields: [userId], references: [id])
+  courseId String         @db.ObjectId
+  course   Course         @relation(fields: [courseId], references: [id])
+  role     MembershipRole @default(student)
 
   @@unique([userId, courseId])
 }
@@ -44,13 +61,11 @@ model Assignment {
   id           String       @id @default(auto()) @map("_id") @db.ObjectId
   courseId     String       @db.ObjectId
   course       Course       @relation(fields: [courseId], references: [id])
-
   title        String
   description  String
   codeLanguage CodeLanguage
   starterCode  String
   dueDate      DateTime
-
   tasks        Task[]
   pairings     Pairing[]
 
@@ -61,12 +76,10 @@ model Task {
   id           String     @id @default(auto()) @map("_id") @db.ObjectId
   assignmentId String     @db.ObjectId
   assignment   Assignment @relation(fields: [assignmentId], references: [id])
-
   order        Int
   title        String
   instructions String
   durationSecs Int
-
   testCases    TestCase[]
 
   @@unique([assignmentId, order])
@@ -76,7 +89,6 @@ model TestCase {
   id             String @id @default(auto()) @map("_id") @db.ObjectId
   taskId         String @db.ObjectId
   task           Task   @relation(fields: [taskId], references: [id])
-
   input          String
   expectedOutput String
   description    String
@@ -86,15 +98,13 @@ model Pairing {
   id               String     @id @default(auto()) @map("_id") @db.ObjectId
   assignmentId     String     @db.ObjectId
   assignment       Assignment @relation(fields: [assignmentId], references: [id])
-
-  memberIds        String[]   @db.ObjectId
-  members          User[]     @relation(fields: [memberIds], references: [id])
-
-  isStarted        Boolean @default(false)
-  isCompleted      Boolean @default(false)
-  currentTaskIndex Int     @default(0)
-
+  partnerIds       String[]   @db.ObjectId
+  partners         User[]     @relation(fields: [partnerIds], references: [id])
+  isStarted        Boolean    @default(false)
+  isCompleted      Boolean    @default(false)
+  currentTaskIndex Int        @default(0)
   session          Session?
+  yjsInitialized   Boolean    @default(false)
 }
 
 model Session {
@@ -110,17 +120,4 @@ model WherebyMeeting {
   session   Session?
   url       String
   expiresAt DateTime
-}
-
-enum CodeLanguage {
-  javascript
-  typescript
-  python
-  java
-  cpp
-  c
-  rust
-  go
-  php
-  sql
 }

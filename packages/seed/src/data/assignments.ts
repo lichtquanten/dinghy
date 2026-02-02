@@ -1,4 +1,4 @@
-import { CodeLanguage } from "../../generated/prisma/client.js"
+import { CodeLanguage } from "@workspace/db/client"
 import { defineAssignment } from "../types.js"
 
 export const assignments = [

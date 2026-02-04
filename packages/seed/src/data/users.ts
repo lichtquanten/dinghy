@@ -1,7 +1,8 @@
 // data/users.ts
 import { defineUser } from "../types.js"
+import type { SeedUser } from "../types.js"
 
-export const users = [
+export const users: SeedUser[] = [
     defineUser({
         clerkId: "user_395qPANcI65t9CWzNe08wvu3bPR",
         email: "instructor@demo.com",

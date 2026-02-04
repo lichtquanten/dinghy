@@ -96,9 +96,6 @@ importers:
       '@types/jsonwebtoken':
         specifier: ^9.0.10
         version: 9.0.10
-      '@workspace/code-languages':
-        specifier: workspace:*
-        version: link:../../packages/code-languages
       '@workspace/collab':
         specifier: workspace:*
         version: link:../../packages/collab
@@ -187,6 +184,9 @@ importers:
       '@codemirror/lang-sql':
         specifier: ^6.10.0
         version: 6.10.0
+      '@codemirror/language':
+        specifier: ^6.12.1
+        version: 6.12.1
       '@daily-co/daily-js':
         specifier: github:daily-co/daily-js
         version: https://codeload.github.com/daily-co/daily-js/tar.gz/f7132c063bf9b61064949fa6bbd490fdcd615a21
@@ -217,9 +217,6 @@ importers:
       '@workspace/api':
         specifier: workspace:*
         version: link:../api
-      '@workspace/code-languages':
-        specifier: workspace:*
-        version: link:../../packages/code-languages
       '@workspace/collab':
         specifier: workspace:*
         version: link:../../packages/collab
@@ -326,49 +323,6 @@ importers:
       vite-tsconfig-paths:
         specifier: ^5.1.4
         version: 5.1.4(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)(stylus@0.64.0))
-
-  packages/code-languages:
-    dependencies:
-      '@codemirror/lang-cpp':
-        specifier: ^6.0.3
-        version: 6.0.3
-      '@codemirror/lang-go':
-        specifier: ^6.0.1
-        version: 6.0.1
-      '@codemirror/lang-java':
-        specifier: ^6.0.2
-        version: 6.0.2
-      '@codemirror/lang-javascript':
-        specifier: ^6.2.4
-        version: 6.2.4
-      '@codemirror/lang-php':
-        specifier: ^6.0.2
-        version: 6.0.2
-      '@codemirror/lang-python':
-        specifier: ^6.2.1
-        version: 6.2.1
-      '@codemirror/lang-rust':
-        specifier: ^6.0.2
-        version: 6.0.2
-      '@codemirror/lang-sql':
-        specifier: ^6.10.0
-        version: 6.10.0
-      '@codemirror/language':
-        specifier: ^6.12.1
-        version: 6.12.1
-    devDependencies:
-      '@workspace/eslint-config':
-        specifier: workspace:*
-        version: link:../eslint-config
-      '@workspace/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
-      tsdown:
-        specifier: ^0.15.12
-        version: 0.15.12(typescript@5.9.3)
-      typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
 
   packages/collab:
     dependencies:
@@ -3856,6 +3810,7 @@ packages:
 
   glob@10.5.0:
     resolution: {integrity: sha512-DfXN8DfhJ7NH3Oe7cFmu3NCu1wKbkReJ8TorzSAFbSKrlNaQSKfIzqYqVY8zlbs2NLBbWpRiU52GX2PbaBVNkg==}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     hasBin: true
 
   globals@14.0.0:

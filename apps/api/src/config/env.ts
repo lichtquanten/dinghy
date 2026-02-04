@@ -28,15 +28,14 @@ const envSchema = z.object({
 
     API_CALLBACK_URL: z.url(),
 
-    CALLBACK_SECRET: z
+    WEBHOOK_SECRET: z
         .string()
         .length(64, {
             message:
-                "CALLBACK_SECRET must be exactly 64 hexadecimal characters.",
+                "WEBHOOK_SECRET must be exactly 64 hexadecimal characters.",
         })
         .regex(/^[0-9a-fA-F]{64}$/, {
-            message:
-                "CALLBACK_SECRET must be composed of valid hex characters.",
+            message: "WEBHOOK_SECRET must be composed of valid hex characters.",
         }),
 })
 

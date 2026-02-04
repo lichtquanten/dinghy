@@ -1,23 +1,65 @@
+import { LiveblocksProvider, RoomProvider } from "@liveblocks/react"
 import { createStore, Provider, useAtomValue, useSetAtom } from "jotai"
 import { Suspense, useState } from "react"
 import { ErrorBoundary } from "react-error-boundary"
 import { Navigate, useParams } from "react-router-dom"
+import { RoomId } from "@workspace/collab"
 import { Button } from "@workspace/ui/components/button.js"
 import { ErrorFallback } from "@/lib/components/ErrorFallback"
 import { LoadingSpinner } from "@/lib/components/LoadingSpinner"
-import {
-    currentModeAtom,
-    myCodeAtom,
-    setModeAtom,
-    startTimeAtom,
-} from "./atoms"
+import { currentModeAtom, setModeAtom, startTimeAtom } from "./atoms"
 import { Mode } from "./components/Mode"
 import { Task } from "./components/Task/Task"
 import { Workspace } from "./components/Workspace/Workspace"
-import { useAssignment } from "./hooks/assignment"
+import { YjsProvider } from "./contexts/YjsProvider"
 import { useStudioTimer } from "./hooks/useStudioTimer"
 
-function StudioContent() {
+// ============================================================================
+// Main Export
+// ============================================================================
+
+export default function Studio() {
+    const { pairingId } = useParams()
+
+    if (!pairingId) {
+        return <Navigate to="/hub" replace />
+    }
+
+    return (
+        <ErrorBoundary fallback={<ErrorFallback />}>
+            <Suspense fallback={<FullPageLoader />}>
+                <StudioProviders pairingId={pairingId} />
+            </Suspense>
+        </ErrorBoundary>
+    )
+}
+
+// ============================================================================
+// Providers & Layout
+// ============================================================================
+
+function StudioProviders({ pairingId }: { pairingId: string }) {
+    const [store] = useState(() => {
+        const s = createStore()
+        s.set(startTimeAtom, Date.now())
+        return s
+    })
+    const roomId = RoomId.fromPairingId(pairingId)
+
+    return (
+        <Provider store={store}>
+            <LiveblocksProvider authEndpoint="/api/liveblocks/token">
+                <RoomProvider id={roomId}>
+                    <YjsProvider>
+                        <StudioLayout />
+                    </YjsProvider>
+                </RoomProvider>
+            </LiveblocksProvider>
+        </Provider>
+    )
+}
+
+function StudioLayout() {
     useStudioTimer()
 
     return (
@@ -32,44 +74,21 @@ function StudioContent() {
     )
 }
 
-function StudioInitializer() {
-    const { data: assignment } = useAssignment()
+// ============================================================================
+// Shared Components
+// ============================================================================
 
-    const [store] = useState(() => {
-        const s = createStore()
-        s.set(myCodeAtom, assignment.starterCode)
-        s.set(startTimeAtom, Date.now())
-        return s
-    })
-
+function FullPageLoader() {
     return (
-        <Provider store={store}>
-            <StudioContent />
-        </Provider>
+        <div className="flex-1 flex items-center justify-center h-screen">
+            <LoadingSpinner />
+        </div>
     )
 }
 
-export default function Studio() {
-    const { assignmentId } = useParams()
-
-    if (!assignmentId) {
-        return <Navigate to="/hub" replace />
-    }
-
-    return (
-        <ErrorBoundary fallback={<ErrorFallback />}>
-            <Suspense
-                fallback={
-                    <div className="flex-1 flex items-center justify-center h-screen">
-                        <LoadingSpinner />
-                    </div>
-                }
-            >
-                <StudioInitializer key={assignmentId} />
-            </Suspense>
-        </ErrorBoundary>
-    )
-}
+// ============================================================================
+// Dev Tools (remove in production)
+// ============================================================================
 
 function DevModeSwitcher() {
     const [isVisible, setIsVisible] = useState(true)
@@ -105,31 +124,24 @@ function ModeButtons() {
     const currentMode = useAtomValue(currentModeAtom)
     const setMode = useSetAtom(setModeAtom)
 
+    const modes = [
+        { value: "solo", label: "Solo" },
+        { value: "review", label: "Review" },
+        { value: "collaborative", label: "Collab" },
+    ] as const
+
     return (
         <>
-            <Button
-                size="sm"
-                variant={currentMode === "solo" ? "default" : "outline"}
-                onClick={() => setMode("solo")}
-            >
-                Solo
-            </Button>
-            <Button
-                size="sm"
-                variant={currentMode === "review" ? "default" : "outline"}
-                onClick={() => setMode("review")}
-            >
-                Review
-            </Button>
-            <Button
-                size="sm"
-                variant={
-                    currentMode === "collaborative" ? "default" : "outline"
-                }
-                onClick={() => setMode("collaborative")}
-            >
-                Collab
-            </Button>
+            {modes.map(({ value, label }) => (
+                <Button
+                    key={value}
+                    size="sm"
+                    variant={currentMode === value ? "default" : "outline"}
+                    onClick={() => setMode(value)}
+                >
+                    {label}
+                </Button>
+            ))}
         </>
     )
 }

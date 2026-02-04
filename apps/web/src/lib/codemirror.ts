@@ -1,8 +1,8 @@
 import type { LanguageSupport } from "@codemirror/language"
-import type { CodeLanguageKey } from "./catalog.ts"
+import type { CodeLanguage } from "@workspace/db/browser"
 
 export const CODEMIRROR_LOADERS: Record<
-    CodeLanguageKey,
+    CodeLanguage,
     () => Promise<LanguageSupport>
 > = {
     javascript: () =>
@@ -31,7 +31,7 @@ export const CODEMIRROR_LOADERS: Record<
 }
 
 export function getCodemirrorLoader(
-    key: CodeLanguageKey
+    key: CodeLanguage
 ): () => Promise<LanguageSupport> {
     return CODEMIRROR_LOADERS[key]
 }

@@ -1,71 +1,63 @@
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { useAtomValue } from "jotai"
 import { useState } from "react"
 import { Button } from "@workspace/ui/components/button.js"
-import { useCodeExecution } from "@/lib/judge0/hooks/useCodeExecution"
+import { useCodeExecution } from "@/lib/hooks/useCodeExecution"
 import { trpc } from "@/lib/trpc"
-import { myCodeAtom } from "../atoms"
 import { useAssignmentId } from "../hooks/assignment"
+
+type Result =
+    | { type: "success"; output: string }
+    | { type: "error"; message: string }
 
 export function Playground() {
     const assignmentId = useAssignmentId()
     const { data: assignment } = useSuspenseQuery(
         trpc.assignment.get.queryOptions({ id: assignmentId })
     )
-    const myCode = useAtomValue(myCodeAtom)
-    const {
-        executeCode,
-        isLoading,
-        isConnected,
-        error: executionError,
-    } = useCodeExecution()
 
+    const { run, isRunning } = useCodeExecution()
     const [stdin, setStdin] = useState("")
-    const [output, setOutput] = useState<string | null>(null)
-    const [error, setError] = useState<string | null>(null)
+    const [result, setResult] = useState<Result | null>(null)
 
-    const runCode = async () => {
-        if (!isConnected) {
-            setError(
-                "Not connected to the server. Please check your Internet connection."
-            )
+    const handleRun = async () => {
+        setResult(null)
+
+        const code = "FIX THIS"
+        if (!code || code.trim() === "") {
+            setResult({
+                type: "error",
+                message: "No code to run. Please write some code first.",
+            })
             return
         }
-        if (!myCode || myCode.trim() === "") {
-            setError("No code to run. Please write some code first.")
-            return
-        }
-
-        setOutput(null)
-        setError(null)
 
         try {
-            const result = await executeCode(
-                myCode,
-                assignment.codeLanguage,
-                stdin
-            )
+            const { status, compileOutput, stderr, stdout } = await run({
+                code,
+                language: assignment.codeLanguage,
+                stdin,
+            })
 
-            if (result.stdout) {
-                setOutput(result.stdout)
-            } else if (result.stderr) {
-                setError(result.stderr)
-            } else if (result.compile_output) {
-                setError(result.compile_output)
+            if (status === "compilation_error") {
+                setResult({ type: "error", message: compileOutput })
+            } else if (status === "runtime_error") {
+                setResult({ type: "error", message: stderr })
+            } else if (status === "success") {
+                setResult({ type: "success", output: stdout || "(no output)" })
             } else {
-                setOutput("(no output)")
+                setResult({
+                    type: "error",
+                    message: `Unexpected status: ${status}`,
+                })
             }
-        } catch (err) {
-            setError(
-                err instanceof Error ? err.message : "Failed to execute code"
-            )
+        } catch {
+            setResult({
+                type: "error",
+                message:
+                    "Failed to run code. Please check your Internet connection.",
+            })
         }
     }
-
-    const displayError =
-        error ||
-        (executionError ? "Unable to run code. Please try again." : null)
-    const hasOutput = output !== null || displayError !== null
 
     return (
         <div className="flex flex-col gap-3 p-4 bg-white border-t">
@@ -79,31 +71,34 @@ export function Playground() {
                     placeholder="Enter input for your program..."
                     className="w-full px-3 py-2 text-xs border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none font-mono"
                     rows={3}
+                    disabled={isRunning}
                 />
             </div>
 
             <Button
-                onClick={runCode}
-                disabled={isLoading || !isConnected}
+                onClick={handleRun}
+                disabled={isRunning}
                 size="sm"
                 className="w-full"
             >
-                {isLoading ? "Running..." : "Run Code"}
+                {isRunning ? "Running..." : "Run Code"}
             </Button>
 
-            {hasOutput && (
+            {result && (
                 <div className="space-y-2">
                     <label className="text-xs font-medium text-foreground block">
                         Output
                     </label>
                     <div
                         className={`w-full px-3 py-2 text-xs border rounded-md font-mono whitespace-pre-wrap ${
-                            displayError
+                            result.type === "error"
                                 ? "bg-red-50 border-red-200 text-red-700"
                                 : "bg-slate-50 border-border text-foreground"
                         }`}
                     >
-                        {displayError || output}
+                        {result.type === "error"
+                            ? result.message
+                            : result.output}
                     </div>
                 </div>
             )}

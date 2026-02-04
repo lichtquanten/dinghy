@@ -1,24 +1,21 @@
-import { useAtomValue } from "jotai"
-import { myCodeAtom, partnerCodeAtom } from "../../atoms"
-import { usePartner } from "../../hooks/assignment"
-import { Editor } from "./Editor"
+import { Button } from "@workspace/ui/components/button.js"
+import { useTestRunner } from "../../hooks/useTestRunner"
+import { useSharedCode } from "../../hooks/yjs"
+import { Editor } from "./Editor.tsx"
 
 export function Review() {
-    const myCode = useAtomValue(myCodeAtom)
-    const partnerCode = useAtomValue(partnerCodeAtom)
-    const partner = usePartner()
+    const sharedCode = useSharedCode()
+    const { runTests } = useTestRunner()
 
     return (
-        <div className="flex h-full gap-4 p-4">
-            <div className="flex-1">
-                <Editor value={myCode} language="python" label="Yours" />
+        <div className="flex flex-col h-full">
+            <div className="flex-1 overflow-hidden p-4">
+                <Editor ytext={sharedCode} readOnly label="Final Solution" />
             </div>
-            <div className="flex-1">
-                <Editor
-                    value={partnerCode}
-                    language="python"
-                    label={partner ? `${partner.firstName}'s` : "Partner's"}
-                />
+            <div className="h-14 border-t px-4 flex items-center gap-2">
+                <Button onClick={runTests} variant="outline" size="sm">
+                    Run Tests
+                </Button>
             </div>
         </div>
     )

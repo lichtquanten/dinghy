@@ -14,7 +14,15 @@ export const DOC_KEYS = {
     userCode: (userId: User["id"]) => `code:${userId}`,
 } as const
 
-export const getRoomId = (pairingId: Pairing["id"]) => `pairing:${pairingId}`
+const PAIRING_PREFIX = "pairing:"
+
+export const RoomId = {
+    fromPairingId: (pairingId: string) => `${PAIRING_PREFIX}${pairingId}`,
+    toPairingId: (roomId: string): string | null => {
+        if (!roomId.startsWith(PAIRING_PREFIX)) return null
+        return roomId.slice(PAIRING_PREFIX.length)
+    },
+} as const
 
 export const DEFAULTS: Progress = {
     mode: "solo",

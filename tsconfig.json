@@ -2,7 +2,6 @@
     "files": [],
     "references": [
         // { "path": "./tsconfig.tools.json" },
-        { "path": "./packages/code-languages" },
         { "path": "./packages/collab" },
         { "path": "./packages/db" },
         { "path": "./packages/seed" },

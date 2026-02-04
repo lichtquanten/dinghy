@@ -11,7 +11,6 @@ services:
           "wget --no-verbose --tries=1 --spider http://localhost:${API_CONTAINER_PORT:-3000}/api/health && wget --no-verbose --tries=1 --spider http://localhost:${WEB_CONTAINER_PORT:-5173}/ || exit 1",
         ]
     volumes:
-      - ./packages/code-languages/src:/app/packages/code-languages/src
       - ./packages/collab/src:/app/packages/collab/src
       - ./packages/db/src:/app/packages/db/src
       - ./packages/seed/src:/app/packages/seed/src

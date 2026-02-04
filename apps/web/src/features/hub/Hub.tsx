@@ -62,8 +62,10 @@ function HubContent() {
     )
 
     const handleAssignmentClick = useCallback(
-        (assignmentId: string) => {
-            const path = generatePath("/studio/:assignmentId", { assignmentId })
+        (pairingId: string) => {
+            const path = generatePath("/studio/:pairingId", {
+                pairingId,
+            })
             void navigate(path)
         },
         [navigate]
@@ -142,15 +144,23 @@ function HubContent() {
                     }
                 >
                     <div className="space-y-6">
-                        {todoAssignments.map((assignment) => (
-                            <Assignment
-                                key={assignment.id}
-                                assignment={assignment}
-                                onClick={() =>
-                                    handleAssignmentClick(assignment.id)
-                                }
-                            />
-                        ))}
+                        {todoAssignments.map((assignment) => {
+                            const pairing = assignment.pairing
+                            return (
+                                <Assignment
+                                    key={assignment.id}
+                                    assignment={assignment}
+                                    onClick={
+                                        pairing
+                                            ? () =>
+                                                  handleAssignmentClick(
+                                                      pairing.id
+                                                  )
+                                            : undefined
+                                    }
+                                />
+                            )
+                        })}
                     </div>
                 </AssignmentGroup>
 

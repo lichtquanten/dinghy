@@ -2,17 +2,19 @@ import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server"
 import { z } from "zod"
 import { assignmentRouter } from "./routers/assignment.router.js"
 import { courseRouter } from "./routers/course.router.js"
-import { liveblocksRouter } from "./routers/liveblocks.router.js"
+import { executionRouter } from "./routers/execution.router.js"
 import { pairingRouter } from "./routers/pairing.router.js"
 import { sessionRouter } from "./routers/session.router.js"
+import { userRouter } from "./routers/user.router.js"
 import { protectedProcedure, publicProcedure, router } from "./trpc.js"
 
 export const appRouter = router({
     assignment: assignmentRouter,
     course: courseRouter,
+    execution: executionRouter,
     pairing: pairingRouter,
     session: sessionRouter,
-    liveblocks: liveblocksRouter,
+    user: userRouter,
 
     health: publicProcedure.query(() => {
         return {

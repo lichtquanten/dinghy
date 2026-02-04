@@ -5,11 +5,6 @@
     "private": true,
     "scripts": {
         "build": "prisma generate && tsdown",
-        "lint": "eslint .",
-        "lint:fix": "eslint . --fix",
-        "format": "prettier --write .",
-        "format:check": "prettier --check .",
-        "typecheck": "tsc --build; tsc --build --clean",
         "clean": "rm -rf dist"
     },
     "devDependencies": {

@@ -29,7 +29,6 @@
         "@redis/client": "^5.10.0",
         "@trpc/server": "^11.8.1",
         "@types/jsonwebtoken": "^9.0.10",
-        "@workspace/code-languages": "workspace:*",
         "@workspace/collab": "workspace:*",
         "@workspace/db": "workspace:*",
         "envsub": "^4.1.0",
@@ -54,7 +53,9 @@
     },
     "exports": {
         ".": {
-            "types": "./dist/index.d.ts"
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "default": "./dist/index.js"
         }
     }
 }

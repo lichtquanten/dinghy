@@ -1,8 +1,8 @@
-import { createPairingDoc, getRoomId } from "@workspace/collab"
+import { createPairingDoc, RoomId } from "@workspace/collab"
 import type { Assignment, Pairing } from "@workspace/db/client"
 import { prisma } from "@/infrastructure/db.js"
 import { redisClient } from "@/infrastructure/redis.js"
-import { sendYjsUpdate } from "@/integrations/liveblocks/client.js"
+import { liveblocks, sendYjsUpdate } from "@/integrations/liveblocks/client.js"
 
 export async function createPairing(
     partnerIds: Pairing["partnerIds"],
@@ -27,8 +27,11 @@ export async function ensurePairingInitialized(
     const acquired = await redisClient.set(lockKey, "1", { EX: 300, NX: true })
 
     if (acquired) {
-        await initializePairing(pairingId, partnerIds, starterCode)
-        await redisClient.del(lockKey)
+        try {
+            await initializePairing(pairingId, partnerIds, starterCode)
+        } finally {
+            await redisClient.del(lockKey)
+        }
     } else {
         await pollUntilInitialized(pairingId)
     }
@@ -44,10 +47,20 @@ async function initializePairing(
         select: { yjsInitialized: true },
     })
 
-    if (pairing?.yjsInitialized) return
+    if (pairing?.yjsInitialized) {
+        return
+    }
 
     const doc = createPairingDoc(partnerIds, starterCode)
-    const roomId = getRoomId(pairingId)
+    const roomId = RoomId.fromPairingId(pairingId)
+
+    await liveblocks.createRoom(roomId, {
+        defaultAccesses: ["room:write"],
+        metadata: {
+            pairingId,
+        },
+    })
+
     await sendYjsUpdate(roomId, doc)
 
     await prisma.pairing.update({

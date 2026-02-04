@@ -1,6 +1,7 @@
 import { defineCourse } from "../types.js"
+import type { SeedCourse } from "../types.js"
 
-export const courses = [
+export const courses: SeedCourse[] = [
     defineCourse({
         title: "CSCI 101",
         joinCode: "ABC123",

@@ -34,7 +34,7 @@ export function App() {
             <Routes>
                 <Route path="/" element={<RootRedirect />} />
                 <Route
-                    path="/studio/:assignmentId"
+                    path="/studio/:pairingId"
                     element={
                         <Protect fallback={<Navigate to="/" replace />}>
                             <Studio />

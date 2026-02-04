@@ -3,11 +3,17 @@ import { useParams } from "react-router-dom"
 import { trpc } from "@/lib/trpc"
 
 export function useAssignmentId() {
-    const { assignmentId } = useParams()
-    if (!assignmentId) {
-        throw new Error("Missing assignmentId in route")
+    const { pairingId } = useParams()
+    if (!pairingId) {
+        throw new Error("Missing pairingId in route")
     }
-    return assignmentId
+    const { data: pairing } = useSuspenseQuery(
+        trpc.pairing.get.queryOptions({ id: pairingId })
+    )
+    if (pairingId) {
+        return pairing.assignmentId
+    }
+    throw new Error("Missing assignmentId in route")
 }
 
 export function useAssignment() {

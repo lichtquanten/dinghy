@@ -7,7 +7,7 @@ const authSchema = z.object({
     token: z.string(),
 })
 
-const liveblocks = new Liveblocks({
+export const liveblocks = new Liveblocks({
     secret: env.LIVEBLOCKS_SECRET_KEY,
 })
 

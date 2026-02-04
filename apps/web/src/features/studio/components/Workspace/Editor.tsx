@@ -1,42 +1,43 @@
-import type { CodeLanguageKey } from "@workspace/code-languages"
-import { cn } from "@workspace/ui/lib/utils.js"
-import { CodeEditor } from "@/lib/components/CodeEditor"
+import { useSuspenseQuery } from "@tanstack/react-query"
+import CodeMirror from "@uiw/react-codemirror"
+import type * as Y from "yjs"
+import { getCodemirrorLoader } from "@/lib/codemirror"
+import { useAssignment } from "../../hooks/assignment"
+import { useCollabExtension } from "../../hooks/yjs"
 
 interface EditorProps {
-    value: string
-    onChange?: (value: string) => void // undefined = read-only
-    language: CodeLanguageKey
-    className?: string
+    ytext: Y.Text
+    readOnly?: boolean
     label?: string
 }
 
-export function Editor({
-    value,
-    onChange,
-    language,
-    className,
-    label,
-}: EditorProps) {
-    const isReadOnly = onChange === undefined
+export function Editor({ ytext, readOnly = false, label }: EditorProps) {
+    const collabExtension = useCollabExtension(ytext)
 
-    const classes = cn(
-        "flex flex-col h-full border border-border rounded-lg overflow-hidden",
-        className
-    )
+    const { data: assignment } = useAssignment()
+    const codeLanguage = assignment.codeLanguage
+
+    const { data: languageExtension } = useSuspenseQuery({
+        queryKey: ["codemirror-language", codeLanguage],
+        queryFn: () => getCodemirrorLoader(codeLanguage)(),
+    })
+    const extensions = [collabExtension, languageExtension]
+
+    const initialValue = ytext.toString()
 
     return (
-        <div className={classes}>
+        <div className="flex flex-col h-full border border-border rounded-lg overflow-hidden">
             {label && (
                 <div className="h-10 px-4 flex items-center border-b bg-muted/30">
                     <span className="text-sm font-medium">{label}</span>
                 </div>
             )}
             <div className="flex-1 overflow-hidden">
-                <CodeEditor
-                    value={value}
-                    onChange={onChange}
-                    language={language}
-                    readOnly={isReadOnly}
+                <CodeMirror
+                    value={initialValue}
+                    extensions={extensions}
+                    readOnly={readOnly}
+                    height="100%"
                 />
             </div>
         </div>

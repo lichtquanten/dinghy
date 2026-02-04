@@ -7,8 +7,8 @@ import { logger } from "hono/logger"
 import { env } from "./config/env.js"
 import { disconnect as disconnectDb } from "./infrastructure/db.js"
 import { disconnect as disconnectRedis } from "./infrastructure/redis.js"
-import { routes as judge0Routes } from "./integrations/judge0/routes.js"
 import { rateLimit } from "./middleware/rate-limit.js"
+import { routes } from "./routes/index.js"
 import { createContext } from "./trpc/context.js"
 import { appRouter } from "./trpc/router.js"
 
@@ -27,11 +27,7 @@ app.use(
     })
 )
 
-app.route("/api/judge0", judge0Routes)
-
-app.get("/api/health", (c) => {
-    return c.json({ status: "ok" })
-})
+app.route("/api", routes)
 
 app.use("/*", serveStatic({ root: "./public" }))
 

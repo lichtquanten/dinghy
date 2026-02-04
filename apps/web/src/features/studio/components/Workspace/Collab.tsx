@@ -1,5 +1,3 @@
-import { useSuspenseQuery } from "@tanstack/react-query"
-import { useAtom, useAtomValue } from "jotai"
 import { useState } from "react"
 import { Button } from "@workspace/ui/components/button.js"
 import {
@@ -8,29 +6,25 @@ import {
     TabsList,
     TabsTrigger,
 } from "@workspace/ui/components/tabs.js"
-import { trpc } from "@/lib/trpc"
-import { myCodeAtom, partnerCodeAtom, sharedCodeAtom } from "../../atoms"
-import { useAssignmentId, usePartner } from "../../hooks/assignment"
+import { usePartner } from "../../hooks/assignment"
 import { useTestRunner } from "../../hooks/useTestRunner"
-import { Editor } from "./Editor"
+import { useMyCode, usePartnerCode, useSharedCode } from "../../hooks/yjs"
+import { Editor } from "./Editor.tsx"
 
 export function Collab() {
-    const assignmentId = useAssignmentId()
-    const { data: assignment } = useSuspenseQuery(
-        trpc.assignment.get.queryOptions({ id: assignmentId })
-    )
-    const myCode = useAtomValue(myCodeAtom)
-    const partnerCode = useAtomValue(partnerCodeAtom)
-    const [sharedCode, setSharedCode] = useAtom(sharedCodeAtom)
+    const myCode = useMyCode()
+    const partnerCode = usePartnerCode()
+    const sharedCode = useSharedCode()
     const partner = usePartner()
     const { runTests } = useTestRunner()
+
     const [referenceTab, setReferenceTab] = useState<"yours" | "partner">(
         "yours"
     )
 
     return (
         <div className="flex h-full gap-4 p-4">
-            {/* Reference Panel - 1/3 */}
+            {/* Reference Panel */}
             <div className="w-1/3">
                 <Tabs
                     value={referenceTab}
@@ -43,39 +37,28 @@ export function Collab() {
                             Yours
                         </TabsTrigger>
                         <TabsTrigger value="partner" className="flex-1">
-                            {partner ? `${partner.firstName}'s` : "Partner's"}
+                            {partner?.firstName ?? "Partner"}&apos;s
                         </TabsTrigger>
                     </TabsList>
                     <TabsContent
                         value="yours"
                         className="h-[calc(100%-40px)] mt-2"
                     >
-                        <Editor
-                            value={myCode}
-                            language={assignment.codeLanguage}
-                        />
+                        <Editor ytext={myCode} readOnly />
                     </TabsContent>
                     <TabsContent
                         value="partner"
                         className="h-[calc(100%-40px)] mt-2"
                     >
-                        <Editor
-                            value={partnerCode}
-                            language={assignment.codeLanguage}
-                        />
+                        {partnerCode && <Editor ytext={partnerCode} readOnly />}
                     </TabsContent>
                 </Tabs>
             </div>
 
-            {/* Shared Editor - 2/3 */}
+            {/* Shared Editor */}
             <div className="flex-1 flex flex-col">
                 <div className="flex-1 overflow-hidden">
-                    <Editor
-                        value={sharedCode}
-                        onChange={setSharedCode}
-                        language={assignment.codeLanguage}
-                        label="Shared Solution"
-                    />
+                    <Editor ytext={sharedCode} label="Shared Solution" />
                 </div>
                 <div className="h-14 border-t px-4 flex items-center mt-4">
                     <Button onClick={runTests} variant="outline" size="sm">

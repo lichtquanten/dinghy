@@ -1,16 +1,30 @@
 import { Button } from "@workspace/ui/components/button.js"
+import { usePartner } from "../../hooks/assignment.ts"
 import { useTestRunner } from "../../hooks/useTestRunner"
-import { useSharedCode } from "../../hooks/yjs"
+import { useMyCode, usePartnerCode } from "../../hooks/yjs"
 import { Editor } from "./Editor.tsx"
 
 export function Review() {
-    const sharedCode = useSharedCode()
+    const myCode = useMyCode()
+    const partnerCode = usePartnerCode()
+    const partner = usePartner()
     const { runTests } = useTestRunner()
 
     return (
         <div className="flex flex-col h-full">
-            <div className="flex-1 overflow-hidden p-4">
-                <Editor ytext={sharedCode} readOnly label="Final Solution" />
+            <div className="flex flex-row w-full">
+                <div className="flex-1 overflow-hidden p-4">
+                    <Editor ytext={myCode} readOnly label="My Code" />
+                </div>
+                {partnerCode && (
+                    <div className="flex-1 overflow-hidden p-4">
+                        <Editor
+                            ytext={partnerCode}
+                            readOnly
+                            label={`${partner?.firstName ?? "Partner"}'s code`}
+                        />
+                    </div>
+                )}
             </div>
             <div className="h-14 border-t px-4 flex items-center gap-2">
                 <Button onClick={runTests} variant="outline" size="sm">

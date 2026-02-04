@@ -37,6 +37,7 @@ export function Editor({ ytext, readOnly = false, label }: EditorProps) {
                     value={initialValue}
                     extensions={extensions}
                     readOnly={readOnly}
+                    editable={!readOnly}
                     height="100%"
                 />
             </div>

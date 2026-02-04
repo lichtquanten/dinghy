@@ -48,7 +48,10 @@ function StudioProviders({ pairingId }: { pairingId: string }) {
 
     return (
         <Provider store={store}>
-            <LiveblocksProvider authEndpoint="/api/liveblocks/token">
+            <LiveblocksProvider
+                authEndpoint="/api/liveblocks/token"
+                badgeLocation="bottom-left"
+            >
                 <RoomProvider id={roomId}>
                     <YjsProvider>
                         <StudioLayout />

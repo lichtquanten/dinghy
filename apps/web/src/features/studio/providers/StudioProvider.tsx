@@ -1,6 +1,7 @@
 import { LiveblocksProvider, RoomProvider } from "@liveblocks/react/suspense"
-import { type ReactNode } from "react"
+import { type ReactNode, Suspense } from "react"
 import { PairingRoomId } from "@workspace/pairing"
+import { FullPageLoader } from "@/lib/components/FullPageLoader.js"
 import { usePartnerIds } from "../hooks/pairing"
 import { usePhaseProgression } from "../hooks/usePhaseProgression.js"
 import { PairingDocProvider } from "./PairingDocProvider"
@@ -22,11 +23,13 @@ export function StudioProvider({
             badgeLocation="bottom-left"
         >
             <RoomProvider id={roomId}>
-                <YjsProvider>
-                    <PairingDocProvider partnerIds={partnerIds}>
-                        <StudioInner>{children}</StudioInner>
-                    </PairingDocProvider>
-                </YjsProvider>
+                <Suspense fallback={<FullPageLoader />}>
+                    <YjsProvider>
+                        <PairingDocProvider partnerIds={partnerIds}>
+                            <StudioInner>{children}</StudioInner>
+                        </PairingDocProvider>
+                    </YjsProvider>
+                </Suspense>
             </RoomProvider>
         </LiveblocksProvider>
     )

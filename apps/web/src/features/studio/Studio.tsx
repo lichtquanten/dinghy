@@ -3,7 +3,7 @@ import { ErrorBoundary } from "react-error-boundary"
 import { Navigate, useParams } from "react-router-dom"
 import { Button } from "@workspace/ui/components/button.js"
 import { ErrorFallback } from "@/lib/components/ErrorFallback"
-import { LoadingSpinner } from "@/lib/components/LoadingSpinner"
+import { FullPageLoader } from "@/lib/components/FullPageLoader"
 import { Mode } from "./components/Mode"
 import { Task } from "./components/Task/Task"
 import { Workspace } from "./components/Workspace/Workspace"
@@ -37,14 +37,6 @@ function StudioLayout() {
                 <Workspace />
             </div>
             <DevModeSwitcher />
-        </div>
-    )
-}
-
-function FullPageLoader() {
-    return (
-        <div className="flex-1 flex items-center justify-center h-screen">
-            <LoadingSpinner />
         </div>
     )
 }

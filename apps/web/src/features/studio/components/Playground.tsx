@@ -1,19 +1,14 @@
-import { useSuspenseQuery } from "@tanstack/react-query"
 import { useState } from "react"
 import { Button } from "@workspace/ui/components/button.js"
 import { useCodeExecution } from "@/lib/hooks/useCodeExecution"
-import { trpc } from "@/lib/trpc"
-import { useAssignmentId } from "../hooks/assignment"
+import { useAssignment } from "../hooks/assignment"
 
 type Result =
     | { type: "success"; output: string }
     | { type: "error"; message: string }
 
 export function Playground() {
-    const assignmentId = useAssignmentId()
-    const { data: assignment } = useSuspenseQuery(
-        trpc.assignment.get.queryOptions({ id: assignmentId })
-    )
+    const assignment = useAssignment()
 
     const { run, isRunning } = useCodeExecution()
     const [stdin, setStdin] = useState("")

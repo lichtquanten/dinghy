@@ -13,8 +13,8 @@
     "exclude": ["node_modules", "../../packages/db/dist", "../../packages/ui"],
 
     "references": [
-        { "path": "../../packages/collab" },
         { "path": "../../packages/db" },
+        { "path": "../../packages/pairing" },
         { "path": "../../packages/ui" }
     ]
 }

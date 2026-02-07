@@ -5,7 +5,7 @@
     "scripts": {
         "predev": "pnpm run build",
         "dev": "pnpm run -r --parallel dev",
-        "build": "pnpm run --filter db --filter collab --filter seed build&& pnpm run --filter api build && pnpm run --filter web build",
+        "build": "pnpm run --filter db --filter pairing --filter seed --filter yjs-store build && pnpm run --filter api build && pnpm run --filter web build",
         "lint": "pnpm run -r lint",
         "lint:fix": "pnpm run -r lint:fix",
         "format": "pnpm run -r format",

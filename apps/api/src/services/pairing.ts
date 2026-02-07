@@ -1,5 +1,6 @@
-import { createPairingDoc, RoomId } from "@workspace/collab"
+import * as Y from "yjs"
 import type { Assignment, Pairing } from "@workspace/db/client"
+import { getPairingDoc, PairingRoomId } from "@workspace/pairing"
 import { prisma } from "@/infrastructure/db.js"
 import { redisClient } from "@/infrastructure/redis.js"
 import { liveblocks, sendYjsUpdate } from "@/integrations/liveblocks/client.js"
@@ -14,7 +15,6 @@ export async function createPairing(
             assignmentId,
         },
     })
-
     return pairing
 }
 
@@ -44,15 +44,23 @@ async function initializePairing(
 ): Promise<void> {
     const pairing = await prisma.pairing.findUnique({
         where: { id: pairingId },
-        select: { yjsInitialized: true },
+        select: { isYjsInitialized: true },
     })
 
-    if (pairing?.yjsInitialized) {
+    if (pairing?.isYjsInitialized) {
         return
     }
 
-    const doc = createPairingDoc(partnerIds, starterCode)
-    const roomId = RoomId.fromPairingId(pairingId)
+    const ydoc = new Y.Doc()
+    const pairingDoc = getPairingDoc(ydoc, partnerIds)
+
+    pairingDoc.store.initialize()
+    pairingDoc.sharedCode.ytext().insert(0, starterCode)
+    for (const id of partnerIds) {
+        pairingDoc.userCode[id].ytext().insert(0, starterCode)
+    }
+
+    const roomId = PairingRoomId.from(pairingId)
 
     await liveblocks.createRoom(roomId, {
         defaultAccesses: ["room:write"],
@@ -61,11 +69,11 @@ async function initializePairing(
         },
     })
 
-    await sendYjsUpdate(roomId, doc)
+    await sendYjsUpdate(roomId, ydoc)
 
     await prisma.pairing.update({
         where: { id: pairingId },
-        data: { yjsInitialized: true },
+        data: { isYjsInitialized: true },
     })
 }
 
@@ -79,10 +87,10 @@ async function pollUntilInitialized(
 
         const pairing = await prisma.pairing.findUnique({
             where: { id: pairingId },
-            select: { yjsInitialized: true },
+            select: { isYjsInitialized: true },
         })
 
-        if (pairing?.yjsInitialized) return
+        if (pairing?.isYjsInitialized) return
     }
 
     throw new Error(`Pairing ${pairingId} initialization timed out`)

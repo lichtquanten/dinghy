@@ -1,17 +1,14 @@
-import { useAtomValue, useSetAtom } from "jotai"
+import type { InteractionMode } from "@workspace/db/browser"
+import { useStoreSelector } from "@workspace/pairing"
 import { Button } from "@workspace/ui/components/button.js"
-import {
-    canClickReadyAtom,
-    clickReadyAtom,
-    clickSubmitAtom,
-    currentModeAtom,
-    readyStateAtom,
-    timeoutRemainingAtom,
-    timeUntilReadyAtom,
-} from "../atoms"
-import type { TaskMode } from "../types"
+import { useSelf } from "@/lib/hooks/useSelf.js"
+import { useCurrentTask } from "../hooks/progress.js"
+import { usePairingDoc } from "../hooks/usePairingDoc.js"
 
-const MODE_CONFIG: Record<TaskMode, { label: string; instruction: string }> = {
+const MODE_CONFIG: Record<
+    InteractionMode,
+    { label: string; instruction: string }
+> = {
     solo: {
         label: "SOLO",
         instruction: "Work independently on your solution",
@@ -26,56 +23,49 @@ const MODE_CONFIG: Record<TaskMode, { label: string; instruction: string }> = {
     },
 }
 
-function formatTime(seconds: number): string {
-    const mins = Math.floor(seconds / 60)
-    const secs = seconds % 60
-    return `${mins}:${secs.toString().padStart(2, "0")}`
-}
-
 export function Mode() {
-    const currentMode = useAtomValue(currentModeAtom)
-    const readyState = useAtomValue(readyStateAtom)
-    const canClickReady = useAtomValue(canClickReadyAtom)
-    const timeUntilReady = useAtomValue(timeUntilReadyAtom)
-    const timeoutRemaining = useAtomValue(timeoutRemainingAtom)
-    const clickReady = useSetAtom(clickReadyAtom)
-    const clickSubmit = useSetAtom(clickSubmitAtom)
+    const pairing = usePairingDoc()
+    const self = useSelf()
+    const task = useCurrentTask()
 
-    const config = MODE_CONFIG[currentMode]
-    const isCollaborative = currentMode === "collaborative"
+    const phaseIndex = useStoreSelector(pairing.store, (s) => s.phaseIndex)
+    const ready = useStoreSelector(pairing.store, (s) => s.ready)
+
+    const currentPhase = task.phases[phaseIndex]
+    const interactionMode = currentPhase?.interactionMode ?? "solo"
+    const config = MODE_CONFIG[interactionMode]
+    const isCollaborative = interactionMode === "collaborative"
+
+    const myReady = ready[self.id] ?? false
+    const partnerReady = Object.entries(ready).some(
+        ([id, isReady]) => id !== self.id && isReady
+    )
+
+    const handleClick = () => {
+        if (isCollaborative) {
+            // TODO: handle submit
+        } else {
+            pairing.store.setReady(self.id, !myReady)
+        }
+    }
 
     const getButtonLabel = () => {
         if (isCollaborative) {
             return "Submit"
         }
-
-        if (readyState.myReady) {
-            if (readyState.partnerReady) {
+        if (myReady) {
+            if (partnerReady) {
                 return "Both Ready"
             }
-            return `Waiting ${timeoutRemaining !== null ? formatTime(timeoutRemaining) : ""}`
+            return "Waiting..."
         }
-
-        if (timeUntilReady !== null) {
-            return `Ready ${formatTime(timeUntilReady)}`
-        }
-
         return "Ready"
     }
 
     const getStatusMessage = () => {
-        if (
-            readyState.myReady &&
-            !readyState.partnerReady &&
-            timeoutRemaining !== null
-        ) {
-            return `Partner hasn't clicked ready. Auto-advancing in ${formatTime(timeoutRemaining)}`
-        }
-
-        if (!readyState.myReady && readyState.partnerReady) {
+        if (!myReady && partnerReady) {
             return "Partner is ready!"
         }
-
         return null
     }
 
@@ -96,11 +86,10 @@ export function Mode() {
                     </div>
                 )}
             </div>
-
             <Button
-                onClick={isCollaborative ? clickSubmit : clickReady}
-                disabled={!isCollaborative && !canClickReady}
-                variant={readyState.myReady ? "secondary" : "default"}
+                onClick={handleClick}
+                disabled={false}
+                variant={myReady ? "secondary" : "default"}
                 size="sm"
             >
                 {getButtonLabel()}

@@ -1,10 +1,8 @@
 import { useContext, useEffect, useMemo } from "react"
 import { yCollab } from "y-codemirror.next"
 import * as Y from "yjs"
-import { getSharedCode, getUserCode } from "@workspace/collab"
 import { useSelf } from "@/lib/hooks/useSelf"
 import { YjsContext } from "../contexts/YjsContext"
-import { usePartner } from "./assignment"
 
 export function useYDoc() {
     const ctx = useContext(YjsContext)
@@ -20,7 +18,7 @@ export function useAwareness() {
 
 export function useCollabExtension(ytext: Y.Text) {
     const awareness = useAwareness()
-    const { data: self } = useSelf()
+    const self = useSelf()
 
     useEffect(() => {
         awareness.setLocalStateField("user", {
@@ -36,21 +34,4 @@ export function useCollabExtension(ytext: Y.Text) {
         () => yCollab(ytext, awareness, { undoManager }),
         [ytext, awareness, undoManager]
     )
-}
-
-export function useMyCode() {
-    const ydoc = useYDoc()
-    const { data: self } = useSelf()
-    return getUserCode(ydoc, self.id)
-}
-
-export function usePartnerCode() {
-    const ydoc = useYDoc()
-    const partner = usePartner()
-    return partner ? getUserCode(ydoc, partner.id) : null
-}
-
-export function useSharedCode() {
-    const ydoc = useYDoc()
-    return getSharedCode(ydoc)
 }

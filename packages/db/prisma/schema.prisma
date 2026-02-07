@@ -26,6 +26,18 @@ enum CodeLanguage {
   sql
 }
 
+enum InteractionMode {
+  solo
+  review
+  collaborative
+}
+
+enum PairingStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
 model User {
   id          String             @id @default(auto()) @map("_id") @db.ObjectId
   clerkId     String             @unique
@@ -79,10 +91,22 @@ model Task {
   order        Int
   title        String
   instructions String
-  durationSecs Int
+  phases       Phase[]
   testCases    TestCase[]
 
   @@unique([assignmentId, order])
+}
+
+model Phase {
+  id              String          @id @default(auto()) @map("_id") @db.ObjectId
+  taskId          String          @db.ObjectId
+  task            Task            @relation(fields: [taskId], references: [id])
+  order           Int
+  interactionMode InteractionMode
+  minTimeSecs     Int?
+  maxTimeSecs     Int?
+
+  @@unique([taskId, order])
 }
 
 model TestCase {
@@ -95,16 +119,14 @@ model TestCase {
 }
 
 model Pairing {
-  id               String     @id @default(auto()) @map("_id") @db.ObjectId
-  assignmentId     String     @db.ObjectId
-  assignment       Assignment @relation(fields: [assignmentId], references: [id])
-  partnerIds       String[]   @db.ObjectId
-  partners         User[]     @relation(fields: [partnerIds], references: [id])
-  isStarted        Boolean    @default(false)
-  isCompleted      Boolean    @default(false)
-  currentTaskIndex Int        @default(0)
+  id               String          @id @default(auto()) @map("_id") @db.ObjectId
+  assignmentId     String          @db.ObjectId
+  assignment       Assignment      @relation(fields: [assignmentId], references: [id])
+  partnerIds       String[]        @db.ObjectId
+  partners         User[]          @relation(fields: [partnerIds], references: [id])
+  status           PairingStatus   @default(NOT_STARTED)
+  isYjsInitialized Boolean         @default(false)
   session          Session?
-  yjsInitialized   Boolean    @default(false)
 }
 
 model Session {

@@ -72,9 +72,12 @@ async function seedAssignments(
                 courseId: course.id,
                 ...rest,
                 tasks: {
-                    create: tasks.map(({ testCases, ...taskRest }) => ({
+                    create: tasks.map(({ testCases, phases, ...taskRest }) => ({
                         ...taskRest,
                         testCases: { create: testCases },
+                        ...(phases && phases.length > 0
+                            ? { phases: { create: phases } }
+                            : {}),
                     })),
                 },
             },
@@ -143,17 +146,28 @@ async function seedPairings(
             continue
         }
 
-        await prisma.pairing.create({
+        const partnerIds = partners.map((p) => p.id)
+
+        const pairing = await prisma.pairing.create({
             data: {
                 assignmentId: assignment.id,
-                partnerIds: partners.map((m) => m.id),
-                isStarted: pairingData.isStarted ?? false,
-                isCompleted: pairingData.isCompleted ?? false,
-                currentTaskIndex: pairingData.currentTaskIndex ?? 0,
+                partnerIds,
+                status: pairingData.status ?? "NOT_STARTED",
+                isYjsInitialized: pairingData.isYjsInitialized ?? false,
             },
         })
+
+        for (const partner of partners) {
+            await prisma.user.update({
+                where: { id: partner.id },
+                data: {
+                    pairingIds: { push: pairing.id },
+                },
+            })
+        }
+
         console.log(
-            `Seeded pairing: ${pairingData.assignmentTitle} (${partners.map((m) => m.email).join(", ")})`
+            `Seeded pairing: ${pairingData.assignmentTitle} (${partners.map((p) => p.email).join(", ")})`
         )
     }
 }

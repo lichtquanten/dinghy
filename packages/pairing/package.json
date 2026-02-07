@@ -1,5 +1,5 @@
 {
-    "name": "@workspace/collab",
+    "name": "@workspace/pairing",
     "version": "0.0.0",
     "type": "module",
     "private": true,
@@ -14,7 +14,8 @@
     },
     "dependencies": {
         "yjs": "^13.6.29",
-        "@workspace/db": "workspace:*"
+        "@workspace/db": "workspace:*",
+        "@workspace/yjs-store": "workspace:*"
     },
     "devDependencies": {
         "@workspace/eslint-config": "workspace:*",

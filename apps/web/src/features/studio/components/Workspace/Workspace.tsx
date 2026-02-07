@@ -1,11 +1,10 @@
-import { useAtomValue } from "jotai"
-import { currentModeAtom } from "../../atoms"
+import { useCurrentInteractionMode } from "../../hooks/progress"
 import { Collab } from "./Collab"
 import { Review } from "./Review"
 import { Solo } from "./Solo"
 
 export function Workspace() {
-    const currentMode = useAtomValue(currentModeAtom)
+    const currentMode = useCurrentInteractionMode()
 
     switch (currentMode) {
         case "solo":

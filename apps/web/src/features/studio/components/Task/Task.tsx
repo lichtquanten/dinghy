@@ -9,7 +9,8 @@ import {
 } from "@workspace/ui/components/accordion.js"
 import { Button } from "@workspace/ui/components/button.js"
 import { trpc } from "@/lib/trpc"
-import { useAssignmentId, useCurrentTask } from "../../hooks/assignment"
+import { useAssignmentId } from "../../hooks/assignment"
+import { useCurrentTask, useCurrentTaskIndex } from "../../hooks/progress"
 import { Instructions } from "./Instructions"
 import { Overview } from "./Overview"
 import { Progress } from "./Progress"
@@ -23,6 +24,7 @@ export function Task() {
     )
 
     const currentTask = useCurrentTask()
+    const currentTaskIndex = useCurrentTaskIndex()
 
     if (!currentTask) return null
 
@@ -45,8 +47,7 @@ export function Task() {
             <div className="h-14 border-b px-4 flex items-center justify-between">
                 <div>
                     <div className="text-xs text-muted-foreground">
-                        Task {assignment.pairing!.currentTaskIndex + 1} of{" "}
-                        {assignment.tasks.length}
+                        Task {currentTaskIndex + 1} of {assignment.tasks.length}
                     </div>
                     <div className="font-semibold text-sm">
                         {currentTask.title}
@@ -103,9 +104,7 @@ export function Task() {
                         <AccordionContent>
                             <Progress
                                 tasks={assignment.tasks}
-                                currentTaskIndex={
-                                    assignment.pairing!.currentTaskIndex
-                                }
+                                currentTaskIndex={currentTaskIndex}
                             />
                         </AccordionContent>
                     </AccordionItem>

@@ -1,5 +1,10 @@
 {
-    "watch": ["dist", "../../packages/collab/dist", "../../packages/db/dist"],
+    "watch": [
+        "dist",
+        "../../packages/db/dist",
+        "../../packages/pairing/dist",
+        "../../packages/yjs-store/dist"
+    ],
     "ext": "js,json,ts",
     "exec": "node dist/server.js",
     "delay": "1000",

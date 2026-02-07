@@ -14,7 +14,7 @@ interface EditorProps {
 export function Editor({ ytext, readOnly = false, label }: EditorProps) {
     const collabExtension = useCollabExtension(ytext)
 
-    const { data: assignment } = useAssignment()
+    const assignment = useAssignment()
     const codeLanguage = assignment.codeLanguage
 
     const { data: languageExtension } = useSuspenseQuery({

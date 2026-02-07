@@ -6,8 +6,11 @@ export type SeedCourse = Prisma.CourseCreateInput
 
 export type SeedTestCase = Omit<Prisma.TestCaseCreateInput, "task">
 
+export type SeedPhase = Omit<Prisma.PhaseCreateInput, "task">
+
 export type SeedTask = Omit<Prisma.TaskCreateInput, "assignment"> & {
     testCases: SeedTestCase[]
+    phases?: SeedPhase[]
 }
 
 export type SeedAssignment = Omit<

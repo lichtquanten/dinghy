@@ -11,7 +11,7 @@
     "exclude": ["node_modules", "../../packages/db/dist"],
 
     "references": [
-        { "path": "../../packages/collab" },
-        { "path": "../../packages/db" }
+        { "path": "../../packages/db" },
+        { "path": "../../packages/pairing" }
     ]
 }

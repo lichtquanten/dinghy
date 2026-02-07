@@ -18,27 +18,13 @@ export function useAssignmentId() {
 
 export function useAssignment() {
     const assignmentId = useAssignmentId()
-    return useSuspenseQuery(
+    const { data: assignment } = useSuspenseQuery(
         trpc.assignment.get.queryOptions({ id: assignmentId })
     )
-}
-
-export function usePartner() {
-    const { data } = useAssignment()
-    return data.pairing?.partner ?? null
+    return assignment
 }
 
 export function useTasks() {
-    const { data } = useAssignment()
-    return data.tasks
-}
-
-export function useCurrentTask() {
-    const { data } = useAssignment()
-
-    if (data.pairing?.currentTaskIndex == null) {
-        return null
-    }
-
-    return data.tasks[data.pairing.currentTaskIndex] ?? null
+    const assignment = useAssignment()
+    return assignment.tasks
 }

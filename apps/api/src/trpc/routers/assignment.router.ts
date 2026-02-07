@@ -20,26 +20,21 @@ function formatPairing(pairings: PairingWithPartners[], userId: string) {
             message: "User has multiple pairings for assignment",
         })
     }
-
     const pairing = pairings[0]
     if (!pairing) return null
 
     const partners = pairing.partners.filter((m) => m.id !== userId)
-
     if (partners.length !== 1 || !partners[0]) {
         throw new TRPCError({
             code: "INTERNAL_SERVER_ERROR",
             message: "Pairing must have exactly one partner",
         })
     }
-
     const partner = partners[0]
 
     return {
         id: pairing.id,
-        isStarted: pairing.isStarted,
-        isCompleted: pairing.isCompleted,
-        currentTaskIndex: pairing.currentTaskIndex,
+        status: pairing.status,
         partner: {
             id: partner.id,
             firstName: partner.firstName,
@@ -58,7 +53,12 @@ export const assignmentRouter = router({
                 include: {
                     tasks: {
                         orderBy: { order: "asc" },
-                        include: { testCases: true },
+                        include: {
+                            testCases: true,
+                            phases: {
+                                orderBy: { order: "asc" },
+                            },
+                        },
                     },
                     pairings: {
                         where: { partnerIds: { has: ctx.userId } },
@@ -72,7 +72,6 @@ export const assignmentRouter = router({
             }
 
             const { pairings, ...rest } = assignment
-
             return {
                 ...rest,
                 pairing: formatPairing(pairings, ctx.userId),
@@ -91,7 +90,12 @@ export const assignmentRouter = router({
                     include: {
                         tasks: {
                             orderBy: { order: "asc" },
-                            include: { testCases: true },
+                            include: {
+                                testCases: true,
+                                phases: {
+                                    orderBy: { order: "asc" },
+                                },
+                            },
                         },
                         pairings: {
                             where: { partnerIds: { has: ctx.userId } },

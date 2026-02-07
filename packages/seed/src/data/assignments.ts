@@ -1,4 +1,4 @@
-import { CodeLanguage } from "@workspace/db/client"
+import { CodeLanguage, InteractionMode } from "@workspace/db/client"
 import { defineAssignment } from "../types.js"
 
 export const assignments = [
@@ -17,7 +17,18 @@ export const assignments = [
                 title: "Implement String Reversal",
                 instructions:
                     "Write a function that takes a string as input and returns the reversed string.",
-                durationSecs: 600,
+                phases: [
+                    {
+                        order: 0,
+                        interactionMode: InteractionMode.solo,
+                        maxTimeSecs: 300,
+                    },
+                    {
+                        order: 1,
+                        interactionMode: InteractionMode.collaborative,
+                        maxTimeSecs: 300,
+                    },
+                ],
                 testCases: [
                     {
                         input: "hello",
@@ -36,7 +47,13 @@ export const assignments = [
                 title: "Code Review",
                 instructions:
                     "Review your partner's code. Check for edge cases and readability.",
-                durationSecs: 300,
+                phases: [
+                    {
+                        order: 0,
+                        interactionMode: InteractionMode.review,
+                        maxTimeSecs: 300,
+                    },
+                ],
                 testCases: [],
             },
         ],
@@ -54,7 +71,18 @@ export const assignments = [
                 title: "Implement FizzBuzz Logic",
                 instructions:
                     "For numbers 1 to n: return 'Fizz' for multiples of 3, 'Buzz' for multiples of 5, 'FizzBuzz' for both, otherwise the number.",
-                durationSecs: 900,
+                phases: [
+                    {
+                        order: 0,
+                        interactionMode: InteractionMode.solo,
+                        maxTimeSecs: 600,
+                    },
+                    {
+                        order: 1,
+                        interactionMode: InteractionMode.review,
+                        maxTimeSecs: 300,
+                    },
+                ],
                 testCases: [
                     {
                         input: "15",
@@ -80,7 +108,18 @@ export const assignments = [
                 title: "Implement Binary Search",
                 instructions:
                     "Implement binary search to find a target value in a sorted array.",
-                durationSecs: 1200,
+                phases: [
+                    {
+                        order: 0,
+                        interactionMode: InteractionMode.solo,
+                        maxTimeSecs: 600,
+                    },
+                    {
+                        order: 1,
+                        interactionMode: InteractionMode.collaborative,
+                        maxTimeSecs: 600,
+                    },
+                ],
                 testCases: [
                     {
                         input: "[1,2,3,4,5], 3",
@@ -98,7 +137,13 @@ export const assignments = [
                 order: 1,
                 title: "Review and Test",
                 instructions: "Review the implementation and test edge cases.",
-                durationSecs: 600,
+                phases: [
+                    {
+                        order: 0,
+                        interactionMode: InteractionMode.review,
+                        maxTimeSecs: 600,
+                    },
+                ],
                 testCases: [],
             },
         ],
@@ -117,7 +162,13 @@ export const assignments = [
                 title: "Understand Linked Lists",
                 instructions:
                     "Review linked list structure and think about the reversal approach.",
-                durationSecs: 400,
+                phases: [
+                    {
+                        order: 0,
+                        interactionMode: InteractionMode.solo,
+                        maxTimeSecs: 400,
+                    },
+                ],
                 testCases: [],
             },
             {
@@ -125,7 +176,18 @@ export const assignments = [
                 title: "Implement Reversal",
                 instructions:
                     "Implement the iterative approach to reverse a linked list.",
-                durationSecs: 1000,
+                phases: [
+                    {
+                        order: 0,
+                        interactionMode: InteractionMode.solo,
+                        maxTimeSecs: 500,
+                    },
+                    {
+                        order: 1,
+                        interactionMode: InteractionMode.collaborative,
+                        maxTimeSecs: 500,
+                    },
+                ],
                 testCases: [
                     {
                         input: "1->2->3->4->5",
@@ -149,7 +211,13 @@ export const assignments = [
                 title: "Review and Discuss",
                 instructions:
                     "Review the solution. Discuss space and time complexity.",
-                durationSecs: 400,
+                phases: [
+                    {
+                        order: 0,
+                        interactionMode: InteractionMode.review,
+                        maxTimeSecs: 400,
+                    },
+                ],
                 testCases: [],
             },
         ],

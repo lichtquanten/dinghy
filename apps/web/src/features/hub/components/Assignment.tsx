@@ -1,5 +1,6 @@
 import { ArrowRight, PlayCircle, User, Users } from "lucide-react"
 import type { RouterOutputs } from "@workspace/api"
+import { PairingStatus } from "@workspace/db/browser"
 import { Badge } from "@workspace/ui/components/badge.js"
 import { Button } from "@workspace/ui/components/button.js"
 import { Card, CardHeader, CardTitle } from "@workspace/ui/components/card.js"
@@ -78,30 +79,6 @@ function DueDateDisplay({ dueDate }: { dueDate: Date }) {
     )
 }
 
-function ProgressBar({
-    currentIndex,
-    total,
-}: {
-    currentIndex: number
-    total: number
-}) {
-    const progress = ((currentIndex + 1) / total) * 100
-
-    return (
-        <div className="flex items-center gap-2">
-            <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
-                <div
-                    className="h-full bg-primary rounded-full transition-all"
-                    style={{ width: `${progress}%` }}
-                />
-            </div>
-            <span className="text-xs text-muted-foreground font-medium">
-                {currentIndex + 1}/{total}
-            </span>
-        </div>
-    )
-}
-
 function ActionButton({ isStarted }: { isStarted: boolean }) {
     return (
         <div className="transition-transform group-hover:rotate-12 group-hover:scale-110">
@@ -129,11 +106,11 @@ interface AssignmentProps {
 }
 
 export function Assignment({ assignment, onClick }: AssignmentProps) {
-    const { pairing, title, dueDate, tasks } = assignment
+    const { pairing, title, dueDate } = assignment
 
     const hasPartner = pairing !== null
-    const isCompleted = pairing?.isCompleted ?? false
-    const isStarted = pairing?.isStarted ?? false
+    const isCompleted =
+        pairing !== null && pairing.status === PairingStatus.COMPLETED
     const isClickable = hasPartner && !isCompleted && Boolean(onClick)
 
     return (
@@ -174,17 +151,10 @@ export function Assignment({ assignment, onClick }: AssignmentProps) {
                                 </span>
                                 <DueDateDisplay dueDate={dueDate} />
                             </div>
-
-                            {isStarted && !isCompleted && pairing && (
-                                <ProgressBar
-                                    currentIndex={pairing.currentTaskIndex}
-                                    total={tasks.length}
-                                />
-                            )}
                         </div>
 
                         {!isCompleted && hasPartner && (
-                            <ActionButton isStarted={isStarted} />
+                            <ActionButton isStarted />
                         )}
                     </div>
                 </CardHeader>

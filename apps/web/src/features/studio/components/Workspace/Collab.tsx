@@ -6,9 +6,9 @@ import {
     TabsList,
     TabsTrigger,
 } from "@workspace/ui/components/tabs.js"
-import { usePartner } from "../../hooks/assignment"
+import { useMyCode, usePartnerCode, useSharedCode } from "../../hooks/code.ts"
+import { usePartner } from "../../hooks/pairing.ts"
 import { useTestRunner } from "../../hooks/useTestRunner"
-import { useMyCode, usePartnerCode, useSharedCode } from "../../hooks/yjs"
 import { Editor } from "./Editor.tsx"
 
 export function Collab() {
@@ -44,13 +44,15 @@ export function Collab() {
                         value="yours"
                         className="h-[calc(100%-40px)] mt-2"
                     >
-                        <Editor ytext={myCode} readOnly />
+                        <Editor ytext={myCode.ytext()} readOnly />
                     </TabsContent>
                     <TabsContent
                         value="partner"
                         className="h-[calc(100%-40px)] mt-2"
                     >
-                        {partnerCode && <Editor ytext={partnerCode} readOnly />}
+                        {partnerCode && (
+                            <Editor ytext={partnerCode.ytext()} readOnly />
+                        )}
                     </TabsContent>
                 </Tabs>
             </div>
@@ -58,7 +60,10 @@ export function Collab() {
             {/* Shared Editor */}
             <div className="flex-1 flex flex-col">
                 <div className="flex-1 overflow-hidden">
-                    <Editor ytext={sharedCode} label="Shared Solution" />
+                    <Editor
+                        ytext={sharedCode.ytext()}
+                        label="Shared Solution"
+                    />
                 </div>
                 <div className="h-14 border-t px-4 flex items-center mt-4">
                     <Button onClick={runTests} variant="outline" size="sm">

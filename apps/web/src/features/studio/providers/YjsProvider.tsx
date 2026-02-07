@@ -2,7 +2,7 @@ import { useRoom } from "@liveblocks/react/suspense"
 import { getYjsProviderForRoom } from "@liveblocks/yjs"
 import type { ReactNode } from "react"
 import { useMemo } from "react"
-import { YjsContext } from "./YjsContext"
+import { YjsContext } from "../contexts/YjsContext"
 
 export function YjsProvider({ children }: { children: ReactNode }) {
     const room = useRoom()

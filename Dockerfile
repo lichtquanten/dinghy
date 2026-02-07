@@ -14,10 +14,11 @@ FROM base AS package-json
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/api/package.json ./apps/api/
 COPY apps/web/package.json ./apps/web/
-COPY packages/collab/package.json ./packages/collab/
 COPY packages/db/package.json ./packages/db/
+COPY packages/pairing/package.json ./packages/pairing/
 COPY packages/seed/package.json ./packages/seed/
 COPY packages/typescript-config/package.json ./packages/typescript-config/
+COPY packages/yjs-store/package.json ./packages/yjs-store/
 COPY packages/ui/package.json ./packages/ui/
 
 # =============================================================================

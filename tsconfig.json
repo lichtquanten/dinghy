@@ -2,10 +2,11 @@
     "files": [],
     "references": [
         // { "path": "./tsconfig.tools.json" },
-        { "path": "./packages/collab" },
+        { "path": "./packages/pairing" },
         { "path": "./packages/db" },
         { "path": "./packages/seed" },
         { "path": "./packages/ui" },
+        { "path": "./packages/yjs-store" },
         { "path": "./apps/api" },
         { "path": "./apps/web" }
     ]

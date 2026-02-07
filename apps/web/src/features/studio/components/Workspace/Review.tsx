@@ -1,7 +1,7 @@
 import { Button } from "@workspace/ui/components/button.js"
-import { usePartner } from "../../hooks/assignment.ts"
+import { useMyCode, usePartnerCode } from "../../hooks/code.ts"
+import { usePartner } from "../../hooks/pairing.ts"
 import { useTestRunner } from "../../hooks/useTestRunner"
-import { useMyCode, usePartnerCode } from "../../hooks/yjs"
 import { Editor } from "./Editor.tsx"
 
 export function Review() {
@@ -14,12 +14,12 @@ export function Review() {
         <div className="flex flex-col h-full">
             <div className="flex flex-row w-full">
                 <div className="flex-1 overflow-hidden p-4">
-                    <Editor ytext={myCode} readOnly label="My Code" />
+                    <Editor ytext={myCode.ytext()} readOnly label="My Code" />
                 </div>
                 {partnerCode && (
                     <div className="flex-1 overflow-hidden p-4">
                         <Editor
-                            ytext={partnerCode}
+                            ytext={partnerCode.ytext()}
                             readOnly
                             label={`${partner?.firstName ?? "Partner"}'s code`}
                         />

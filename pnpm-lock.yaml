@@ -96,12 +96,12 @@ importers:
       '@types/jsonwebtoken':
         specifier: ^9.0.10
         version: 9.0.10
-      '@workspace/collab':
-        specifier: workspace:*
-        version: link:../../packages/collab
       '@workspace/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@workspace/pairing':
+        specifier: workspace:*
+        version: link:../../packages/pairing
       envsub:
         specifier: ^4.1.0
         version: 4.1.0
@@ -217,12 +217,12 @@ importers:
       '@workspace/api':
         specifier: workspace:*
         version: link:../api
-      '@workspace/collab':
-        specifier: workspace:*
-        version: link:../../packages/collab
       '@workspace/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@workspace/pairing':
+        specifier: workspace:*
+        version: link:../../packages/pairing
       '@workspace/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -232,6 +232,9 @@ importers:
       envsub:
         specifier: ^4.1.0
         version: 4.1.0
+      immer-yjs:
+        specifier: ^1.2.0
+        version: 1.2.0(immer@10.2.0)(yjs@13.6.29)
       jotai:
         specifier: ^2.17.0
         version: 2.17.0(@babel/core@7.28.6)(@babel/template@7.28.6)(@types/react@19.2.9)(react@19.2.3)
@@ -324,28 +327,6 @@ importers:
         specifier: ^5.1.4
         version: 5.1.4(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)(stylus@0.64.0))
 
-  packages/collab:
-    dependencies:
-      '@workspace/db':
-        specifier: workspace:*
-        version: link:../db
-      yjs:
-        specifier: ^13.6.29
-        version: 13.6.29
-    devDependencies:
-      '@workspace/eslint-config':
-        specifier: workspace:*
-        version: link:../eslint-config
-      '@workspace/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
-      tsdown:
-        specifier: ^0.15.12
-        version: 0.15.12(typescript@5.9.3)
-      typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
-
   packages/db:
     devDependencies:
       '@prisma/client':
@@ -403,14 +384,39 @@ importers:
         specifier: ^8.53.1
         version: 8.53.1(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
 
-  packages/seed:
+  packages/pairing:
     dependencies:
-      '@workspace/collab':
-        specifier: workspace:*
-        version: link:../collab
       '@workspace/db':
         specifier: workspace:*
         version: link:../db
+      '@workspace/yjs-store':
+        specifier: workspace:*
+        version: link:../yjs-store
+      yjs:
+        specifier: ^13.6.29
+        version: 13.6.29
+    devDependencies:
+      '@workspace/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@workspace/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      tsdown:
+        specifier: ^0.15.12
+        version: 0.15.12(typescript@5.9.3)
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
+  packages/seed:
+    dependencies:
+      '@workspace/db':
+        specifier: workspace:*
+        version: link:../db
+      '@workspace/pairing':
+        specifier: workspace:*
+        version: link:../pairing
       yjs:
         specifier: ^13.6.29
         version: 13.6.29
@@ -518,7 +524,7 @@ importers:
         version: 1.2.2(@types/react@19.2.9)(react@19.2.3)
       '@xyflow/react':
         specifier: ^12.10.0
-        version: 12.10.0(@types/react@19.2.9)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+        version: 12.10.0(@types/react@19.2.9)(immer@10.2.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       ai:
         specifier: ^5.0.121
         version: 5.0.121(zod@3.25.76)
@@ -628,6 +634,34 @@ importers:
       tailwindcss:
         specifier: ^4.1.18
         version: 4.1.18
+      tsdown:
+        specifier: ^0.15.12
+        version: 0.15.12(typescript@5.9.3)
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
+  packages/yjs-store:
+    dependencies:
+      immer-yjs:
+        specifier: ^1.2.0
+        version: 1.2.0(immer@10.2.0)(yjs@13.6.29)
+      yjs:
+        specifier: ^13.6.29
+        version: 13.6.29
+    devDependencies:
+      '@types/react':
+        specifier: ^19.2.9
+        version: 19.2.9
+      '@workspace/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@workspace/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      react:
+        specifier: ^19.2.3
+        version: 19.2.3
       tsdown:
         specifier: ^0.15.12
         version: 0.15.12(typescript@5.9.3)
@@ -3983,6 +4017,15 @@ packages:
   ignore@7.0.5:
     resolution: {integrity: sha512-Hs59xBNfUIunMFgWAbGX5cq6893IbWg4KnrjbYwX3tx0ztorVgTDA6B2sxf8ejHJ4wz8BqGUMYlnzNBer5NvGg==}
     engines: {node: '>= 4'}
+
+  immer-yjs@1.2.0:
+    resolution: {integrity: sha512-81zD2G0RSXr+B+BhsOZ5LX5lOOd07ey1BvOoMSem1vz+yBStghBi38wpbBA1C6xd1cKGNW0BE3qav0lIS5YdSg==}
+    peerDependencies:
+      immer: ^10.1.1
+      yjs: ^13.5.35
+
+  immer@10.2.0:
+    resolution: {integrity: sha512-d/+XTN3zfODyjr89gM3mPq1WNX2B8pYsu7eORitdwyA2sBubnTl3laYlBk4sXY5FUa5qTZGBDPJICVbvqzjlbw==}
 
   import-fresh@3.3.1:
     resolution: {integrity: sha512-TR3KfrTZTYLPB6jUjfx6MF9WcWrHL9su5TObK4ZkYgBdWKPOFoSoQIdEuTuR82pmtxH2spWG9h6etwfr1pLBqQ==}
@@ -8363,13 +8406,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@xyflow/react@12.10.0(@types/react@19.2.9)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
+  '@xyflow/react@12.10.0(@types/react@19.2.9)(immer@10.2.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
     dependencies:
       '@xyflow/system': 0.0.74
       classcat: 5.0.5
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
-      zustand: 4.5.7(@types/react@19.2.9)(react@19.2.3)
+      zustand: 4.5.7(@types/react@19.2.9)(immer@10.2.0)(react@19.2.3)
     transitivePeerDependencies:
       - '@types/react'
       - immer
@@ -9945,6 +9988,13 @@ snapshots:
   ignore@5.3.2: {}
 
   ignore@7.0.5: {}
+
+  immer-yjs@1.2.0(immer@10.2.0)(yjs@13.6.29):
+    dependencies:
+      immer: 10.2.0
+      yjs: 13.6.29
+
+  immer@10.2.0: {}
 
   import-fresh@3.3.1:
     dependencies:
@@ -12485,11 +12535,12 @@ snapshots:
 
   zod@4.3.5: {}
 
-  zustand@4.5.7(@types/react@19.2.9)(react@19.2.3):
+  zustand@4.5.7(@types/react@19.2.9)(immer@10.2.0)(react@19.2.3):
     dependencies:
       use-sync-external-store: 1.6.0(react@19.2.3)
     optionalDependencies:
       '@types/react': 19.2.9
+      immer: 10.2.0
       react: 19.2.3
 
   zwitch@2.0.4: {}

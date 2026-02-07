@@ -1,9 +1,37 @@
 import { useRoom } from "@liveblocks/react/suspense"
+import type { LiveblocksYjsProvider } from "@liveblocks/yjs"
 import { getYjsProviderForRoom } from "@liveblocks/yjs"
 import type { ReactNode } from "react"
-import { useEffect, useMemo, useState } from "react"
-import { FullPageLoader } from "@/lib/components/FullPageLoader"
+import { useMemo } from "react"
 import { YjsContext } from "../contexts/YjsContext"
+
+const syncPromiseCache = new WeakMap<LiveblocksYjsProvider, Promise<void>>()
+
+function useSyncedProvider(provider: LiveblocksYjsProvider) {
+    if (provider.synced) return
+
+    let syncPromise = syncPromiseCache.get(provider)
+
+    if (!syncPromise) {
+        syncPromise = new Promise<void>((resolve) => {
+            if (provider.synced) {
+                resolve()
+            } else {
+                const handler = (synced: boolean) => {
+                    if (synced) {
+                        provider.off("sync", handler)
+                        resolve()
+                    }
+                }
+                provider.on("sync", handler)
+            }
+        })
+        syncPromiseCache.set(provider, syncPromise)
+    }
+
+    // eslint-disable-next-line @typescript-eslint/only-throw-error
+    throw syncPromise
+}
 
 export function YjsProvider({ children }: { children: ReactNode }) {
     const room = useRoom()
@@ -17,23 +45,7 @@ export function YjsProvider({ children }: { children: ReactNode }) {
         }
     }, [room])
 
-    const [synced, setSynced] = useState(() => provider.synced)
-
-    useEffect(() => {
-        if (provider.synced) return
-
-        function handler(s: boolean) {
-            if (s) {
-                setSynced(true)
-                provider.off("sync", handler)
-            }
-        }
-
-        provider.on("sync", handler)
-        return () => provider.off("sync", handler)
-    }, [provider])
-
-    if (!synced) return <FullPageLoader />
+    useSyncedProvider(provider)
 
     return (
         <YjsContext.Provider value={{ ydoc, awareness }}>

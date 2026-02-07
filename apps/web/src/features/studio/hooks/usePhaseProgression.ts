@@ -1,4 +1,3 @@
-// hooks/usePhaseProgression.ts
 import { useEffect } from "react"
 import { useStoreSelector } from "@workspace/pairing"
 import { useSelf } from "@/lib/hooks/useSelf"

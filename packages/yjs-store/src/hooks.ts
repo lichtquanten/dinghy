@@ -1,16 +1,13 @@
+import type { Snapshot } from "immer-yjs"
 import { useSyncExternalStore } from "react"
+import type { ReadOnlyStore } from "./types"
 
-type Store<T> = {
-    get: () => T
-    subscribe: (fn: () => void) => () => void
-}
-
-export function useStore<T>(store: Store<T>): T {
+export function useStore<T extends Snapshot>(store: ReadOnlyStore<T>): T {
     return useSyncExternalStore(store.subscribe, store.get, store.get)
 }
 
-export function useStoreSelector<T, R>(
-    store: Store<T>,
+export function useStoreSelector<T extends Snapshot, R>(
+    store: ReadOnlyStore<T>,
     selector: (state: T) => R
 ): R {
     return useSyncExternalStore(

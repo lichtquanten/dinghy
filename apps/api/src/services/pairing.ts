@@ -54,16 +54,18 @@ async function initializePairing(
     const ydoc = new Y.Doc()
     const pairingDoc = getPairingDoc(ydoc, partnerIds)
 
-    pairingDoc.store.initialize()
+    pairingDoc.store.initialize(partnerIds)
     pairingDoc.sharedCode.ytext().insert(0, starterCode)
     for (const id of partnerIds) {
+        if (!pairingDoc.userCode[id])
+            throw new Error(`User code for user ${id} not found in pairing doc`)
         pairingDoc.userCode[id].ytext().insert(0, starterCode)
     }
 
     const roomId = PairingRoomId.from(pairingId)
 
     await liveblocks.createRoom(roomId, {
-        defaultAccesses: ["room:write"],
+        defaultAccesses: [],
         metadata: {
             pairingId,
         },

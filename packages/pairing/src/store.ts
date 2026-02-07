@@ -1,17 +1,20 @@
+import type { User } from "@workspace/db/browser"
 import { createStoreFactory } from "@workspace/yjs-store"
 import type { PairingState } from "./types"
 
 export const createPairingStore = createStoreFactory(
     "pairing",
     (update: (fn: (draft: PairingState) => void) => void) => ({
-        initialize: () =>
+        initialize: (partnerIds: User["id"][]) =>
             update((d) => {
                 d.taskIndex = 0
                 d.phaseIndex = 0
                 d.phaseStartedAt = 0
                 d.firstReadyAt = null
                 d.driver = null
-                d.ready = {}
+                d.ready = Object.fromEntries(
+                    partnerIds.map((id) => [id, false])
+                )
             }),
 
         setReady: (userId: string, ready: boolean) =>

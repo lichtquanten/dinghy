@@ -1,5 +1,5 @@
-import { LiveblocksProvider, RoomProvider } from "@liveblocks/react"
-import type { ReactNode } from "react"
+import { LiveblocksProvider, RoomProvider } from "@liveblocks/react/suspense"
+import { type ReactNode } from "react"
 import { PairingRoomId } from "@workspace/pairing"
 import { usePartnerIds } from "../hooks/pairing"
 import { usePhaseProgression } from "../hooks/usePhaseProgression.js"

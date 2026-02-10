@@ -29,7 +29,7 @@ export function Collab() {
                     onValueChange={(v) =>
                         setReferenceTab(v as "yours" | "partner")
                     }
-                    className="flex-1 flex flex-col"
+                    className="flex-1 min-h-0 flex flex-col"
                 >
                     <TabsList className="w-full">
                         <TabsTrigger value="yours" className="flex-1">
@@ -41,13 +41,13 @@ export function Collab() {
                     </TabsList>
                     <TabsContent
                         value="yours"
-                        className="flex-1 overflow-hidden mt-2"
+                        className="flex-1 min-h-0 overflow-hidden mt-2"
                     >
                         <Editor ytext={myCode.ytext()} readOnly />
                     </TabsContent>
                     <TabsContent
                         value="partner"
-                        className="flex-1 overflow-hidden mt-2"
+                        className="flex-1 min-h-0 overflow-hidden mt-2"
                     >
                         {partnerCode && (
                             <Editor ytext={partnerCode.ytext()} readOnly />
@@ -61,7 +61,7 @@ export function Collab() {
                 <div className="h-10 px-4 flex items-center bg-muted/50 border border-border rounded-t-lg">
                     <span className="text-sm font-medium">Shared Solution</span>
                 </div>
-                <div className="flex-1 overflow-hidden mt-2">
+                <div className="flex-1 min-h-0 overflow-hidden mt-2">
                     <Editor ytext={sharedCode.ytext()} />
                 </div>
                 <Playground />

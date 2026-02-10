@@ -82,7 +82,7 @@ export function Editor({ ytext, readOnly = false, label }: EditorProps) {
                     <span className="text-sm font-medium">{label}</span>
                 </div>
             )}
-            <div className="flex-1 overflow-hidden">
+            <div className="flex-1 min-h-0 overflow-hidden">
                 <CodeMirror
                     value={initialValue}
                     extensions={extensions}
@@ -91,6 +91,7 @@ export function Editor({ ytext, readOnly = false, label }: EditorProps) {
                     basicSetup={readOnly ? readOnlySetup : editableSetup}
                     theme={readOnly ? readOnlyTheme : undefined}
                     height="100%"
+                    style={{ height: "100%" }}
                 />
             </div>
         </div>

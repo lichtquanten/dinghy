@@ -7,7 +7,7 @@ export function Solo() {
 
     return (
         <div className="flex flex-col lg:flex-row h-full gap-4 p-4">
-            <div className="flex-1 overflow-hidden">
+            <div className="flex-1 min-h-0 overflow-hidden">
                 <Editor ytext={myCode.ytext()} />
             </div>
             <div className="lg:w-96 flex-shrink-0">

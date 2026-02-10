@@ -9,7 +9,7 @@ export function Review() {
 
     return (
         <div className="flex flex-col h-full">
-            <div className="flex flex-row flex-1 w-full overflow-hidden gap-4 p-4">
+            <div className="flex flex-row flex-1 min-h-0 w-full overflow-hidden gap-4 p-4">
                 <div className="flex-1 overflow-hidden">
                     <Editor ytext={myCode.ytext()} readOnly label="My Code" />
                 </div>

@@ -25,6 +25,6 @@ export function usePartnerCode() {
 export function useSharedCode() {
     const pairingDoc = usePairingDoc()
     const sharedCode = pairingDoc.sharedCode
-    if (!sharedCode) throw new Error("User code not found")
+    if (!sharedCode) throw new Error("Shared code not found")
     return sharedCode
 }

@@ -1,9 +1,52 @@
 import { useSuspenseQuery } from "@tanstack/react-query"
-import CodeMirror from "@uiw/react-codemirror"
+import CodeMirror, { EditorView, scrollPastEnd } from "@uiw/react-codemirror"
+import { useMemo } from "react"
 import type * as Y from "yjs"
 import { getCodemirrorLoader } from "@/lib/codemirror"
 import { useAssignment } from "../../hooks/assignment"
 import { useCollabExtension } from "../../hooks/yjs"
+
+const readOnlySetup = {
+    foldGutter: false,
+    lineNumbers: true,
+    highlightActiveLine: false,
+    highlightActiveLineGutter: false,
+    dropCursor: false,
+    crosshairCursor: false,
+    highlightSelectionMatches: false,
+}
+
+const editableSetup = {
+    foldGutter: false,
+    lineNumbers: true,
+    highlightActiveLine: true,
+    highlightActiveLineGutter: true,
+    dropCursor: true,
+    crosshairCursor: true,
+    highlightSelectionMatches: true,
+}
+
+const readOnlyTheme = EditorView.theme({
+    "&": {
+        backgroundColor: "#f9fafb",
+    },
+    ".cm-gutters": {
+        backgroundColor: "#f9fafb",
+        color: "#d1d5db",
+    },
+    ".cm-activeLineGutter": {
+        backgroundColor: "transparent",
+    },
+    ".cm-content": {
+        caretColor: "transparent",
+    },
+    ".cm-cursor": {
+        display: "none",
+    },
+    "&.cm-focused": {
+        outline: "none",
+    },
+})
 
 interface EditorProps {
     ytext: Y.Text
@@ -13,7 +56,6 @@ interface EditorProps {
 
 export function Editor({ ytext, readOnly = false, label }: EditorProps) {
     const collabExtension = useCollabExtension(ytext)
-
     const assignment = useAssignment()
     const codeLanguage = assignment.codeLanguage
 
@@ -21,9 +63,17 @@ export function Editor({ ytext, readOnly = false, label }: EditorProps) {
         queryKey: ["codemirror-language", codeLanguage],
         queryFn: () => getCodemirrorLoader(codeLanguage)(),
     })
-    const extensions = [collabExtension, languageExtension]
 
-    const initialValue = ytext.toString()
+    const extensions = useMemo(() => {
+        const base = [collabExtension, languageExtension]
+        if (readOnly) {
+            return base
+        }
+        return [...base, scrollPastEnd()]
+    }, [collabExtension, languageExtension, readOnly])
+
+    const rawValue = ytext.toString()
+    const initialValue = readOnly ? rawValue.trimEnd() : rawValue
 
     return (
         <div className="flex flex-col h-full border border-border rounded-lg overflow-hidden">
@@ -38,6 +88,8 @@ export function Editor({ ytext, readOnly = false, label }: EditorProps) {
                     extensions={extensions}
                     readOnly={readOnly}
                     editable={!readOnly}
+                    basicSetup={readOnly ? readOnlySetup : editableSetup}
+                    theme={readOnly ? readOnlyTheme : undefined}
                     height="100%"
                 />
             </div>

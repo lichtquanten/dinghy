@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { Button } from "@workspace/ui/components/button.js"
 import {
     Tabs,
     TabsContent,
@@ -8,7 +7,7 @@ import {
 } from "@workspace/ui/components/tabs.js"
 import { useMyCode, usePartnerCode, useSharedCode } from "../../hooks/code.ts"
 import { usePartner } from "../../hooks/pairing.ts"
-import { useTestRunner } from "../../hooks/useTestRunner"
+import { Playground } from "../Playground.tsx"
 import { Editor } from "./Editor.tsx"
 
 export function Collab() {
@@ -16,7 +15,6 @@ export function Collab() {
     const partnerCode = usePartnerCode()
     const sharedCode = useSharedCode()
     const partner = usePartner()
-    const { runTests } = useTestRunner()
 
     const [referenceTab, setReferenceTab] = useState<"yours" | "partner">(
         "yours"
@@ -25,12 +23,13 @@ export function Collab() {
     return (
         <div className="flex h-full gap-4 p-4">
             {/* Reference Panel */}
-            <div className="w-1/3">
+            <div className="w-1/3 flex flex-col">
                 <Tabs
                     value={referenceTab}
                     onValueChange={(v) =>
                         setReferenceTab(v as "yours" | "partner")
                     }
+                    className="flex-1 flex flex-col"
                 >
                     <TabsList className="w-full">
                         <TabsTrigger value="yours" className="flex-1">
@@ -42,13 +41,13 @@ export function Collab() {
                     </TabsList>
                     <TabsContent
                         value="yours"
-                        className="h-[calc(100%-40px)] mt-2"
+                        className="flex-1 overflow-hidden mt-2"
                     >
                         <Editor ytext={myCode.ytext()} readOnly />
                     </TabsContent>
                     <TabsContent
                         value="partner"
-                        className="h-[calc(100%-40px)] mt-2"
+                        className="flex-1 overflow-hidden mt-2"
                     >
                         {partnerCode && (
                             <Editor ytext={partnerCode.ytext()} readOnly />
@@ -57,19 +56,15 @@ export function Collab() {
                 </Tabs>
             </div>
 
-            {/* Shared Editor */}
-            <div className="flex-1 flex flex-col">
-                <div className="flex-1 overflow-hidden">
-                    <Editor
-                        ytext={sharedCode.ytext()}
-                        label="Shared Solution"
-                    />
+            {/* Shared Editor with Playground */}
+            <div className="flex-1 flex flex-col overflow-hidden">
+                <div className="h-10 px-4 flex items-center bg-muted/50 border border-border rounded-t-lg">
+                    <span className="text-sm font-medium">Shared Solution</span>
                 </div>
-                <div className="h-14 border-t px-4 flex items-center mt-4">
-                    <Button onClick={runTests} variant="outline" size="sm">
-                        Run Tests
-                    </Button>
+                <div className="flex-1 overflow-hidden mt-2">
+                    <Editor ytext={sharedCode.ytext()} />
                 </div>
+                <Playground />
             </div>
         </div>
     )

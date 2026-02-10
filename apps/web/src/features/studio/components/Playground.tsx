@@ -65,7 +65,7 @@ export function Playground() {
                     onChange={(e) => setStdin(e.target.value)}
                     placeholder="Enter input for your program..."
                     className="w-full px-3 py-2 text-xs border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none font-mono"
-                    rows={3}
+                    rows={2}
                     disabled={isRunning}
                 />
             </div>
@@ -74,7 +74,7 @@ export function Playground() {
                 onClick={handleRun}
                 disabled={isRunning}
                 size="sm"
-                className="w-full"
+                className="w-40"
             >
                 {isRunning ? "Running..." : "Run Code"}
             </Button>

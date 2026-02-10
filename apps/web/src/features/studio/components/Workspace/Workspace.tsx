@@ -6,12 +6,11 @@ import { Solo } from "./Solo"
 export function Workspace() {
     const currentMode = useCurrentInteractionMode()
 
-    switch (currentMode) {
-        case "solo":
-            return <Solo />
-        case "review":
-            return <Review />
-        case "collaborative":
-            return <Collab />
-    }
+    return (
+        <div className="flex-1 overflow-hidden">
+            {currentMode === "solo" && <Solo />}
+            {currentMode === "review" && <Review />}
+            {currentMode === "collaborative" && <Collab />}
+        </div>
+    )
 }

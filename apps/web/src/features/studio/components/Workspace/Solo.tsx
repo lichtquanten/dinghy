@@ -10,7 +10,7 @@ export function Solo() {
             <div className="flex-1 min-h-0 overflow-hidden">
                 <Editor ytext={myCode.ytext()} />
             </div>
-            <div className="lg:w-96 flex-shrink-0">
+            <div className="lg:w-96 shrink-0">
                 <Playground />
             </div>
         </div>

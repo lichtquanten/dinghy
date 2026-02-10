@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Button } from "@workspace/ui/components/button.js"
 import { useCodeExecution } from "@/lib/hooks/useCodeExecution"
 import { useAssignment } from "../hooks/assignment"
+import { useExecutableCode } from "../hooks/useExecutableCode"
 
 type Result =
     | { type: "success"; output: string }
@@ -10,6 +11,7 @@ type Result =
 export function Playground() {
     const assignment = useAssignment()
 
+    const code = useExecutableCode()
     const { run, isRunning } = useCodeExecution()
     const [stdin, setStdin] = useState("")
     const [result, setResult] = useState<Result | null>(null)
@@ -17,7 +19,6 @@ export function Playground() {
     const handleRun = async () => {
         setResult(null)
 
-        const code = "FIX THIS"
         if (!code || code.trim() === "") {
             setResult({
                 type: "error",

@@ -10,7 +10,7 @@ export function useAssignmentId() {
     const { data: pairing } = useSuspenseQuery(
         trpc.pairing.get.queryOptions({ id: pairingId })
     )
-    if (pairingId) {
+    if (pairing.assignmentId) {
         return pairing.assignmentId
     }
     throw new Error("Missing assignmentId in route")

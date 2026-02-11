@@ -5,6 +5,7 @@ import { courseRouter } from "./routers/course.router.js"
 import { executionRouter } from "./routers/execution.router.js"
 import { pairingRouter } from "./routers/pairing.router.js"
 import { sessionRouter } from "./routers/session.router.js"
+import { timeRouter } from "./routers/time.router.js"
 import { userRouter } from "./routers/user.router.js"
 import { protectedProcedure, publicProcedure, router } from "./trpc.js"
 
@@ -14,6 +15,7 @@ export const appRouter = router({
     execution: executionRouter,
     pairing: pairingRouter,
     session: sessionRouter,
+    time: timeRouter,
     user: userRouter,
 
     health: publicProcedure.query(() => {

@@ -4,7 +4,7 @@ import type { Store, TextAccessor } from "@workspace/yjs-store"
 export type PairingActions = {
     initialize: (partnerIds: User["id"][]) => void
     setReady: (userId: string, ready: boolean) => void
-    advancePhase: () => void
+    advancePhase: (startTime: number) => void
     setDriver: (driverId: string) => void
     advanceTask: () => void
 }

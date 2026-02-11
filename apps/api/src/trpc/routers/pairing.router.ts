@@ -1,6 +1,10 @@
 import { TRPCError } from "@trpc/server"
+import * as Y from "yjs"
 import { z } from "zod"
+import { PairingRoomId } from "@workspace/pairing"
+import { createPairingStore } from "@workspace/pairing"
 import { prisma } from "@/infrastructure/db.js"
+import { liveblocks, sendYjsUpdate } from "@/integrations/liveblocks/client.js"
 import { destroySession } from "@/services/session.js"
 import { protectedProcedure, router } from "@/trpc/trpc.js"
 
@@ -98,5 +102,19 @@ export const pairingRouter = router({
                 where: { id: input.pairingId },
                 data: { status: "COMPLETED" },
             })
+        }),
+    advancePhase: protectedProcedure
+        .input(z.object({ pairingId: z.string() }))
+        .mutation(async ({ input }) => {
+            const roomId = PairingRoomId.from(input.pairingId)
+            const ydoc = new Y.Doc()
+
+            const update = await liveblocks.getYjsDocumentAsBinaryUpdate(roomId)
+            Y.applyUpdate(ydoc, new Uint8Array(update))
+
+            const store = createPairingStore(ydoc)
+            store.advancePhase(Date.now())
+
+            await sendYjsUpdate(roomId, ydoc)
         }),
 })

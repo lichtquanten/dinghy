@@ -3,7 +3,7 @@ import { type ReactNode, Suspense } from "react"
 import { PairingRoomId } from "@workspace/pairing"
 import { FullPageLoader } from "@/lib/components/FullPageLoader.js"
 import { usePartnerIds } from "../hooks/pairing"
-import { usePhaseProgression } from "../hooks/usePhaseProgression.js"
+import { useAutoAdvance } from "../hooks/useAutoAdvance"
 import { PairingDocProvider } from "./PairingDocProvider"
 import { YjsProvider } from "./YjsProvider"
 
@@ -36,6 +36,6 @@ export function StudioProvider({
 }
 
 function StudioInner({ children }: { children: ReactNode }) {
-    usePhaseProgression()
+    useAutoAdvance()
     return <>{children}</>
 }

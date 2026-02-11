@@ -52,7 +52,9 @@ function PartnerDisplay({ pairing }: { pairing: Assignment["pairing"] }) {
         return (
             <div className="flex items-center gap-1.5 text-muted-foreground">
                 <User className="w-4 h-4" />
-                <span className="italic">Waiting for partner...</span>
+                <span className="italic">
+                    Waiting for instructor to assign a partner...
+                </span>
             </div>
         )
     }

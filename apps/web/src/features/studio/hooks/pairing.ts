@@ -1,3 +1,4 @@
+import { useMemo } from "react"
 import { useSelf } from "@/lib/hooks/useSelf"
 import { useAssignment } from "./assignment"
 
@@ -6,6 +7,13 @@ function pickPrimary(partnerIds: string[]): string {
     const primary = sorted[0]
     if (!primary) throw new Error("partnerIds cannot be empty")
     return primary
+}
+
+export function usePairingId() {
+    const assignment = useAssignment()
+    if (!assignment.pairing)
+        throw new Error("Must have pairing to use usePartner")
+    return assignment.pairing.id
 }
 
 export function usePartner() {
@@ -18,9 +26,13 @@ export function usePartner() {
 export function usePartnerIds() {
     const assignment = useAssignment()
     const self = useSelf()
+
     if (!assignment.pairing)
         throw new Error("Must have pairing to use usePartner")
-    return [assignment.pairing.partner.id, self.id]
+
+    const partnerId = assignment.pairing.partner.id
+
+    return useMemo(() => [partnerId, self.id], [partnerId, self.id])
 }
 
 export function useIsPrimary(): boolean {

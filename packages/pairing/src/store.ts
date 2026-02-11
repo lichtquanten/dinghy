@@ -5,11 +5,11 @@ import type { PairingState } from "./types"
 export const createPairingStore = createStoreFactory(
     "pairing",
     (update: (fn: (draft: PairingState) => void) => void) => ({
-        initialize: (partnerIds: User["id"][]) =>
+        start: (partnerIds: User["id"][], startTime: number) =>
             update((d) => {
                 d.taskIndex = 0
                 d.phaseIndex = 0
-                d.phaseStartedAt = 0
+                d.phaseStartedAt = startTime
                 d.firstReadyAt = null
                 d.driver = null
                 d.ready = Object.fromEntries(
@@ -28,10 +28,10 @@ export const createPairingStore = createStoreFactory(
                 }
             }),
 
-        advancePhase: () =>
+        advancePhase: (startTime: number) =>
             update((d) => {
                 d.phaseIndex++
-                d.phaseStartedAt = Date.now()
+                d.phaseStartedAt = startTime
                 d.firstReadyAt = null
                 d.ready = {}
             }),

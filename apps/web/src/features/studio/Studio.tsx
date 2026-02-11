@@ -7,7 +7,7 @@ import { FullPageLoader } from "@/lib/components/FullPageLoader"
 import { Mode } from "./components/Mode"
 import { Task } from "./components/Task/Task"
 import { Workspace } from "./components/Workspace/Workspace"
-import { usePairingDoc } from "./hooks/usePairingDoc"
+// import { usePairingDoc } from "./hooks/usePairingDoc"
 import { StudioProvider } from "./providers/StudioProvider"
 
 export default function Studio() {
@@ -47,7 +47,7 @@ function StudioLayout() {
 
 function DevModeSwitcher() {
     const [isVisible, setIsVisible] = useState(true)
-    const pairingDoc = usePairingDoc()
+    // const pairingDoc = usePairingDoc()
 
     if (!isVisible) {
         return (
@@ -71,9 +71,9 @@ function DevModeSwitcher() {
             >
                 ✕
             </Button>
-            <Button size="sm" onClick={pairingDoc.store.advancePhase}>
+            {/* <Button size="sm" onClick={pairingDoc.store.advancePhase}>
                 Advance Phase
-            </Button>
+            </Button> */}
         </div>
     )
 }

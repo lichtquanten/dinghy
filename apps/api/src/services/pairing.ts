@@ -54,7 +54,7 @@ async function initializePairing(
     const ydoc = new Y.Doc()
     const pairingDoc = getPairingDoc(ydoc, partnerIds)
 
-    pairingDoc.store.start(partnerIds, Date.now())
+    pairingDoc.store.initialize(partnerIds, Date.now())
     pairingDoc.sharedCode.ytext().insert(0, starterCode)
     for (const id of partnerIds) {
         if (!pairingDoc.userCode[id])

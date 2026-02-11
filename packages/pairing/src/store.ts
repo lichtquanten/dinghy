@@ -5,7 +5,7 @@ import type { PairingState } from "./types"
 export const createPairingStore = createStoreFactory(
     "pairing",
     (update: (fn: (draft: PairingState) => void) => void) => ({
-        start: (partnerIds: User["id"][], startTime: number) =>
+        initialize: (partnerIds: User["id"][], startTime: number) =>
             update((d) => {
                 d.taskIndex = 0
                 d.phaseIndex = 0

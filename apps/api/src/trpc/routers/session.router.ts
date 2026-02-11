@@ -40,7 +40,7 @@ export const sessionRouter = router({
                     }),
                     prisma.pairing.update({
                         where: { id: input.pairingId },
-                        data: { isStarted: true },
+                        data: { status: "IN_PROGRESS" },
                     }),
                 ])
 

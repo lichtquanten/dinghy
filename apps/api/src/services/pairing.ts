@@ -19,16 +19,14 @@ export async function createPairing(
 }
 
 export async function ensurePairingInitialized(
-    pairingId: Pairing["id"],
-    partnerIds: Pairing["partnerIds"],
-    starterCode: Assignment["starterCode"]
+    pairingId: Pairing["id"]
 ): Promise<void> {
     const lockKey = `lock:pairing:${pairingId}:init`
     const acquired = await redisClient.set(lockKey, "1", { EX: 300, NX: true })
 
     if (acquired) {
         try {
-            await initializePairing(pairingId, partnerIds, starterCode)
+            await initializePairing(pairingId)
         } finally {
             await redisClient.del(lockKey)
         }
@@ -37,29 +35,27 @@ export async function ensurePairingInitialized(
     }
 }
 
-async function initializePairing(
-    pairingId: Pairing["id"],
-    partnerIds: Pairing["partnerIds"],
-    starterCode: Assignment["starterCode"]
-): Promise<void> {
-    const pairing = await prisma.pairing.findUnique({
+async function initializePairing(pairingId: Pairing["id"]): Promise<void> {
+    const pairing = await prisma.pairing.findUniqueOrThrow({
         where: { id: pairingId },
-        select: { isYjsInitialized: true },
+        include: { assignment: { select: { starterCode: true } } },
     })
 
-    if (pairing?.isYjsInitialized) {
+    if (pairing.isYjsInitialized) {
         return
     }
 
     const ydoc = new Y.Doc()
-    const pairingDoc = getPairingDoc(ydoc, partnerIds)
+    const pairingDoc = getPairingDoc(ydoc, pairing.partnerIds)
 
-    pairingDoc.store.initialize(partnerIds, Date.now())
-    pairingDoc.sharedCode.ytext().insert(0, starterCode)
-    for (const id of partnerIds) {
+    pairingDoc.store.initialize(pairing.partnerIds, Date.now())
+    pairingDoc.sharedCode.ytext().insert(0, pairing.assignment.starterCode)
+    for (const id of pairing.partnerIds) {
         if (!pairingDoc.userCode[id])
             throw new Error(`User code for user ${id} not found in pairing doc`)
-        pairingDoc.userCode[id].ytext().insert(0, starterCode)
+        pairingDoc.userCode[id]
+            .ytext()
+            .insert(0, pairing.assignment.starterCode)
     }
 
     const roomId = PairingRoomId.from(pairingId)
@@ -87,12 +83,12 @@ async function pollUntilInitialized(
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
         await new Promise((resolve) => setTimeout(resolve, intervalMs))
 
-        const pairing = await prisma.pairing.findUnique({
+        const pairing = await prisma.pairing.findUniqueOrThrow({
             where: { id: pairingId },
             select: { isYjsInitialized: true },
         })
 
-        if (pairing?.isYjsInitialized) return
+        if (pairing.isYjsInitialized) return
     }
 
     throw new Error(`Pairing ${pairingId} initialization timed out`)

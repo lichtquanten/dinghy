@@ -5,10 +5,38 @@ import { PairingRoomId } from "@workspace/pairing"
 import { createPairingStore } from "@workspace/pairing"
 import { prisma } from "@/infrastructure/db.js"
 import { liveblocks, sendYjsUpdate } from "@/integrations/liveblocks/client.js"
+import { ensurePairingInitialized } from "@/services/pairing.js"
 import { destroySession } from "@/services/session.js"
 import { protectedProcedure, router } from "@/trpc/trpc.js"
 
 export const pairingRouter = router({
+    init: protectedProcedure
+        .input(z.object({ pairingId: z.string() }))
+        .query(async ({ ctx, input }) => {
+            const pairing = await prisma.pairing.findUnique({
+                where: { id: input.pairingId },
+                include: {
+                    partners: true,
+                    assignment: true,
+                },
+            })
+
+            if (!pairing) {
+                throw new TRPCError({ code: "NOT_FOUND" })
+            }
+
+            if (!pairing.partnerIds.includes(ctx.userId)) {
+                throw new TRPCError({ code: "FORBIDDEN" })
+            }
+
+            if (!(pairing.partnerIds.length === 2)) {
+                throw new TRPCError({
+                    code: "INTERNAL_SERVER_ERROR",
+                    message: "Pairing has no partner",
+                })
+            }
+            await ensurePairingInitialized(pairing.id)
+        }),
     get: protectedProcedure
         .input(z.object({ id: z.string() }))
         .query(async ({ ctx, input }) => {

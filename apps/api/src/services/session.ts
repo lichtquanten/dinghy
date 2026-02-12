@@ -1,4 +1,4 @@
-// services/session.ts
+import type { Pairing } from "@workspace/db/client"
 import { prisma } from "@/infrastructure/db.js"
 import { createMeeting, deleteMeeting } from "@/integrations/whereby/client.js"
 
@@ -52,4 +52,42 @@ export async function refreshWherebyMeeting(oldId: string, sessionId: string) {
 export function isExpiringSoon(expiresAt: Date) {
     const twoHoursFromNow = new Date(Date.now() + 2 * 60 * 60 * 1000)
     return expiresAt < twoHoursFromNow
+}
+
+export async function ensureSessionInitialized(
+    pairingId: Pairing["id"]
+): Promise<void> {
+    const pairing = await prisma.pairing.findUniqueOrThrow({
+        where: { id: pairingId },
+        include: {
+            session: {
+                include: { wherebyMeeting: true },
+            },
+        },
+    })
+
+    if (pairing.session) {
+        if (isExpiringSoon(pairing.session.wherebyMeeting.expiresAt)) {
+            await refreshWherebyMeeting(
+                pairing.session.wherebyMeeting.id,
+                pairing.session.id
+            )
+        }
+        return
+    }
+
+    const wherebyMeeting = await createWherebyMeeting()
+
+    await Promise.all([
+        prisma.session.create({
+            data: {
+                pairingId,
+                wherebyMeetingId: wherebyMeeting.id,
+            },
+        }),
+        prisma.pairing.update({
+            where: { id: pairingId },
+            data: { status: "IN_PROGRESS" },
+        }),
+    ])
 }

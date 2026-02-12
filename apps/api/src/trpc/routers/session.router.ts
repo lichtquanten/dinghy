@@ -1,17 +1,31 @@
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 import { prisma } from "@/infrastructure/db.js"
-import {
-    createWherebyMeeting,
-    isExpiringSoon,
-    refreshWherebyMeeting,
-} from "@/services/session.js"
+import { ensureSessionInitialized } from "@/services/session.js"
 import { protectedProcedure, router } from "@/trpc/trpc.js"
 
 export const sessionRouter = router({
-    enter: protectedProcedure
+    init: protectedProcedure
         .input(z.object({ pairingId: z.string() }))
-        .mutation(async ({ ctx, input }) => {
+        .query(async ({ ctx, input }) => {
+            const pairing = await prisma.pairing.findUnique({
+                where: { id: input.pairingId },
+            })
+
+            if (!pairing) {
+                throw new TRPCError({ code: "NOT_FOUND" })
+            }
+
+            if (!pairing.partnerIds.includes(ctx.userId)) {
+                throw new TRPCError({ code: "FORBIDDEN" })
+            }
+
+            await ensureSessionInitialized(input.pairingId)
+        }),
+
+    get: protectedProcedure
+        .input(z.object({ pairingId: z.string() }))
+        .query(async ({ ctx, input }) => {
             const pairing = await prisma.pairing.findUnique({
                 where: { id: input.pairingId },
                 include: {
@@ -30,39 +44,11 @@ export const sessionRouter = router({
             }
 
             if (!pairing.session) {
-                const wherebyMeeting = await createWherebyMeeting()
-                const [session] = await Promise.all([
-                    prisma.session.create({
-                        data: {
-                            pairingId: input.pairingId,
-                            wherebyMeetingId: wherebyMeeting.id,
-                        },
-                    }),
-                    prisma.pairing.update({
-                        where: { id: input.pairingId },
-                        data: { status: "IN_PROGRESS" },
-                    }),
-                ])
-
-                return {
-                    sessionId: session.id,
-                    wherebyMeetingUrl: wherebyMeeting.url,
-                }
+                return null
             }
 
-            const { session } = pairing
-            const wherebyMeeting = isExpiringSoon(
-                session.wherebyMeeting.expiresAt
-            )
-                ? await refreshWherebyMeeting(
-                      session.wherebyMeeting.id,
-                      session.id
-                  )
-                : session.wherebyMeeting
-
             return {
-                sessionId: session.id,
-                wherebyMeetingUrl: wherebyMeeting.url,
+                wherebyMeetingUrl: pairing.session.wherebyMeeting.url,
             }
         }),
 })

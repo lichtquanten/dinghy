@@ -4,7 +4,6 @@ import { PairingRoomId } from "@workspace/pairing"
 import { prisma } from "@/infrastructure/db.js"
 import { getToken } from "@/integrations/liveblocks/client.js"
 import { requireAuth } from "@/middleware/auth.js"
-import { ensurePairingInitialized } from "@/services/pairing.js"
 
 export const routes = new Hono()
 
@@ -26,19 +25,10 @@ routes.post("/token", requireAuth, async (c) => {
 
     const pairing = await prisma.pairing.findUnique({
         where: { id: pairingId },
-        include: { assignment: true },
     })
 
     if (!pairing || !pairing.partnerIds.includes(userId)) {
         return c.json({ error: "Forbidden" }, 403)
-    }
-
-    if (!pairing.isYjsInitialized) {
-        await ensurePairingInitialized(
-            pairing.id,
-            pairing.partnerIds,
-            pairing.assignment.starterCode
-        )
     }
 
     const token = await getToken(userId, PairingRoomId.from(pairing.id))

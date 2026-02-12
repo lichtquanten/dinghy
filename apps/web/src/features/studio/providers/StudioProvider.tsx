@@ -8,6 +8,7 @@ import { PairingInit } from "../components/PairingInit"
 import { SessionInit } from "../components/SessionInit"
 import { usePairingId, usePartnerIds } from "../hooks/pairing"
 import { useAutoAdvance } from "../hooks/useAutoAdvance"
+import { usePairingComplete } from "../hooks/usePairingComplete"
 import { PairingDocProvider } from "./PairingDocProvider"
 import { YjsProvider } from "./YjsProvider"
 
@@ -28,7 +29,9 @@ export function StudioProvider({ children }: { children: ReactNode }) {
                             <YjsProvider>
                                 <PairingDocProvider partnerIds={partnerIds}>
                                     <Lobby>
-                                        <AutoAdvance>{children}</AutoAdvance>
+                                        <AutoAdvance />
+                                        <PairingComplete />
+                                        {children}
                                     </Lobby>
                                 </PairingDocProvider>
                             </YjsProvider>
@@ -40,7 +43,12 @@ export function StudioProvider({ children }: { children: ReactNode }) {
     )
 }
 
-function AutoAdvance({ children }: { children: ReactNode }) {
+function AutoAdvance() {
     useAutoAdvance()
-    return <>{children}</>
+    return null
+}
+
+function PairingComplete() {
+    usePairingComplete()
+    return null
 }

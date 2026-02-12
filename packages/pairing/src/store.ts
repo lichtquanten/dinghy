@@ -12,6 +12,7 @@ export const createPairingStore = createStoreFactory(
                 d.phaseStartedAt = startTime
                 d.firstReadyAt = null
                 d.driver = null
+                d.isCompleted = false
                 d.ready = Object.fromEntries(
                     partnerIds.map((id) => [id, false])
                 )
@@ -49,6 +50,10 @@ export const createPairingStore = createStoreFactory(
                 d.firstReadyAt = null
                 d.driver = null
                 d.ready = {}
+            }),
+        complete: () =>
+            update((d) => {
+                d.isCompleted = true
             }),
     })
 )

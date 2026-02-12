@@ -16,6 +16,7 @@ export type PairingState = {
     firstReadyAt: number | null
     driver: User["id"] | null
     ready: Record<User["id"], boolean>
+    isCompleted: boolean
 }
 
 export type PairingStore = Store<PairingState, PairingActions>

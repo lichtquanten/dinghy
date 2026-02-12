@@ -8,12 +8,26 @@ import { cn } from "@workspace/ui/lib/utils.js"
 
 type Assignment = RouterOutputs["assignment"]["getByCourse"][number]
 
-function formatDueDate(dueDate: Date) {
+function formatDueDate(dueDate: Date, isCompleted: boolean) {
     const now = new Date()
     const due = new Date(dueDate)
     const diffDays = Math.ceil(
         (due.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
     )
+
+    if (isCompleted) {
+        return {
+            text: due.toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year:
+                    due.getFullYear() !== now.getFullYear()
+                        ? "numeric"
+                        : undefined,
+            }),
+            variant: "outline" as const,
+        }
+    }
 
     if (diffDays < 0) {
         return {
@@ -25,12 +39,6 @@ function formatDueDate(dueDate: Date) {
         return { text: "Due Today", variant: "destructive" as const }
     if (diffDays === 1)
         return { text: "Due Tomorrow", variant: "default" as const }
-    if (diffDays <= 7)
-        return {
-            text: `Due in ${diffDays} days`,
-            variant:
-                diffDays <= 3 ? ("default" as const) : ("secondary" as const),
-        }
 
     return {
         text: due.toLocaleDateString("en-US", {
@@ -72,11 +80,20 @@ function PartnerDisplay({ pairing }: { pairing: Assignment["pairing"] }) {
     )
 }
 
-function DueDateDisplay({ dueDate }: { dueDate: Date }) {
-    const { text, variant } = formatDueDate(dueDate)
+function DueDateDisplay({
+    dueDate,
+    isCompleted,
+}: {
+    dueDate: Date
+    isCompleted: boolean
+}) {
+    const { text, variant } = formatDueDate(dueDate, isCompleted)
     return (
-        <Badge variant={variant} className="font-medium">
-            Due: {text}
+        <Badge
+            variant={variant}
+            className={cn("font-medium", isCompleted && "opacity-50")}
+        >
+            {isCompleted ? text : `Due: ${text}`}
         </Badge>
     )
 }
@@ -151,7 +168,7 @@ export function Assignment({ assignment, onClick }: AssignmentProps) {
                                 <span className="text-muted-foreground/50">
                                     •
                                 </span>
-                                <DueDateDisplay dueDate={dueDate} />
+                                <DueDateDisplay dueDate={dueDate} isCompleted />
                             </div>
                         </div>
 

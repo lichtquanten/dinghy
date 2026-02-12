@@ -1,5 +1,6 @@
 import type { Pairing } from "@workspace/db/client"
 import { prisma } from "@/infrastructure/db.js"
+import { redisClient } from "@/infrastructure/redis.js"
 import { createMeeting, deleteMeeting } from "@/integrations/whereby/client.js"
 
 export async function destroySession(sessionId: string) {
@@ -7,19 +8,20 @@ export async function destroySession(sessionId: string) {
         where: { id: sessionId },
         include: { wherebyMeeting: true },
     })
+
     if (!session) return
 
-    await deleteMeeting(session.wherebyMeeting.wherebyId)
-
     await prisma.$transaction([
+        prisma.session.delete({ where: { id: session.id } }),
         prisma.wherebyMeeting.delete({
             where: { id: session.wherebyMeeting.id },
         }),
-        prisma.session.delete({ where: { id: session.id } }),
     ])
+
+    await deleteMeeting(session.wherebyMeeting.wherebyId)
 }
 
-export async function createWherebyMeeting() {
+async function createWherebyMeeting() {
     const meeting = await createMeeting()
     return prisma.wherebyMeeting.create({
         data: {
@@ -30,7 +32,7 @@ export async function createWherebyMeeting() {
     })
 }
 
-export async function refreshWherebyMeeting(
+async function refreshWherebyMeeting(
     wherebyMeetingId: string,
     sessionId: string
 ) {
@@ -38,20 +40,25 @@ export async function refreshWherebyMeeting(
         where: { id: wherebyMeetingId },
     })
 
-    await deleteMeeting(old.wherebyId)
-
     const meeting = await createMeeting()
-    const [_, newMeeting] = await Promise.all([
-        prisma.wherebyMeeting.delete({ where: { id: wherebyMeetingId } }),
-        prisma.wherebyMeeting.create({
+
+    const newMeeting = await prisma.$transaction(async (tx) => {
+        const created = await tx.wherebyMeeting.create({
             data: {
                 wherebyId: meeting.meetingId,
                 url: meeting.roomUrl,
                 expiresAt: meeting.endDate,
-                session: { connect: { id: sessionId } },
             },
-        }),
-    ])
+        })
+        await tx.session.update({
+            where: { id: sessionId },
+            data: { wherebyMeetingId: created.id },
+        })
+        await tx.wherebyMeeting.delete({ where: { id: wherebyMeetingId } })
+        return created
+    })
+
+    await deleteMeeting(old.wherebyId)
     return newMeeting
 }
 
@@ -63,12 +70,25 @@ export function isExpiringSoon(expiresAt: Date) {
 export async function ensureSessionInitialized(
     pairingId: Pairing["id"]
 ): Promise<void> {
+    const lockKey = `lock:pairing:${pairingId}:session`
+    const acquired = await redisClient.set(lockKey, "1", { EX: 300, NX: true })
+
+    if (acquired) {
+        try {
+            await initializeSession(pairingId)
+        } finally {
+            await redisClient.del(lockKey)
+        }
+    } else {
+        await pollUntilSessionInitialized(pairingId)
+    }
+}
+
+async function initializeSession(pairingId: Pairing["id"]): Promise<void> {
     const pairing = await prisma.pairing.findUniqueOrThrow({
         where: { id: pairingId },
         include: {
-            session: {
-                include: { wherebyMeeting: true },
-            },
+            session: { include: { wherebyMeeting: true } },
         },
     })
 
@@ -83,8 +103,7 @@ export async function ensureSessionInitialized(
     }
 
     const wherebyMeeting = await createWherebyMeeting()
-
-    await Promise.all([
+    await prisma.$transaction([
         prisma.session.create({
             data: {
                 pairingId,
@@ -96,4 +115,20 @@ export async function ensureSessionInitialized(
             data: { status: "IN_PROGRESS" },
         }),
     ])
+}
+
+async function pollUntilSessionInitialized(
+    pairingId: Pairing["id"],
+    maxAttempts = 20,
+    intervalMs = 250
+): Promise<void> {
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+        await new Promise((resolve) => setTimeout(resolve, intervalMs))
+        const pairing = await prisma.pairing.findUniqueOrThrow({
+            where: { id: pairingId },
+            select: { session: { select: { id: true } } },
+        })
+        if (pairing.session) return
+    }
+    throw new Error(`Session initialization timed out for pairing ${pairingId}`)
 }

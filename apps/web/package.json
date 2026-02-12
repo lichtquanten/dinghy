@@ -49,6 +49,7 @@
         "@trpc/client": "^11.8.1",
         "@trpc/tanstack-react-query": "^11.8.1",
         "@uiw/react-codemirror": "^4.25.4",
+        "@whereby.com/browser-sdk": "^3.18.11",
         "@workspace/api": "workspace:*",
         "@workspace/db": "workspace:*",
         "@workspace/pairing": "workspace:*",

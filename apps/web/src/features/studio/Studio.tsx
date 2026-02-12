@@ -4,6 +4,7 @@ import { Navigate, useParams } from "react-router-dom"
 import { Button } from "@workspace/ui/components/button.js"
 import { ErrorFallback } from "@/lib/components/ErrorFallback"
 import { FullPageLoader } from "@/lib/components/FullPageLoader"
+import { useSelf } from "@/lib/hooks/useSelf"
 import { Mode } from "./components/Mode"
 import { Task } from "./components/Task/Task"
 import { WherebyEmbed } from "./components/WherebyEmbed"
@@ -30,6 +31,7 @@ export default function Studio() {
 }
 
 function StudioLayout() {
+    const self = useSelf()
     return (
         <div className="h-screen flex flex-col">
             <Mode />
@@ -37,7 +39,7 @@ function StudioLayout() {
                 <Task />
                 <Workspace />
             </div>
-            <WherebyEmbed mode="audio-only" />
+            <WherebyEmbed mode="audio-only" displayName={self.firstName} />
             <DevModeSwitcher />
         </div>
     )

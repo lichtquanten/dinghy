@@ -1,7 +1,6 @@
-import { useContext, useEffect, useMemo } from "react"
+import { useContext, useMemo } from "react"
 import { yCollab } from "y-codemirror.next"
 import * as Y from "yjs"
-import { useSelf } from "@/lib/hooks/useSelf"
 import { YjsContext } from "../contexts/YjsContext"
 
 export function useYDoc() {
@@ -18,15 +17,6 @@ export function useAwareness() {
 
 export function useCollabExtension(ytext: Y.Text) {
     const awareness = useAwareness()
-    const self = useSelf()
-
-    useEffect(() => {
-        awareness.setLocalStateField("user", {
-            name: self.firstName,
-            color: "#888888",
-            colorLight: `#88888880`,
-        })
-    }, [awareness, self])
 
     const undoManager = useMemo(() => new Y.UndoManager(ytext), [ytext])
 

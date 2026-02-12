@@ -36,6 +36,7 @@ export const pairingRouter = router({
                 })
             }
             await ensurePairingInitialized(pairing.id)
+            return {}
         }),
     get: protectedProcedure
         .input(z.object({ id: z.string() }))

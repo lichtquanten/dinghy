@@ -7,10 +7,10 @@ export async function destroySession(sessionId: string) {
         where: { id: sessionId },
         include: { wherebyMeeting: true },
     })
-
     if (!session) return
 
-    await deleteMeeting(session.wherebyMeeting.id)
+    await deleteMeeting(session.wherebyMeeting.wherebyId)
+
     await prisma.$transaction([
         prisma.wherebyMeeting.delete({
             where: { id: session.wherebyMeeting.id },
@@ -23,29 +23,35 @@ export async function createWherebyMeeting() {
     const meeting = await createMeeting()
     return prisma.wherebyMeeting.create({
         data: {
-            id: meeting.meetingId,
+            wherebyId: meeting.meetingId,
             url: meeting.roomUrl,
             expiresAt: meeting.endDate,
         },
     })
 }
 
-export async function refreshWherebyMeeting(oldId: string, sessionId: string) {
-    await deleteMeeting(oldId)
-    const meeting = await createMeeting()
+export async function refreshWherebyMeeting(
+    wherebyMeetingId: string,
+    sessionId: string
+) {
+    const old = await prisma.wherebyMeeting.findUniqueOrThrow({
+        where: { id: wherebyMeetingId },
+    })
 
+    await deleteMeeting(old.wherebyId)
+
+    const meeting = await createMeeting()
     const [_, newMeeting] = await Promise.all([
-        prisma.wherebyMeeting.delete({ where: { id: oldId } }),
+        prisma.wherebyMeeting.delete({ where: { id: wherebyMeetingId } }),
         prisma.wherebyMeeting.create({
             data: {
-                id: meeting.meetingId,
+                wherebyId: meeting.meetingId,
                 url: meeting.roomUrl,
                 expiresAt: meeting.endDate,
                 session: { connect: { id: sessionId } },
             },
         }),
     ])
-
     return newMeeting
 }
 

@@ -138,7 +138,8 @@ model Session {
 }
 
 model WherebyMeeting {
-  id        String   @id @map("_id") @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  wherebyId String   @unique
   session   Session?
   url       String
   expiresAt DateTime

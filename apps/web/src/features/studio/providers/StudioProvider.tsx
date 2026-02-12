@@ -1,41 +1,46 @@
 import { LiveblocksProvider, RoomProvider } from "@liveblocks/react/suspense"
-import { type ReactNode, Suspense } from "react"
+import type { ReactNode } from "react"
+import { Suspense } from "react"
 import { PairingRoomId } from "@workspace/pairing"
 import { FullPageLoader } from "@/lib/components/FullPageLoader.js"
-import { usePartnerIds } from "../hooks/pairing"
+import { Lobby } from "../components/Lobby"
+import { PairingInit } from "../components/PairingInit"
+import { SessionInit } from "../components/SessionInit"
+import { usePairingId, usePartnerIds } from "../hooks/pairing"
 import { useAutoAdvance } from "../hooks/useAutoAdvance"
 import { PairingDocProvider } from "./PairingDocProvider"
 import { YjsProvider } from "./YjsProvider"
 
-export function StudioProvider({
-    pairingId,
-    children,
-}: {
-    pairingId: string
-    children: ReactNode
-}) {
-    const roomId = PairingRoomId.from(pairingId)
+export function StudioProvider({ children }: { children: ReactNode }) {
+    const pairingId = usePairingId()
     const partnerIds = usePartnerIds()
+    const roomId = PairingRoomId.from(pairingId)
 
     return (
-        <LiveblocksProvider
-            authEndpoint="/api/liveblocks/token"
-            badgeLocation="bottom-left"
-        >
-            <RoomProvider id={roomId}>
-                <Suspense fallback={<FullPageLoader />}>
-                    <YjsProvider>
-                        <PairingDocProvider partnerIds={partnerIds}>
-                            <StudioInner>{children}</StudioInner>
-                        </PairingDocProvider>
-                    </YjsProvider>
-                </Suspense>
-            </RoomProvider>
-        </LiveblocksProvider>
+        <PairingInit pairingId={pairingId}>
+            <SessionInit pairingId={pairingId}>
+                <LiveblocksProvider
+                    authEndpoint="/api/liveblocks/token"
+                    badgeLocation="bottom-left"
+                >
+                    <RoomProvider id={roomId}>
+                        <Suspense fallback={<FullPageLoader />}>
+                            <YjsProvider>
+                                <PairingDocProvider partnerIds={partnerIds}>
+                                    <Lobby>
+                                        <AutoAdvance>{children}</AutoAdvance>
+                                    </Lobby>
+                                </PairingDocProvider>
+                            </YjsProvider>
+                        </Suspense>
+                    </RoomProvider>
+                </LiveblocksProvider>
+            </SessionInit>
+        </PairingInit>
     )
 }
 
-function StudioInner({ children }: { children: ReactNode }) {
+function AutoAdvance({ children }: { children: ReactNode }) {
     useAutoAdvance()
     return <>{children}</>
 }

@@ -21,6 +21,7 @@ export const sessionRouter = router({
             }
 
             await ensureSessionInitialized(input.pairingId)
+            return {}
         }),
 
     get: protectedProcedure

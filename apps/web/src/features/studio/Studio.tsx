@@ -6,6 +6,7 @@ import { ErrorFallback } from "@/lib/components/ErrorFallback"
 import { FullPageLoader } from "@/lib/components/FullPageLoader"
 import { Mode } from "./components/Mode"
 import { Task } from "./components/Task/Task"
+import { WherebyEmbed } from "./components/WherebyEmbed"
 import { Workspace } from "./components/Workspace/Workspace"
 // import { usePairingDoc } from "./hooks/usePairingDoc"
 import { StudioProvider } from "./providers/StudioProvider"
@@ -20,7 +21,7 @@ export default function Studio() {
     return (
         <ErrorBoundary fallback={<ErrorFallback />}>
             <Suspense fallback={<FullPageLoader />}>
-                <StudioProvider pairingId={pairingId}>
+                <StudioProvider>
                     <StudioLayout />
                 </StudioProvider>
             </Suspense>
@@ -36,6 +37,7 @@ function StudioLayout() {
                 <Task />
                 <Workspace />
             </div>
+            <WherebyEmbed mode="audio-only" />
             <DevModeSwitcher />
         </div>
     )

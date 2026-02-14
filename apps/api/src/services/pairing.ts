@@ -1,8 +1,13 @@
 import * as Y from "yjs"
 import type { Assignment, Pairing } from "@workspace/db/client"
-import { getPairingDoc, PairingRoomId } from "@workspace/pairing"
+import {
+    createPairingStore,
+    getPairingDoc,
+    PairingRoomId,
+} from "@workspace/pairing"
+import type { PairingState, PairingStore } from "@workspace/pairing"
 import { prisma } from "@/infrastructure/db.js"
-import { redisClient } from "@/infrastructure/redis.js"
+import { withLock } from "@/infrastructure/redis.js"
 import { liveblocks, sendYjsUpdate } from "@/integrations/liveblocks/client.js"
 
 export async function createPairing(
@@ -15,22 +20,48 @@ export async function createPairing(
             assignmentId,
         },
     })
+
     return pairing
+}
+
+export async function withPairingStore(
+    roomId: string,
+    fn: (store: PairingStore, state: PairingState) => void | false
+): Promise<void> {
+    const ydoc = new Y.Doc()
+    const update = await liveblocks.getYjsDocumentAsBinaryUpdate(roomId)
+    Y.applyUpdate(ydoc, new Uint8Array(update))
+
+    const store = createPairingStore(ydoc)
+    const state = store.get()
+
+    const result = fn(store, state)
+
+    if (result !== false) {
+        await sendYjsUpdate(roomId, ydoc)
+    }
+}
+
+export function computeSecsRemaining(state: PairingState): number {
+    if (state.phaseSecsRemaining == null || state.phaseTickingSince == null) {
+        return 0
+    }
+    const elapsed = (Date.now() - state.phaseTickingSince) / 1000
+    return Math.max(0, state.phaseSecsRemaining - elapsed)
 }
 
 export async function ensurePairingInitialized(
     pairingId: Pairing["id"]
 ): Promise<void> {
-    const lockKey = `lock:pairing:${pairingId}:init`
-    const acquired = await redisClient.set(lockKey, "1", { EX: 300, NX: true })
-
-    if (acquired) {
-        try {
+    const acquired = await withLock(
+        `pairing:${pairingId}:init`,
+        async () => {
             await initializePairing(pairingId)
-        } finally {
-            await redisClient.del(lockKey)
-        }
-    } else {
+        },
+        300
+    )
+
+    if (!acquired) {
         await pollUntilInitialized(pairingId)
     }
 }
@@ -48,11 +79,14 @@ async function initializePairing(pairingId: Pairing["id"]): Promise<void> {
     const ydoc = new Y.Doc()
     const pairingDoc = getPairingDoc(ydoc, pairing.partnerIds)
 
-    pairingDoc.store.initialize(pairing.partnerIds, Date.now())
+    pairingDoc.store.initialize(pairing.partnerIds)
+
     pairingDoc.sharedCode.ytext().insert(0, pairing.assignment.starterCode)
+
     for (const id of pairing.partnerIds) {
         if (!pairingDoc.userCode[id])
             throw new Error(`User code for user ${id} not found in pairing doc`)
+
         pairingDoc.userCode[id]
             .ytext()
             .insert(0, pairing.assignment.starterCode)

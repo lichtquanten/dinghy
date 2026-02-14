@@ -25,3 +25,25 @@ export const KEYS = {
         sseChannel: (userId: string) => `judge0:sse:${userId}`,
     },
 }
+
+export async function withLock(
+    key: string,
+    fn: () => Promise<void>,
+    ttlSeconds = 10
+): Promise<boolean> {
+    const lockKey = `lock:${key}`
+    const acquired = await redisClient.set(lockKey, "1", {
+        EX: ttlSeconds,
+        NX: true,
+    })
+
+    if (!acquired) return false
+
+    try {
+        await fn()
+    } finally {
+        await redisClient.del(lockKey)
+    }
+
+    return true
+}

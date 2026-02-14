@@ -3,12 +3,9 @@ import type { ReactNode } from "react"
 import { Suspense } from "react"
 import { PairingRoomId } from "@workspace/pairing"
 import { FullPageLoader } from "@/lib/components/FullPageLoader.js"
-import { Lobby } from "../components/Lobby"
 import { PairingInit } from "../components/PairingInit"
 import { SessionInit } from "../components/SessionInit"
 import { usePairingId, usePartnerIds } from "../hooks/pairing"
-import { useAutoAdvance } from "../hooks/useAutoAdvance"
-import { usePairingComplete } from "../hooks/usePairingComplete"
 import { PairingDocProvider } from "./PairingDocProvider"
 import { YjsProvider } from "./YjsProvider"
 
@@ -28,11 +25,7 @@ export function StudioProvider({ children }: { children: ReactNode }) {
                         <Suspense fallback={<FullPageLoader />}>
                             <YjsProvider>
                                 <PairingDocProvider partnerIds={partnerIds}>
-                                    <Lobby>
-                                        <AutoAdvance />
-                                        <PairingComplete />
-                                        {children}
-                                    </Lobby>
+                                    {children}
                                 </PairingDocProvider>
                             </YjsProvider>
                         </Suspense>
@@ -41,14 +34,4 @@ export function StudioProvider({ children }: { children: ReactNode }) {
             </SessionInit>
         </PairingInit>
     )
-}
-
-function AutoAdvance() {
-    useAutoAdvance()
-    return null
-}
-
-function PairingComplete() {
-    usePairingComplete()
-    return null
 }

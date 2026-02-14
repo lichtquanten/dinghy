@@ -5,55 +5,79 @@ import type { PairingState } from "./types"
 export const createPairingStore = createStoreFactory(
     "pairing",
     (update: (fn: (draft: PairingState) => void) => void) => ({
-        initialize: (partnerIds: User["id"][], startTime: number) =>
+        initialize: (partnerIds: User["id"][]) =>
             update((d) => {
                 d.taskIndex = 0
                 d.phaseIndex = 0
-                d.phaseStartedAt = startTime
-                d.firstReadyAt = null
-                d.driver = null
+                d.phaseSecsRemaining = null
+                d.phaseTickingSince = null
+                d.isStarted = false
+                d.isPaused = false
                 d.isCompleted = false
-                d.ready = Object.fromEntries(
+                d.readyByUser = Object.fromEntries(
                     partnerIds.map((id) => [id, false])
                 )
             }),
 
         setReady: (userId: string, ready: boolean) =>
             update((d) => {
-                d.ready[userId] = ready
-                if (ready && !d.firstReadyAt) {
-                    d.firstReadyAt = Date.now()
-                }
-                if (!ready && !Object.values(d.ready).some(Boolean)) {
-                    d.firstReadyAt = null
+                d.readyByUser[userId] = ready
+            }),
+
+        startPhase: (secsRemaining: number, serverNow: number) =>
+            update((d) => {
+                d.phaseSecsRemaining = secsRemaining
+                d.phaseTickingSince = serverNow
+                d.isStarted = true
+                d.isPaused = false
+                for (const id of Object.keys(d.readyByUser)) {
+                    d.readyByUser[id] = false
                 }
             }),
 
-        advancePhase: (startTime: number) =>
+        pausePhase: (secsRemaining: number) =>
+            update((d) => {
+                d.phaseSecsRemaining = secsRemaining
+                d.phaseTickingSince = null
+                d.isPaused = true
+            }),
+
+        resumePhase: (serverNow: number) =>
+            update((d) => {
+                d.phaseTickingSince = serverNow
+                d.isPaused = false
+                for (const id of Object.keys(d.readyByUser)) {
+                    d.readyByUser[id] = false
+                }
+            }),
+
+        advancePhase: (secsRemaining: number, serverNow: number) =>
             update((d) => {
                 d.phaseIndex++
-                d.phaseStartedAt = startTime
-                d.firstReadyAt = null
-                d.ready = {}
-            }),
-
-        setDriver: (driverId: string) =>
-            update((d) => {
-                d.driver = driverId
+                d.phaseSecsRemaining = secsRemaining
+                d.phaseTickingSince = serverNow
+                d.isPaused = false
+                for (const id of Object.keys(d.readyByUser)) {
+                    d.readyByUser[id] = false
+                }
             }),
 
         advanceTask: () =>
             update((d) => {
                 d.taskIndex++
                 d.phaseIndex = 0
-                d.phaseStartedAt = 0
-                d.firstReadyAt = null
-                d.driver = null
-                d.ready = {}
+                d.phaseSecsRemaining = null
+                d.phaseTickingSince = null
+                d.isPaused = false
+                for (const id of Object.keys(d.readyByUser)) {
+                    d.readyByUser[id] = false
+                }
             }),
+
         complete: () =>
             update((d) => {
                 d.isCompleted = true
+                d.phaseTickingSince = null
             }),
     })
 )

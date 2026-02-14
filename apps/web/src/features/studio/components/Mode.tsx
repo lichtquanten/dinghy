@@ -2,7 +2,7 @@ import type { InteractionMode } from "@workspace/db/browser"
 import { Button } from "@workspace/ui/components/button.js"
 import { useCurrentPhase } from "../hooks/progress.js"
 import { type PhaseStatus, usePhaseStatus } from "../hooks/usePhaseStatus.js"
-import { useReadiness } from "../hooks/useReadiness"
+import { useSelfReady } from "../hooks/useSelfReady.js"
 
 const MODE_CONFIG: Record<
     InteractionMode,
@@ -35,11 +35,17 @@ const BUTTON_CONFIG: Record<
         variant: "secondary",
     },
     advancing: { label: "Advancing...", disabled: true, variant: "secondary" },
+    paused: {
+        label: "Activity paused...",
+        disabled: true,
+        variant: "default",
+    },
 }
 
 function formatTime(seconds: number) {
-    const m = Math.floor(seconds / 60)
-    const s = seconds % 60
+    const total = Math.ceil(seconds)
+    const m = Math.floor(total / 60)
+    const s = total % 60
     return m > 0 ? `${m}:${s.toString().padStart(2, "0")}` : `${s}s`
 }
 
@@ -48,29 +54,27 @@ function StatusMessage({ state }: { state: PhaseStatus }) {
         case "locked":
             return (
                 <span className="text-sm text-muted-foreground">
-                    {formatTime(state.countdown)} until you can continue
+                    {formatTime(state.secsRemaining)} until you can continue
                 </span>
             )
         case "partnerWaiting":
             return (
-                <span className="text-sm text-amber-600 dark:text-amber-500 animate-pulse">
-                    Partner is waiting!
+                <span className="text-sm text-amber-600 dark:text-amber-500">
+                    {state.secsRemaining == null
+                        ? "Partner is ready"
+                        : `Partner is ready. Auto-advancing in ${formatTime(state.secsRemaining)}`}
                 </span>
             )
         case "waiting":
             return (
                 <span className="text-sm text-muted-foreground">
-                    {state.countdown !== null
-                        ? `Auto-advancing in ${formatTime(state.countdown)}`
+                    {state.secsRemaining !== null
+                        ? `Auto-advancing in ${formatTime(state.secsRemaining)}`
                         : "Waiting for partner..."}
                 </span>
             )
         case "advancing":
-            return (
-                <span className="text-sm text-green-600 dark:text-green-500">
-                    Advancing...
-                </span>
-            )
+            return null
         case "unlocked":
             return null
     }
@@ -78,14 +82,14 @@ function StatusMessage({ state }: { state: PhaseStatus }) {
 
 function PhaseActions() {
     const state = usePhaseStatus()
-    const { toggleReady } = useReadiness()
+    const { setSelfReady } = useSelfReady()
     const button = BUTTON_CONFIG[state.status]
 
     return (
         <div className="flex items-center gap-3">
             <StatusMessage state={state} />
             <Button
-                onClick={toggleReady}
+                onClick={() => setSelfReady(true)}
                 disabled={button.disabled}
                 variant={button.variant}
                 size="sm"

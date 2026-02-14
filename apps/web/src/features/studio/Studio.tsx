@@ -1,15 +1,14 @@
-import { Suspense, useState } from "react"
+import { Suspense } from "react"
 import { ErrorBoundary } from "react-error-boundary"
 import { Navigate, useParams } from "react-router-dom"
-import { Button } from "@workspace/ui/components/button.js"
 import { ErrorFallback } from "@/lib/components/ErrorFallback"
 import { FullPageLoader } from "@/lib/components/FullPageLoader"
 import { useSelf } from "@/lib/hooks/useSelf"
 import { Mode } from "./components/Mode"
+import { PairingGate } from "./components/PairingGate"
 import { Task } from "./components/Task/Task"
 import { WherebyEmbed } from "./components/WherebyEmbed"
 import { Workspace } from "./components/Workspace/Workspace"
-// import { usePairingDoc } from "./hooks/usePairingDoc"
 import { StudioProvider } from "./providers/StudioProvider"
 
 export default function Studio() {
@@ -23,7 +22,9 @@ export default function Studio() {
         <ErrorBoundary fallback={<ErrorFallback />}>
             <Suspense fallback={<FullPageLoader />}>
                 <StudioProvider>
-                    <StudioLayout />
+                    <PairingGate>
+                        <StudioLayout />
+                    </PairingGate>
                 </StudioProvider>
             </Suspense>
         </ErrorBoundary>
@@ -40,44 +41,6 @@ function StudioLayout() {
                 <Workspace />
             </div>
             <WherebyEmbed mode="audio-only" displayName={self.firstName} />
-            <DevModeSwitcher />
-        </div>
-    )
-}
-
-// ============================================================================
-// Dev Tools (remove in production)
-// ============================================================================
-
-function DevModeSwitcher() {
-    const [isVisible, setIsVisible] = useState(true)
-    // const pairingDoc = usePairingDoc()
-
-    if (!isVisible) {
-        return (
-            <Button
-                size="sm"
-                variant="outline"
-                className="fixed bottom-4 right-4 z-50"
-                onClick={() => setIsVisible(true)}
-            >
-                Show Dev Controls
-            </Button>
-        )
-    }
-
-    return (
-        <div className="fixed bottom-4 right-4 flex gap-2 z-50 bg-background border rounded-lg p-2 shadow-lg">
-            <Button
-                size="sm"
-                variant="outline"
-                onClick={() => setIsVisible(false)}
-            >
-                ✕
-            </Button>
-            {/* <Button size="sm" onClick={pairingDoc.store.advancePhase}>
-                Advance Phase
-            </Button> */}
         </div>
     )
 }

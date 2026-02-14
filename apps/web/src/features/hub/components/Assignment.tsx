@@ -1,6 +1,5 @@
 import { ArrowRight, PlayCircle, User, Users } from "lucide-react"
 import type { RouterOutputs } from "@workspace/api"
-import { PairingStatus } from "@workspace/db/browser"
 import { Badge } from "@workspace/ui/components/badge.js"
 import { Button } from "@workspace/ui/components/button.js"
 import { Card, CardHeader, CardTitle } from "@workspace/ui/components/card.js"
@@ -50,10 +49,6 @@ function formatDueDate(dueDate: Date, isCompleted: boolean) {
         variant: "outline" as const,
     }
 }
-
-// ============================================
-// Subcomponents
-// ============================================
 
 function PartnerDisplay({ pairing }: { pairing: Assignment["pairing"] }) {
     if (!pairing) {
@@ -115,10 +110,6 @@ function ActionButton({ isStarted }: { isStarted: boolean }) {
     )
 }
 
-// ============================================
-// Main component
-// ============================================
-
 interface AssignmentProps {
     assignment: Assignment
     onClick?: () => void
@@ -128,8 +119,8 @@ export function Assignment({ assignment, onClick }: AssignmentProps) {
     const { pairing, title, dueDate } = assignment
 
     const hasPartner = pairing !== null
-    const isCompleted =
-        pairing !== null && pairing.status === PairingStatus.COMPLETED
+    const isCompleted = pairing?.isCompleted ?? false
+    const isStarted = pairing?.startedAt != null
     const isClickable = hasPartner && !isCompleted && Boolean(onClick)
 
     return (
@@ -168,12 +159,15 @@ export function Assignment({ assignment, onClick }: AssignmentProps) {
                                 <span className="text-muted-foreground/50">
                                     •
                                 </span>
-                                <DueDateDisplay dueDate={dueDate} isCompleted />
+                                <DueDateDisplay
+                                    dueDate={dueDate}
+                                    isCompleted={isCompleted}
+                                />
                             </div>
                         </div>
 
                         {!isCompleted && hasPartner && (
-                            <ActionButton isStarted />
+                            <ActionButton isStarted={isStarted} />
                         )}
                     </div>
                 </CardHeader>

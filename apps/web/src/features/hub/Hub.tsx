@@ -4,7 +4,6 @@ import { CheckCircle2, Clock, Plus } from "lucide-react"
 import { Suspense, useCallback, useState } from "react"
 import { ErrorBoundary } from "react-error-boundary"
 import { generatePath, Navigate, useNavigate } from "react-router-dom"
-import { PairingStatus } from "@workspace/db/browser"
 import { Button } from "@workspace/ui/components/button.js"
 import {
     Select,
@@ -80,11 +79,9 @@ function HubContent() {
         return null
     }
 
-    const todoAssignments = assignments.filter(
-        (a) => a.pairing?.status !== PairingStatus.COMPLETED
-    )
-    const completedAssignments = assignments.filter((a) =>
-        Boolean(a.pairing?.status === PairingStatus.COMPLETED)
+    const todoAssignments = assignments.filter((a) => !a.pairing?.isCompleted)
+    const completedAssignments = assignments.filter(
+        (a) => a.pairing?.isCompleted
     )
 
     return (

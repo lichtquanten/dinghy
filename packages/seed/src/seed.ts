@@ -152,7 +152,6 @@ async function seedPairings(
             data: {
                 assignmentId: assignment.id,
                 partnerIds,
-                status: pairingData.status ?? "NOT_STARTED",
                 isYjsInitialized: pairingData.isYjsInitialized ?? false,
             },
         })

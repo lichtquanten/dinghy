@@ -4,7 +4,7 @@ import { toast } from "sonner"
 import { useStoreSelector } from "@workspace/pairing"
 import { usePairingDoc } from "./usePairingDoc"
 
-export function usePairingComplete() {
+export function useRedirectOnPairingComplete() {
     const pairing = usePairingDoc()
     const isCompleted = useStoreSelector(pairing.store, (s) => s.isCompleted)
 

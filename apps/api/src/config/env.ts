@@ -25,6 +25,7 @@ const envSchema = z.object({
     WHEREBY_API_KEY: z.string().min(1),
 
     LIVEBLOCKS_SECRET_KEY: z.string().min(1),
+    LIVEBLOCKS_WEBHOOK_SECRET: z.string().min(1),
 
     API_CALLBACK_URL: z.url(),
 

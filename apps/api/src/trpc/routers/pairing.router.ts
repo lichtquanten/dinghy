@@ -1,10 +1,12 @@
 import { TRPCError } from "@trpc/server"
-import * as Y from "yjs"
 import { z } from "zod"
-import { createPairingStore, PairingRoomId } from "@workspace/pairing"
+import { PairingRoomId } from "@workspace/pairing"
 import { prisma } from "@/infrastructure/db.js"
-import { liveblocks, sendYjsUpdate } from "@/integrations/liveblocks/client.js"
-import { ensurePairingInitialized } from "@/services/pairing.js"
+import { withLock } from "@/infrastructure/redis.js"
+import {
+    ensurePairingInitialized,
+    withPairingStore,
+} from "@/services/pairing.js"
 import { destroySession } from "@/services/session.js"
 import { protectedProcedure, router } from "@/trpc/trpc.js"
 
@@ -58,7 +60,7 @@ function getPartner(
 async function completePairing(pairingId: string, sessionId?: string) {
     await prisma.pairing.update({
         where: { id: pairingId },
-        data: { status: "COMPLETED" },
+        data: { isCompleted: true },
     })
 
     if (sessionId) {
@@ -95,7 +97,8 @@ export const pairingRouter = router({
                 pairingId: pairing.id,
                 assignmentId: pairing.assignmentId,
                 partner: getPartner(pairing, ctx.userId),
-                status: pairing.status,
+                isCompleted: pairing.isCompleted,
+                startedAt: pairing.startedAt,
             }
         }),
 
@@ -127,51 +130,124 @@ export const pairingRouter = router({
                     firstName: partner.firstName,
                     lastInitial: partner.lastName[0],
                 },
-                status: pairing.status,
+                isCompleted: pairing.isCompleted,
+                startedAt: pairing.startedAt,
             }
         }),
 
-    advancePhase: protectedProcedure
+    startPairing: protectedProcedure
         .input(z.object({ pairingId: z.string() }))
         .mutation(async ({ ctx, input }) => {
             const pairing = await findPairingForUser(
                 input.pairingId,
                 ctx.userId
             )
+            if (pairing.isCompleted) return
 
-            if (pairing.status === "COMPLETED") return
+            await withLock(`pairing:${input.pairingId}:start`, async () => {
+                const tasks = pairing.assignment.tasks
+                const roomId = PairingRoomId.from(input.pairingId)
 
-            const roomId = PairingRoomId.from(input.pairingId)
-            const ydoc = new Y.Doc()
-            const update = await liveblocks.getYjsDocumentAsBinaryUpdate(roomId)
-            Y.applyUpdate(ydoc, new Uint8Array(update))
+                await withPairingStore(roomId, (store, state) => {
+                    if (state.isStarted) return false
 
-            const store = createPairingStore(ydoc)
-            const state = store.get()
-            const tasks = pairing.assignment.tasks
-            const currentTask = tasks[state.taskIndex]
+                    const phase =
+                        tasks[state.taskIndex]?.phases[state.phaseIndex]
+                    if (!phase) {
+                        throw new TRPCError({
+                            code: "INTERNAL_SERVER_ERROR",
+                            message: `Invalid phase: task ${state.taskIndex}, phase ${state.phaseIndex}`,
+                        })
+                    }
 
-            if (!currentTask) {
-                throw new TRPCError({
-                    code: "INTERNAL_SERVER_ERROR",
-                    message: `Invalid task index: ${state.taskIndex}`,
+                    store.startPhase(phase.maxTimeSecs ?? 0, Date.now())
                 })
-            }
 
-            const isLastPhase =
-                state.phaseIndex >= currentTask.phases.length - 1
-            const isLastTask = state.taskIndex >= tasks.length - 1
+                if (!pairing.startedAt) {
+                    await prisma.pairing.update({
+                        where: { id: pairing.id },
+                        data: {
+                            startedAt: new Date(),
+                        },
+                    })
+                }
+            })
+        }),
 
-            if (isLastPhase && isLastTask) {
-                store.complete()
-                await sendYjsUpdate(roomId, ydoc)
+    resumePhase: protectedProcedure
+        .input(z.object({ pairingId: z.string() }))
+        .mutation(async ({ ctx, input }) => {
+            const pairing = await findPairingForUser(
+                input.pairingId,
+                ctx.userId
+            )
+            if (pairing.isCompleted) return
+
+            await withLock(`pairing:${input.pairingId}:resume`, async () => {
+                const roomId = PairingRoomId.from(input.pairingId)
+
+                await withPairingStore(roomId, (store, state) => {
+                    if (!state.isPaused) return false
+                    store.resumePhase(Date.now())
+                })
+            })
+        }),
+
+    advancePhase: protectedProcedure
+        .input(
+            z.object({
+                pairingId: z.string(),
+                taskIndex: z.number(),
+                phaseIndex: z.number(),
+            })
+        )
+        .mutation(async ({ ctx, input }) => {
+            const pairing = await findPairingForUser(
+                input.pairingId,
+                ctx.userId
+            )
+            if (pairing.isCompleted) return
+
+            let didComplete = false
+
+            await withLock(`pairing:${input.pairingId}:advance`, async () => {
+                const tasks = pairing.assignment.tasks
+                const roomId = PairingRoomId.from(input.pairingId)
+
+                await withPairingStore(roomId, (store, state) => {
+                    if (state.taskIndex !== input.taskIndex) return false
+                    if (state.phaseIndex !== input.phaseIndex) return false
+
+                    const currentTask = tasks[state.taskIndex]
+                    if (!currentTask) {
+                        throw new TRPCError({
+                            code: "INTERNAL_SERVER_ERROR",
+                            message: `Invalid task index: ${state.taskIndex}`,
+                        })
+                    }
+
+                    const isLastPhase =
+                        state.phaseIndex >= currentTask.phases.length - 1
+                    const isLastTask = state.taskIndex >= tasks.length - 1
+
+                    if (isLastPhase && isLastTask) {
+                        store.complete()
+                        didComplete = true
+                    } else if (isLastPhase) {
+                        store.advanceTask()
+                    } else {
+                        const nextPhase =
+                            currentTask.phases[state.phaseIndex + 1]
+                        store.advancePhase(
+                            nextPhase?.maxTimeSecs ?? 0,
+                            Date.now()
+                        )
+                    }
+                })
+            })
+
+            if (didComplete) {
                 await completePairing(pairing.id, pairing.session?.id)
-            } else if (isLastPhase) {
-                store.advanceTask()
-                await sendYjsUpdate(roomId, ydoc)
-            } else {
-                store.advancePhase(Date.now())
-                await sendYjsUpdate(roomId, ydoc)
             }
         }),
 })

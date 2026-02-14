@@ -2,20 +2,24 @@ import type { User } from "@workspace/db/browser"
 import type { Store, TextAccessor } from "@workspace/yjs-store"
 
 export type PairingActions = {
-    initialize: (partnerIds: User["id"][], startTime: number) => void
+    initialize: (partnerIds: User["id"][]) => void
     setReady: (userId: string, ready: boolean) => void
-    advancePhase: (startTime: number) => void
-    setDriver: (driverId: string) => void
+    startPhase: (secsRemaining: number, serverNow: number) => void
+    pausePhase: (secsRemaining: number) => void
+    resumePhase: (serverNow: number) => void
+    advancePhase: (secsRemaining: number, serverNow: number) => void
     advanceTask: () => void
+    complete: () => void
 }
 
 export type PairingState = {
     taskIndex: number
     phaseIndex: number
-    phaseStartedAt: number
-    firstReadyAt: number | null
-    driver: User["id"] | null
-    ready: Record<User["id"], boolean>
+    phaseSecsRemaining: number | null
+    phaseTickingSince: number | null
+    isStarted: boolean
+    isPaused: boolean
+    readyByUser: Record<User["id"], boolean>
     isCompleted: boolean
 }
 

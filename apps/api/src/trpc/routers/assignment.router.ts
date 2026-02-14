@@ -20,6 +20,7 @@ function formatPairing(pairings: PairingWithPartners[], userId: string) {
             message: "User has multiple pairings for assignment",
         })
     }
+
     const pairing = pairings[0]
     if (!pairing) return null
 
@@ -30,11 +31,13 @@ function formatPairing(pairings: PairingWithPartners[], userId: string) {
             message: "Pairing must have exactly one partner",
         })
     }
+
     const partner = partners[0]
 
     return {
         id: pairing.id,
-        status: pairing.status,
+        isCompleted: pairing.isCompleted,
+        startedAt: pairing.startedAt,
         partner: {
             id: partner.id,
             firstName: partner.firstName,
@@ -72,6 +75,7 @@ export const assignmentRouter = router({
             }
 
             const { pairings, ...rest } = assignment
+
             return {
                 ...rest,
                 pairing: formatPairing(pairings, ctx.userId),

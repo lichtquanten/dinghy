@@ -26,30 +26,30 @@ DOTENV_PUBLIC_KEY_CONF="03eeedf1b29b8c92265bb5e2e86d1c0b846bd75a0aa51185df6dc1aa
 # Enable or disable Judge0 Telemetry.
 # Read more about it here: https://github.com/judge0/judge0/blob/master/TELEMETRY.md
 # Default: true
-JUDGE0_TELEMETRY_ENABLE=encrypted:BKlSHQRppP2MnKgKrT8oiGwOjgpfZNJY6nN5qz5nj8RsyGlwHb2ouYv/Ri9S/ICyLlOrwu3CMHvkkEkEOqG5tStXE41RbUpL6DtktSYkLXLFbTLMdnA4NcyCSC6RZITOY2o1ZeKa
+JUDGE0_TELEMETRY_ENABLE=encrypted:BD0mGcIUEzfviY6eDDG1MZRsaWjrjo7SXiCOBO+2hphqu9D/L+94YBNTqpmLT8MRfR16xC69Td5NLr4Kahh2QWcZfB2wqfBdhCCgjaJMbBJYsYFFTN5U5KkQcGVb3ohYGKQUo3r9
 
 # Automatically restart Judge0 server if it fails to start.
 # Default: 10
-RESTART_MAX_TRIES=encrypted:BNhrh94O1xR03s2XXoVTYmLrk691CSqYqTZadZWDtzFYL1hZ8QgXexSKc5u9LIxexWeukZbrTFZ6imOlbyYj+0r8xnDC8AZ42F8PsjbW9zzZFrVi7ICBbO224o9Y+3B9MQ==
+RESTART_MAX_TRIES=encrypted:BJsOTe+WeVaUe56uebeSFctfBALKi4gDYl4RYs0agTv21142qDgSzahOFOL3lXLjXu7Ldsl2+Xbg94/BQoCRlstcAsZIVanv/c31q0c9+Yeiq3v7XgGQvTIHfxzUvHQoZg==
 
 # Maintenance mode is a mode in which clients cannot
 # create or delete submissions while maintenance is enabled.
 # Default: false
-MAINTENANCE_MODE=encrypted:BBnycTtlgOrIhmU4O7OEgu0Ga75ANA1q6IUQwmFyzPQdqTJkd1R4m1z2hEMh0d+d88SAargNqqv3R691D6DTA51pYlF9qD9L7BZm3aYnz0uJ/ytwVuK7suoo5+bSn2b4jw==
+MAINTENANCE_MODE=encrypted:BIA7zkE4LSLE4lGb1KM6ebwvhtxbfYJ3XUM7iys4ihQgpuUz67MKowYkc21CGqInE4M+d/2SOp6sGu7fp9T06RaTBcsQEZrmPYtMUHi4kMqe9AaUHqfmtCfWgeJ5qgejhQ==
 
 # Set custom maintenance message that will be returned to clients
 # who try to create or delete submisions.
 # Default: Judge0 is currently in maintenance.
-MAINTENANCE_MESSAGE=encrypted:BCxvk0hxrPKjGB5wFM4RO7Xfz8IkP0JiVLnYxb3+3dNIhJdwWpO/rm9g0JK+zU81ncIu9RXow/9BBmeQ8sTZymGZpg2zASBh/CHsCLSnla1oqj7Tp2ctmJjEBfBs7DGGzg==
+MAINTENANCE_MESSAGE=encrypted:BM+s2r4Qx4ZEKompcPozAbvVlMQxjjv/rHF1XZ/f8L+++R32cIJIY8FLthm5Mtsrh1toLWhmmC7L13YnIzLZxqK+VK+7gvVWPOq/91ERnh3Tv7FRwUgwr9m2e48YjXAmiQ==
 
 # If enabled user can request to synchronically wait for
 # submission result on submission create.
 # Default: true, i.e. user can request to wait for the result
-ENABLE_WAIT_RESULT=encrypted:BLY7dtaKWXzgWIPc9lsb2tI3QN5ZOyC8vht6Iw5GL+b8VN9DkJBpaJjy1IcHpgYPB4fN9L9hoWfj/JjWedw/gnxZL37DJYNEFZadrL9Bk/ihJSTMuyNdk6sBnMjUMaUxZA==
+ENABLE_WAIT_RESULT=encrypted:BPuywimlY9nBX0s8WE/GBgh8jNxoEMU8prpiAEuvgJKeKAdIyhSB/bcSl4qcjHCDUuKSQ7IIeyYioO6MF9IDJsMXcTJNmo5PVEqUAPpbhLSPy42X/TRFID0ataBbtHWLlQ==
 
 # If enabled user is allowed to set custom compiler options.
 # Default: true
-ENABLE_COMPILER_OPTIONS=encrypted:BHNZqMJy3CQu63b5nB9c9tnzySjLViUEX1JvxSI5oqLCnn/jrmy6xfypjTPTAvb9TmKwz9OPVgT/aBVtT8VWkOzuISzLia8PvdejNe6BtYZ7XwyRdD+We35yYm6EPwtt3Q==
+ENABLE_COMPILER_OPTIONS=encrypted:BE/KfTeO4EksjXOboYdjnSRJDbJpYeXGoXfHNovlyo9RzjRDCjUHm1Z2iRxGJedRNsmDi9cxUTLAybuUre15wUZdXh0ufBMn77HyZL4KNVylTtoLUJ1DdbJ7OxJu41ULGQ==
 
 # List language names, separated by space, for which setting compiler options is allowed.
 # Note that ENABLE_COMPILER_OPTIONS has higher priority, so this option will be
@@ -57,50 +57,50 @@ ENABLE_COMPILER_OPTIONS=encrypted:BHNZqMJy3CQu63b5nB9c9tnzySjLViUEX1JvxSI5oqLCnn
 # For example, ALLOWED_LANGUAGES_FOR_COMPILER_OPTIONS="C C++ Java" would only
 # allow setting compiler options for languages C, C++ and Java.
 # Default: empty - for every compiled language setting compiler options is allowed.
-ALLOWED_LANGUAGES_FOR_COMPILER_OPTIONS=encrypted:BCC1c/ywILJymq8DJp9kVFU3RCwe3oXRgCmYDV41mv+kao7pXjCzfahq2tLSv+Q3CZamnCWqpyi1SVpHwaAPBNaFQKS0eO2InvrIlE/p4ZUnoUH91SIWkFRS4aKMn7VG0A==
+ALLOWED_LANGUAGES_FOR_COMPILER_OPTIONS=encrypted:BK1HC0yuFhoMeIrZ5Qp+zWF301uBzF/b7c+Oal6RIxIw4IgEScbTe1Q282Esd1wExAmtBrP7WBpLEEjzZUU688F1W7Ka2NUXUmTkjkG2v2mtknHkQI2e+DcoJ9KSUF8CbA==
 
 # If enabled user is allowed to set custom command line arguments.
 # Default: true
-ENABLE_COMMAND_LINE_ARGUMENTS=encrypted:BLfZdH07voKyvc6F9mw5sTWgi+MmtMze3LSW7hNz67iSzOMaoq4uIooLKfVDD+nCsr3bMO9mk4S6Z3++sZzxvTgr4WE1Kd9hLdQB/9xzRBjm2s/y5WdQ3khiwD9k5ujfHA==
+ENABLE_COMMAND_LINE_ARGUMENTS=encrypted:BDw1YqcQCYptqbiVTY0WubkKbJXkrCHzgg7OzLVISrpgHVGQ0bn3i07c+gPzDBRPQkABp8zmll9kKtF7LzoagRZjJiWsOauGxKhzDk34/8Hmpsv+bx6Zs5+bVkTv+786hA==
 
 # If enabled autorized users can delete a submission.
 # Default: false
-ENABLE_SUBMISSION_DELETE=encrypted:BIZlBwRC6ZIdgRb8MDHBcPFxpBITx3s/E+D8zfedDDT438g0szj8YS4ESFh0duwWiGQmUeqwaZ9gZ2QeL5/tuULjLiJUqlmV1XmaeCEn62URKMLGQ92WUZVLLITpB9YOxA==
+ENABLE_SUBMISSION_DELETE=encrypted:BIOdBZZ8i7Aevx1HMhvh0sUKMGQsFMOR1ngLevNkQRJ40vBVFcifHQ6wb3X9ig1tUkh0TeQOIfCRnFdUC+QnmM8cXrV6rRIDgvY41YnNJ1b5fHjRw6yQLDjvZuvumK1Y2w==
 
 # If enabled user can GET and POST batched submissions.
 # Default: true
-ENABLE_BATCHED_SUBMISSIONS=encrypted:BA88mNwPU36QT3AMym71Dt0V+goLaq+MTPYIbj3NkNNbOGsZ4I8Hrg20A7PQkB0nlmC4oE5tREjJae8sP1ZfxWxX8qvcDAOMzzol7/a8HSIRDju9B+nqjDPdJcmNnxflKw==
+ENABLE_BATCHED_SUBMISSIONS=encrypted:BFWevRjcU0Fie+MoQPTZzMwWDgtTrGxoarM/eZvWhg6FaZjDBNf+kmRv30dRzYUYDIjaLakXYnCmsn11VQGALqaVwfVcKMZVcXpPNBkaWwVASTo8/dQ8DbfrgpJT3GQ75Q==
 
 # Maximum number of submissions that can be created or get in a batch.
 # Default: 20
-MAX_SUBMISSION_BATCH_SIZE=encrypted:BIUJInM/1bM1PmoKaShmoGj/36dOyNJt9AAW81JK827+87ZWjLjisTYeh/eF3DxKvwkL3hl7pgkWQBRcizMbcuHeHsRZm1LPK6lvX25tDFSpXXyY6km3AU3XJW+/FrADzA==
+MAX_SUBMISSION_BATCH_SIZE=encrypted:BOHREmIjxjUIYO4wJzuK0dKGAAvUIEcXW5WPCvWnsgRDqMf0vum9cQiLzwoMQtAOsxaLtPOpEai/XMM/6SU6Eh3t77uPnRmprH5k+LAzvhs+5S0v4CB56Hcwrq6IlrZKmQ==
 
 # If enabled user can use callbacks.
 # Default: true
-ENABLE_CALLBACKS=encrypted:BOG6TiwlGnK0UjBfx8w7HVsOmM1tTK5m9MIhQuz7QpTF1lOBm502ZlRrobGQWbd3J3dm+Xa+rLyFDoEqHUeRE/MFVEF2fVrY6QUCcqewjqOC3k0IPvVuyxhL8NXO6tyozw==
+ENABLE_CALLBACKS=encrypted:BNQdi319JDL3ArPsRo9LLI5XHhGvbQey9LN7KGqvhe9fJoeg4yU2zilGgqvLDKr6P0Cu0H3pb9MQPO+ROt2HyYmUsnqNhhFfS85ZUuDqAPCYxp4wnSFEu4bt0NJYanglIg==
 
 # Maximum number of callback tries before giving up.
 # Default: 3
-CALLBACKS_MAX_TRIES=encrypted:BI1++nTy4jO0DTellFPQWPOruDHri+rW3g4dE5QbdkxmJ5C6nSfTWwiDESFIO9Jdu+oQzRYEgbUmyAnN9/daQiuh4MQjBfeomtGW/l7mdxkK2RsBJHdTZ/UaPxumWP9SbQ==
+CALLBACKS_MAX_TRIES=encrypted:BODD4j1zXYkYSW7mPiJ3Z+LlRQQgcpcnATjLlFXCHs1yilI3sZyzLQMC0TmG3GGW6eZti35UrNncS6bh1cGv68OWM6v10UxsVtwc0LXmWdmWHT5GoNDcsxf5KLcw7CDJRw==
 
 # Timeout callback call after this many seconds.
 # Default: 5
-CALLBACKS_TIMEOUT=encrypted:BByYzcpPB2TMhchnRJ+K0k9/zFNi+m2Ofaxy0pJkxnhSCloF2+5pl7pB0dxNP5thF2Rv7Ahf8wUYaNZvV1O0CdFByGzA4aFVDdbnuGl4K6CFaeT1fY7MNQa/R8+Y7ufQVw==
+CALLBACKS_TIMEOUT=encrypted:BFnC+KBeeNRbk9RhGQjp3UwylHF24Fs/gyFalcNxA485d7b0FnjafG7L1vb1ywjtVmbmihWeLzOm4G3BmB3OJ5tbnvYriUm+HaHB1X4jdCZTYo3zXNh58i8T3l5wQ7FL+A==
 
 # If enabled user can preset additional files in the sandbox.
 # Default: true
-ENABLE_ADDITIONAL_FILES=encrypted:BMw0ac90oZj1Qe+LtN+2uHgPNbD62lBalQYm76EATsPNV+p5J9N+GWBnzJyFbEs5KCUjW6YTMBryBPZWXGXLfCwjakNrVuNB5xQmbHsRvEnNrkuE2SyG/0Euppy175I7SA==
+ENABLE_ADDITIONAL_FILES=encrypted:BDB7B2BW8upYC5YUTo6UOeKbzdcg8+nLyLZndplofjXgeR3D1ZNt/zzL6PqYvMm0+k3gC3fo/f8PpaGOdxnB4UNCJ1NYHOHdeGgc0K4Zc33HFs0wedlCPO9GTKG28No33A==
 
 # Duration (in seconds) of submission cache. Decimal numbers are allowed.
 # Set to 0 to turn of submission caching. Note that this does not apply to
 # batched submissions.
 # Default: 1
-SUBMISSION_CACHE_DURATION=encrypted:BCYGkfTx0MQWA6yLqwKcFEV7BgA2c2klqf2DHmsfI6uVoJlWod/kjaruHGHDJSHGxCPGMgvx/D0m5EuuR2S/PA5MuQtynP8lYqPpyCTJyPBKjxKaQT/5w8jZdF15VcIZ9Q==
+SUBMISSION_CACHE_DURATION=encrypted:BIB330XjuKrk57slCboqo4r6ordePIOvjW9f3zXCo+YZwRg3c56abuTWAlgMPAHRG4KWgdhcoeUCKIEXPmnkMvk2cb4ckWXvbU/mnBEoO17Ue0QqhF1Kq5YC4X1C3JLxZw==
 
 # If true the documentation page will be used as a homepage, otherwise, the
 # homepage will be empty. You can always access the documentation page via /docs.
 # Default: false
-USE_DOCS_AS_HOMEPAGE=encrypted:BEa4pqXc0eSaOBt6WADAciZUHtFbu+ETeX3CyQmqpCOuLeDSkzMruBRKiFbf5g6h3eRdfmaQT8MrXu52R4wxu9hlNEWyaIxQ7yXxH9df+jUto4xEhzOpyjevhHRTwUlHnw==
+USE_DOCS_AS_HOMEPAGE=encrypted:BD4UDMw+QJNCVOFscKMpnzf0ZIufNQACVdblmIEW8sKQDH5jMaHDa8XEANLqaPBRU4otDT731l5p6bpGkVzTbiIGBOERhoeZY8HrZ5mYfLHkDTqK+aSmO7cDUWh3F9Scig==
 
 
 ################################################################################
@@ -108,17 +108,17 @@ USE_DOCS_AS_HOMEPAGE=encrypted:BEa4pqXc0eSaOBt6WADAciZUHtFbu+ETeX3CyQmqpCOuLeDSk
 ################################################################################
 # Specify polling frequency in seconds. Decimal numbers are allowed.
 # Default: 0.1
-INTERVAL=encrypted:BIzAHHOrXXRjYKWc8SwGho0Js1jcj3ASoIuVCnJdGI6iSuqb3sfCCecbWZgzHHbEmyp6+XPwvQaPuBx9a8dzyMsOwuS02wu14WeDHIpHF7V1beQM7a2ajvYzVc4EdHpTOg==
+INTERVAL=encrypted:BPdxnY/ezEGrBn6MI3wC43PwzQzEXIi5L6dCm3vuD38MoX7XlEkhIQcUrx2N971B1CAXAleM/CMdhsefonvCRuCxlYSfYSIczEXkjE5aiaA8CuLIg9PEAK0bf4CQcAwpUQ==
 
 # Specify how many parallel workers to run.
 # Default: 2*nproc (https://linux.die.net/man/1/nproc)
-COUNT=encrypted:BJlXXMuJ9dMGSKgL/vS15FY632BlTuB9LglmzSMSqT1Rq2IRgtRILvOlKaARVIxie9A+jszr5K7GCoVIUdymAEyoUIpcTl4Eb33pRkoZ9bwO9HSIbpoz655uivxgMdUhBg==
+COUNT=encrypted:BCvq1SajXQWSakRRzNCCNfMGtKvAOBnxfyHKC8c2HYU6HSgeL/mcfBdfmHYyCv4g3gDoFnme8DvrJoU7qk0ynrMJp9Bzo0PRtFXmnLp7xwomrwvMw6G/xB2nTsVX0XbpXw==
 
 # Specify maximum queue size. Represents maximum number of submissions that
 # can wait in the queue at once. If request for new submission comes and the
 # queue if full then submission will be rejected.
 # Default: 100
-MAX_QUEUE_SIZE=encrypted:BK77bquLVd3dL6xUeskAANO2Q89fdBUhql6qnmxTLVlaZpMJW7rd+EjU0QJCacOgregeZOCxA1heBPMFl/1hm0wBKv15ZtzHo0Gf3g2G0wuFL8TLmbCU7DaUOuyoVXxtgQ==
+MAX_QUEUE_SIZE=encrypted:BKYkX84o7KM9P9WoN9RDBsmQlEp82n/gVQwugjHtaVStZ07d5xU1DABPg6t3CaMBZ1dSyZQT/FCbhni6K1//FHWDiR8S+gjX/QpXA48LkJX2Lsdo2GYjBmYJHNHKbFcyoQ==
 
 
 ################################################################################
@@ -128,25 +128,25 @@ MAX_QUEUE_SIZE=encrypted:BK77bquLVd3dL6xUeskAANO2Q89fdBUhql6qnmxTLVlaZpMJW7rd+Ej
 # If left blank, then all origins will be allowed (denoted with '*').
 # Example:
 # ALLOW_ORIGIN="www.judge0.com judge0.com www.example.com blog.example.com"
-ALLOW_ORIGIN=encrypted:BMwNac8WrUAWxBkA3Ot+ZHI7sdrwQhhiRP3u/WRI2OCjNdKsLbY1Wd3UdHhZIdggLqJb7Yi1+R5JzHp8JpG/hybYddd6ZPZlvwlO0W4vR+HsxHKjQ7ZlnZyLnytixmTeFQ==
+ALLOW_ORIGIN=encrypted:BIcVP537Flzj38Lzy/mIvpT+k6GZ/c66SgnJjvNXAPoyJpYrc49I3z8PpB/S3P9kbXecQWYGlVGuYDnB8k1rGOSosUIzPvpFkRo5FsGbaJsoYH3qT6y+692q2z6lUz0M7w==
 
 # Disallow only specified origins.
 # If left blank, then no origin will be disallowed.
 # Example:
 # DISALLOW_ORIGIN="www.judge0.com judge0.com www.example.com blog.example.com"
-DISALLOW_ORIGIN=encrypted:BJs5pJB0wlJ84n3kcLHH7e/WGcXvkyIjOcpCuVjZc2zVmWh86zkL0KGnpG5CQh8DeSJFKnvisznqgYn68+Uv6P6IJyAYkgmRiYLui6kPPM4FEL+a02CoKbwqoOG7kw+Ndw==
+DISALLOW_ORIGIN=encrypted:BJRNyzuvBVIain7yha09kXhIzyU0Yd1caXeJRyJVuR38H9NUp08T1zFlGboDv7RpnenEE3SRvpzx7xpfz2X4Ul5PZc5SkJsJRdBjKhalKEKzEwo8Z4fQUPxlRn2XJPi+dg==
 
 # Allow only specified IP addresses.
 # If left blank, then all IP addresses will be allowed.
 # Example:
 # ALLOW_IP="192.168.10.10 96.239.226.228 208.23.207.242"
-ALLOW_IP=encrypted:BDnEA3pmUyKreVBQZFFKmumKNJD1pWPdg0E1T8AVlaElo9hiF1maAQ8rG/HJwydH+A1uBiw7ZmoQr1IGAE2hMFl9MJoJtQ56r6NjO8GqB+2i6umQoA8lkpSrwrhONrQW7Q==
+ALLOW_IP=encrypted:BCrJynV7x3lYw7FzlH+8YURga5ysikIBg06xaZrdWtrC4JlA0HNszH4/lQJ5hY7W87YfFih+U1QZ5nA+Ox4hFtnoI+wn0hRtOqet5twnWDVemFbl5lKtLYrrDyiRo8MX9g==
 
 # Disallow only specified IP addresses.
 # If left blank, then no IP addresses will be disallowed.
 # Example:
 # DISALLOW_IP="192.168.10.10 96.239.226.228 208.23.207.242"
-DISALLOW_IP=encrypted:BCWSG+l+N1TeTKzLlS8B3H04/c5RWK2/wMgBrkFzX2A2KEJ7ZGVHaqc+rwbCT+ZrMtm5HrxbYuWEewS8+gtquP9MetvBh6RtbRHQtwjM7mFRVBqVes4Q3wig4f2gLI08Tg==
+DISALLOW_IP=encrypted:BNUg5hB/rvhuIK1ShQe7VY+opS4CAmhKAMYTfcn73BT97/vwZYUakf3ZTbnCKJnwuPgzC5aELH9mC8hiprb2qdnpoqe3JLOtOzA0T9cYwjdsYSzwk/p5o3xzzBNgHl7v7w==
 
 
 ################################################################################
@@ -161,11 +161,11 @@ DISALLOW_IP=encrypted:BCWSG+l+N1TeTKzLlS8B3H04/c5RWK2/wMgBrkFzX2A2KEJ7ZGVHaqc+rw
 
 # Specify authentication header name.
 # Default: X-Auth-Token
-AUTHN_HEADER=encrypted:BEvKky3QYm+6qoweuAz0fQbPiJsJ/qd1To+ZQLWNqmi6X7jHb/wPrlXQcPsTAWteNU3k050XbFhc9x0nuXbTqsi7wUUbrYPohKlfLlU1+NDpWo9RJwtdjmooM3UoUQ/t0tKn2wXilQI16V1ysQ==
+AUTHN_HEADER=encrypted:BDDHghfq6VdCCPhJiN5+vSKOYFySxhiJb8y4HqOrqP4I2jo/0x54vDUxpfcgrcznysTDUYMUDmAH+kqwksqr1gXWyHshSEpgKAk1sGhGJiCRWOWv3YDWLE3mLHXYmwNAAa8AVtsl0hhUIHFpag==
 
 # Specify valid authentication tokens.
 # Default: empty - authentication is disabled
-AUTHN_TOKEN=encrypted:BPfQ9HopMJxpm0dR6DCKknvcrduVsmE1OyNtQr7YcApWfQojcQiI4LXQpzM7XvqsNVUSzftaXXZmdGdHsKHEcAbOwFB7LrHIViYU+fiLJbw/6H64zXri7w3rGPQV7XdhLg==
+AUTHN_TOKEN=encrypted:BB6dYWmWmoPZeuMpOt5Rfprb49n33iuQcWz82CPUBT3wJ8lvA6EfO6jVnttSvxZOCb5BB8X5r9KgVxl5fzJXwGQAn3pJIeryVCSrv2oaP8Lbo/pjo6N8XcnMbqGF7brlPA==
 
 
 ################################################################################
@@ -183,11 +183,11 @@ AUTHN_TOKEN=encrypted:BPfQ9HopMJxpm0dR6DCKknvcrduVsmE1OyNtQr7YcApWfQojcQiI4LXQpz
 
 # Specify authorization header name.
 # Default: X-Auth-User
-AUTHZ_HEADER=encrypted:BAeNrdD9+QkCBqY+1lMgrXN/NATlcaP46dIJzkkJoSPEmvOyF0jbI8nq/IA3YPd3PgpQb4/M9XH3VAN08IJoRGr3WLTbi8pNDxhC5nd8c9KdwFhRWyejjDXEkxPYKqjjhA==
+AUTHZ_HEADER=encrypted:BHJlIJeeW8oc6209UfpK+Ylcp7rxmJkR9zsNeTLUEXkfxiM4G68Lltb4JJU0DfcjUlGeUbFZoJmg6QrtDMJtmUsASKvtIG/J8ddE+qVYIG5Wjx9c61tc+Q7CBo5478SkFw==
 
 # Specify valid authorization tokens.
 # Default: empty - authorization is disabled, protected API calls cannot be issued
-AUTHZ_TOKEN=encrypted:BNjCDwaJUh/7Qup364+Ez32esAiT4nubZE3Ur/T96VEVAPFxIXNvYYof9DGwR70DW3NMLy7+VrYG56SR7KObK4bB3s/og3QComc4pwQpdIA8X4NTCkXuYvJdAXoblpwmvQ==
+AUTHZ_TOKEN=encrypted:BHtlUsM70jC+h32GS1HKp0meJG9GEiTjMQ3vy6/6/VLAA7jqZ03vqJd3kXVyjSmjiSJvfJ4hpg/GO9b/Nvmxhv5Aupvh1K01cQMTvj5BZXIUEEksgeF6SrL9zjvSQScDMQ==
 
 
 ################################################################################
@@ -195,15 +195,15 @@ AUTHZ_TOKEN=encrypted:BNjCDwaJUh/7Qup364+Ez32esAiT4nubZE3Ur/T96VEVAPFxIXNvYYof9D
 ################################################################################
 # Specify Redis host
 # Default: localhost
-REDIS_HOST=encrypted:BFujAxWh3xHflxebLsUnF4IHbs6pokferEUq9QZYstPc1qyOTWUVjYnZNKt9p2K4EU250+NzG8HregCYFMGC90guOG3KYC11ps1RyO5cm4opqEdN12e8pmE3NRIQZmVI5w5DurXIdy9KcFNYag==
+REDIS_HOST=encrypted:BH1Y6GePKIfQGrRo2keQErT3z5zM+yosdN0d7VrlkrAZ2e/cHqLkN6pUTKlHaGewAu1gwCYMvyia8f/6e5T+FvtMvqePZmzTS+YhP1jj06Usxu6B3EJgewTUVN0lUUr5sIZILqmW+YL5ePdk6w==
 
 # Specify Redis port.
 # Default: 6379
-REDIS_PORT=encrypted:BLYtiWVyLuu27FNGaH/CVjr/afPUOSEuZaxUSRtliAe2IsUT/yge9I3sU1QOnN3mf4OuHMfpHt6RoYmPZw7xQE8kqzKq034vUhCibdWWc6yV5HTSPKbYg4qY04Y3wA9nUg==
+REDIS_PORT=encrypted:BHji8IAXKtGWyJeHDXh5vgAxeTk7DDK26BaytpcNRpgN9Jg65nO2sOD/FeC4cK3f5mD/QNxwwUq+EuV5eeCPI3ai2kLHels1Ozxw+zAfzKYtzAcTg7S8IoSm59paB+ZD7g==
 
 # Specify Redis password. Cannot be blank.
 # Default: NO DEFAULT! MUST BE SET!
-REDIS_PASSWORD=encrypted:BN9sSCHS40N0n+dWtAF+nvG4+ZF9gvYGUmbg0etzKt7z8qHmAKJO8nh+PEpxuktrC76bEecJ46bGNYZ/ZQzURQIPUm/vD8eytR3JAZHnUUY2Wyo26gwzVoGZ+uH3vzcePQ==
+REDIS_PASSWORD=encrypted:BG7olhsL3Z1JQfA/DnbnO4alHoNeANVLlB7w5uwMsf4drSA91YC55lPofEJqFsE6FSHEdVy4CfbzJ7g3kOgFjPtPzW4ZRzq6WIfFvHWyM8vWhozg+npzU3Af4IrcricACA==
 
 
 ################################################################################
@@ -211,23 +211,23 @@ REDIS_PASSWORD=encrypted:BN9sSCHS40N0n+dWtAF+nvG4+ZF9gvYGUmbg0etzKt7z8qHmAKJO8nh
 ################################################################################
 # Specify Postgres host.
 # Default: localhost
-POSTGRES_HOST=encrypted:BCjiujpyfV0Uil2Zp+ILZchno4yjHjtFqqo/N6P3PMvxY1XhRgNWCojZp6ZTDCSrsh75rPIFxJIysYIFb3V693NNtoE+rTI06fe3J5qqOcBtUIrofd/W/IXukaP5J+JXDSkvGPlz/aFdGw==
+POSTGRES_HOST=encrypted:BPPfmCtXN0qhF+OB8haABBGS8bPsiOlsOySkSTgvtJt/Jv5SfF/B/mjWtxYbNqTNKh4KILBtNnj9M7TFiuQtekI6wzDCSIvY3cY/vSgKBjBh/L9YGbtOGyq+REhtGsC2iBgxmAQ77lzlzA==
 
 # Specify Postgres port.
 # Default: 5432
-POSTGRES_PORT=encrypted:BH+4A9qBXAYLWH0muDqsloQ4YgZMmecYCF2S/aLV20jbMJ3KJjAi2iNJA/Nb4o3h/jVValHiLJWDe9L0/JRu3jz9p5TndPrMcN/NUuH3+wvrzbvKi5c4CReLJtj7jajdmg==
+POSTGRES_PORT=encrypted:BGaF26Edzdo6UU3UxTsAhB43/Lc1NmlITnldziH5M29X6RpMhLJ7JaBZIMiL+lf1wEV0vp+u/7P1I5NBRk1Q5hHimt7I0m0w8K44GmW131sbrRaMTdtqmlblTKjURgVs6g==
 
 # Name of the database to use. Used only in production.
 # Default: postgres
-POSTGRES_DB=encrypted:BKfur4//Y9xL3A/QqBpWrGbT3rh8j26UOi4dooLORMfViXP+bioxdKrs82DblbzTgmI6X3ucQGH0ID3yh+/jsFPihQyGpMbRERhNo5hm9Y5qXnrrynlk14pgV5fe7FcWAWrR0C0IaA==
+POSTGRES_DB=encrypted:BLNdvjzSsWOnwAxc4PyCzd8tVw5QGLlR7yCfOJnGjxBO4ehUBHPH1gbicXDyYEyu8NR7n8e2A4OMaA4gUPRlHPM0V4VpYWgWFEGz39B8vgP3FwWA/8OjXHp1X8koiOryLxMdHIF0mQ==
 
 # User who can access this database. Used only in production.
 # Default: postgres
-POSTGRES_USER=encrypted:BEmQr5SC1EIhBMXjFGFDbkJTK6mkkjMg0D+qUN8WUJCYWV/mvaSTbOHaV9oHDfcKVQGhKKTGiOGLzDIVFWgQHduEr/nHuC2gIuUh/+vFA4busXr+2+Z2iPTAzjerL/DmDQRJcKdMiA==
+POSTGRES_USER=encrypted:BMdppYvoz8Qzl46flMKuVWNNOtcXG4JcpIeoi//svrceI443kPcRqwnRbstW4P7zLp8pK7IJ/WoKKDV9vM5wGTsjAfseGYtBv7XWBNtX51wP/hUeWmYFZpJik4lnA2qq36c+W67oeg==
 
 # Password of the user. Cannot be blank. Used only in production.
 # Default: NO DEFAULT, YOU MUST SET YOUR PASSWORD
-POSTGRES_PASSWORD=encrypted:BNV444dzaaiFGeSptibH9b/01+M8Sp/uYY0x1xCF7vgUzYacMIHsWFamBQrFAfrX9CqXeI7AcCvGHc2e0Cvq6iWLPGKY5eL4q0HNCUuxQ21JQcIXLTj9in0uc16xPEDqBw==
+POSTGRES_PASSWORD=encrypted:BPocMUr6ku9ONv4wRDXno5baAOdFEJdMW1SB24mWWKJbsWA6CUHSNdBFKhUBztune6dSI0KqDYtMMa9j2s89xvxnygzDswzWvLs/Q4LTZWaAKAisw0yox2X17R8VuLo3Fw==
 
 
 ################################################################################
@@ -242,21 +242,21 @@ POSTGRES_PASSWORD=encrypted:BNV444dzaaiFGeSptibH9b/01+M8Sp/uYY0x1xCF7vgUzYacMIHs
 # Default runtime limit for every program (in seconds). Decimal numbers are allowed.
 # Time in which the OS assigns the processor to different tasks is not counted.
 # Default: 5
-CPU_TIME_LIMIT=encrypted:BHloOLXahfdEsx7GTXYGR1qMqshXW2iAZF5fzoOOo28LyD3haQ54vaTlfT3abDR9iY7QzLc51VnlhStz1M8VIk9YefryH3OsnPmZD1yE+E2wlqSJWyb4T5l30MIqhgzztW8=
+CPU_TIME_LIMIT=encrypted:BK/6YKat1jVxFMmjZhhMProNsiMfvKS3biLqUOEo9Wu5XdJJdOE+g5Pvs8pQYuNDbuX1C2ISHQzKOZp3DFsY5vLsb4stYi0I69yVV01xuAfDMq2IvlryC86/dGx6KcXUNwk=
 
 # Maximum custom CPU_TIME_LIMIT.
 # Default: 15
-MAX_CPU_TIME_LIMIT=encrypted:BPno+7CI30WtHQKi8EOqamHcxKHc7n9Tff72rltL+YOgZx26rhTEeAeR52TfChlAYtsuEYoQaF5LTQDmO5bKO8P0LtsWK/nuIoth5cZX5hWpq//1RZqP/L6v3bPmORgoDg==
+MAX_CPU_TIME_LIMIT=encrypted:BMO/CfRR5DBLyijGev0Mik/h5Gxkx69wdPanOPnaBTirlQve0XjGiv1Q+xEn76PxSfJYlLAIGPgmt8dKEYFYs7y9KOZnYmHpTbUGA4gKYk9i6Lih6Zk2PP+QCmaIn4j8gA==
 
 # When a time limit is exceeded, wait for extra time (in seconds), before
 # killing the program. This has the advantage that the real execution time
 # is reported, even though it slightly exceeds the limit.
 # Default: 1
-CPU_EXTRA_TIME=encrypted:BGpGAlu2wSwxFBaUnTMWFWgd8OjCB4JCIuQiIV0zE/Pla4bQTwEyJLg0t6diX6FsQdB1Dv8QXb0QCp2xOyfCLZpd1qN55g5hpH02Yh0axgjYMAC9lVBc8PT3+/OBDVbthsU=
+CPU_EXTRA_TIME=encrypted:BDsAR18e4GYCV0ViM3sfu9U7aMJGHfa+0DPuqMffsCs8+uRfiSd+iUTBVoGmkLDCJXwqg16xE4K9WhzdeBj2I+su7q4vTXw3kXwy8YqlL+fZrSrLDj9WOlTQc5AYdk026g0=
 
 # Maximum custom CPU_EXTRA_TIME.
 # Default: 5
-MAX_CPU_EXTRA_TIME=encrypted:BNH0P1w3bY3u0CqaSnTX/4bkeB1H3AVCyKqBh0lrT8cXKzcdfXx0urBoGmt+oIHJgKlYZJmEAUaNRQfN7hzMtfT5oyq6xPOjQM+TYVGiYhCRWXVv16vF8hgsomngt4kYSQ==
+MAX_CPU_EXTRA_TIME=encrypted:BHmZC7D3X08daOJv8e00Gk/yFC3GmHYU04Qn6UkjkJCApGYhdcE5rOacUufV25x3PKDtChQjetuqDzY162Ke54iRCIOZ8o+WUxFtqsHJKru2YIYaklXXkT3/055CxLn/OA==
 
 # Limit wall-clock time in seconds. Decimal numbers are allowed.
 # This clock measures the time from the start of the program to its exit,
@@ -265,83 +265,83 @@ MAX_CPU_EXTRA_TIME=encrypted:BNH0P1w3bY3u0CqaSnTX/4bkeB1H3AVCyKqBh0lrT8cXKzcdfXx
 # but set WALL_TIME_LIMIT to a much higher value as a precaution against
 # sleeping programs.
 # Default: 10
-WALL_TIME_LIMIT=encrypted:BAWDrYHAJhD4sjFH58spKuSMPgk10WvAgOfMZRdc1tOf49HL6blYx19hjixIeOGwW0XG0cJvoj4YAH6bLJnR8vLU/taTT4NyzCwzEkBp4aaukvmv1DgLmwz1iTpk+Cwo7aVY
+WALL_TIME_LIMIT=encrypted:BNHXDmQsF5XJDd5VlvmzcZ5LAofXiQdNFagayV17F+oA8CjiEky+XyV38n/GxuTA4fxwxr0nR/WMA7ZxriKU5PInFcIzqDMn77Duc8OWEAfEe8OdHeF70Dnm/Rb16WkZY3cg
 
 # Maximum custom WALL_TIME_LIMIT.
 # Default: 20
-MAX_WALL_TIME_LIMIT=encrypted:BKKfLPSK6akbx/OcYS8lY81VtMkobJ+3pGSxAh1WfDwkiqvxJqsZ/V+cBadvBUef4h7XriHtWKpV6doTBsh/jGTDWB3oBZ6XpPC7tLelAZbaVEd2fnELlu5Cq+R75Xl9/Q==
+MAX_WALL_TIME_LIMIT=encrypted:BOkWEafXIY90uIDvxoilwgEzyARRINW0O3sE+Pyslip91XYg47GfAxxvUXtSgRcfPuT4xfswPlntTRfRG1eZiqSSaO9LN2E3tTpQKRc1sqbaVQKrMu75ZW5kq4yCFbdKLw==
 
 # Limit address space of the program in kilobytes.
 # Default: 128000
-MEMORY_LIMIT=encrypted:BOBp0JLwB6zoeeNJBKnI/nnpiQF6MU/rNjrhNEZrXfkurieFo7HdiyWP3MYW83FIMvxcrFLQw+2/v1lm+EalveUVzapmIK6DWglf8ByZzyybfyIf46FkAoN0uSmqPGPp6T+BRZxg8A==
+MEMORY_LIMIT=encrypted:BNZ5vJSbae+iT99Q5PQCJJIyHZjCjyS5fAc8inQppD2oAPxR7lKvTKsDfGhzhZRAMDNInJolxWR1cEFJjxxyCMk7HTuaZv4v+FNca3sb4nI1qGxL0Cn9xAKT0aWtMlgQekfgAdDepw==
 
 # Maximum custom MEMORY_LIMIT.
 # Default: 512000
-MAX_MEMORY_LIMIT=encrypted:BNZEc12N/x5uC6jl39T+nmGVhyKiUUqQvnIENCO2jfnVR1MSfzuv4DoRWmF0sgEz2hhFThW53M5/VmwaPy8SM9za+6fHNRFvFqraKg6pDfo45JCijKdY/VZxP7fIaJm6Cg==
+MAX_MEMORY_LIMIT=encrypted:BFe4Dt1LcIv0urA84Bg0+qfLPy9g6VIM0AzHy+n+cxYOL1IRjkYldCJv7fGaTaQLCDnIRJHdnFIFZgBm8ZNpUNWpV0tw0y58QUKALr4ef1HxLxLrBkPvx0v2C9bFydy7Bg==
 
 # Limit process stack in kilobytes.
 # Default: 64000
-STACK_LIMIT=encrypted:BLHKV8tQbYut2Ne9FMzXC7DxuFwJKt+rf56NqF2HRKMJFP07ir+X1IwMw9/vV78m3SRq7MPvFIr3h5n6GhbQlpq5Pk68flzcX+YuzRpmtiuxTLThSgH9ZKD4j7GzTj1P+5aw8qY3
+STACK_LIMIT=encrypted:BBA4aych9fyS9u6vRVq5UP81pKF11RiuCVfQChrepO7lAQ/RCQUAH2Jw6QrpKnj9tTTb6qqYVqUvmlcmmnAGixCTSsr1g2kSc6CvNnz+QrEGgFc6hI6ByzMTgU3JdjZY8wTLjjum
 
 # Maximum custom STACK_LIMIT.
 # Default: 128000
-MAX_STACK_LIMIT=encrypted:BF8nAiGeKgtFHaVWWZ5vFfZQLgqRvY0CRYodIMQXnE8mLyHEL1G68MbE6zFuVO+TsKBDq/k4xlJXNsSJ8iVOUf7B9/JROdV5esaPhtjkmLl7TZOiIXTgNXDOaGssy852EA==
+MAX_STACK_LIMIT=encrypted:BNSRfUAWxHev4CPDORvztKiBtyjPP5CaOaV5c/SyIoUk0SpmFxvKy5413HTHKGlIPBSVVbP+PTsARbhDeZcB1x+iVC8FcAFKJPxtkHfJnE7EUanwn3XpkxGyakPLCqhK9Q==
 
 # Maximum number of processes and/or threads program can create.
 # Default: 60
-MAX_PROCESSES_AND_OR_THREADS=encrypted:BBjb83e10FlCbPVdtQgHQj8oKW7/c3zee3YQbf+V8CrzZaO+kJ6dySiGVUdyhwAs0NrR/pZOVQpvwnP/ZWnVmvMRvfpJDl5oZNMRDVkZOPtjPMvFl94m0gOtMWZz8iiWrtEt
+MAX_PROCESSES_AND_OR_THREADS=encrypted:BF9AY6HnL2aUJ1wZP4LmY79ZSv1SPj/JjNV2aop97isYWT4n0CTtJ196V8sEQ9EsKBSUcWfoe9rQ91dWRhYOFi64cOXM3qsyWNYXZNr/ygkC+ROwj7m/ekqAtGm4IqLlYjk6
 
 # Maximum custom MAX_PROCESSES_AND_OR_THREADS.
 # Default: 120
-MAX_MAX_PROCESSES_AND_OR_THREADS=encrypted:BM+QCsV95+gcMIZVlH74K49d94+18JquHMQl+YY9Yvxc7cSCm4jBUAS+Yy0YATcvcWY1rxRm2dsi7VSOE4N1EGONmLmqfUQvV+PXmE2OpJaJQNX7+kAP5YoLtqVguptgcg==
+MAX_MAX_PROCESSES_AND_OR_THREADS=encrypted:BPGz87ccaN5DmcdlHX8xFqRySsMRLJ1DDojZ0/Y7q1Y/GTCyFQ7MWqCS4qW6zLkp3orJVOfHavJQ54CXl61/FiwQRt36MVyxXXKcfxPWqLztCCfcHLAAYLZ4b3EY0PpLSQ==
 
 # If true then CPU_TIME_LIMIT will be used as per process and thread.
 # Default: false, i.e. CPU_TIME_LIMIT is set as a total limit for all processes and threads.
-ENABLE_PER_PROCESS_AND_THREAD_TIME_LIMIT=encrypted:BG4M7Iq9Ctnnsq6EGNc5QBOVgSBu6F4dcpXBe2Q68PDFjV/sdDgVnOFaGD/DrqlmDwWQTdRnVg9BV87otLCgtqodJujJSvfDtSvvq0lsSKJBvSjfVVkkAAAfUecPPfJfvzM7u3s=
+ENABLE_PER_PROCESS_AND_THREAD_TIME_LIMIT=encrypted:BHuH/EkvTBh14BJSU8zWS52ReccBHsOd8ESa7w74m6OFI1G9CKilgIRkiFskyJ05nnHa0ZFm8LWya54X8YNVFoS17SsWF/pHz8cKqQkT7uRYduE2hSjLQSymJTC7rsav1eUolno=
 
 # If false, user won't be able to set ENABLE_PER_PROCESS_AND_THREAD_TIME_LIMIT.
 # Default: true
-ALLOW_ENABLE_PER_PROCESS_AND_THREAD_TIME_LIMIT=encrypted:BGseJ2tJBc+ND6AXanwN0giwm+haC94fxA1H3yqlzRX0OPR2hKyQaNtbexPDxhePsao4pCCgWgE2qU7WilXTxldNC6H1BbrkItmzAOtiSYQ3GcXCMpU8gXGEavEwegSLhA==
+ALLOW_ENABLE_PER_PROCESS_AND_THREAD_TIME_LIMIT=encrypted:BA9zlBPFg2iMp1IUR1jwwhbWUi3Uw/58ioYqtAboroSrqym7I2kcPoiL6so++RoomzvYXsBGOusyiNrHOmWmsxNLJYcpJzi0GMoenZDMzYpx4Jmc337G/7RYu2/m7VRIvA==
 
 # If true then MEMORY_LIMIT will be used as per process and thread.
 # Default: false, i.e. MEMORY_LIMIT is set as a total limit for all processes and threads.
-ENABLE_PER_PROCESS_AND_THREAD_MEMORY_LIMIT=encrypted:BODKasFX06GnLI/IZlYUly8tV6QOzZVNaQA9XhR8T9ev4H4EJl8GW58Sy3ngRZ0J1FJnR0FJiNHs9IJq7IO99g57SE/FT2DOZ6+y0iDn8Gim3w05J1EbJ+mY1sRD7FCFbHXNyCg=
+ENABLE_PER_PROCESS_AND_THREAD_MEMORY_LIMIT=encrypted:BHerWPuafqEDpZ+Y1+H+foPpllheA82DPvR5yvbB22czpyyYGNLBIksxQ4aThkLM090vfkeKHdcwR68w6R+IzXact5q2bWgkgNlbPmiFRMrtBdg8CBxgxqNvzl7EcYR6yftMTUk=
 
 # If false, user won't be able to set ENABLE_PER_PROCESS_AND_THREAD_MEMORY_LIMIT.
 # Default: true
-ALLOW_ENABLE_PER_PROCESS_AND_THREAD_MEMORY_LIMIT=encrypted:BCBYb0C21ooRwmVZPjQ6vvYZC9lioXGuiJMG4K43kTDE9ngrvaJHSCP7wlRyd8LJKwK81fiJTGO5IUwreKUUUXFrT1kI2y/D1C/xP/x1en7dK7Na/+o+rA5JccJUyib+nQ==
+ALLOW_ENABLE_PER_PROCESS_AND_THREAD_MEMORY_LIMIT=encrypted:BIsSqjuDWLXTEPGuS3Oue3xl7OXGwPHu47nEb+PUfY6kKbuDZLKnjth3pWQAwnIWltqsYqGR8zlndC0be+gLFmGU0PJruRfCQmK3FL7ZqIeagWyf1IxOiy22YTAL0zY6iw==
 
 # Limit size of files created (or modified) by the program in kilobytes.
 # Default: 1024
-MAX_FILE_SIZE=encrypted:BJv6gPRJ9Rh2boHyzSImPVpOuYrnfoWTuEX66LZbWptYs/P+pNHf24uCRzjDLCb/f0WbwTbTSQx/cuMrQBGxDhc5Nq0Evb3QWwY/1zu5f0qkadaOvSUF5/q2IzNOrivu9w==
+MAX_FILE_SIZE=encrypted:BN4d+pA3lX6EhUEvBy19vac4cou58D+7KDvbRxCbEfSQWEHk7vO8B0zqipz0tlE/wuoE43og6WJMBPVSZf6sNdDoLyBPxhrCTQQZOy8dWjtI1quIByUkJlnQfn1HxeuoSw==
 
 # Maximum custom MAX_FILE_SIZE.
 # Default: 4096
-MAX_MAX_FILE_SIZE=encrypted:BLiQomVIdY5ytxjbIFCm3wi12uP/vBjy/fu+qUnxB/aJHxDNiIMNQP5x3766vPJItPSYJh2w6QTPSK9ESPPDjv4titsnP4gIKM3gB0m9XprljX3G+58iodtjQ+KV9A00aQ==
+MAX_MAX_FILE_SIZE=encrypted:BLiei/PJ6jaODy4vJ67Wr4iag2H8ikP618zo08x5ttd7lzzisZR3aakSBG6wZV26RMhrFZOGaC87LRdzFbudCVyqEocYYe+jMy2+doeAijrzjUmlR74jkrNSrkS5MFeVFw==
 
 # Run each program this many times and take average of time and memory.
 # Default: 1
-NUMBER_OF_RUNS=encrypted:BNV1F+BJVCa1KFd0d6HvCWsv+Bfmn1ExST0xXIJUh4nUnWlFGS6mBGU+LsT3rkIPiEsUnH6W0mRf6opl3TSK5g4WpbXts4c5wNTpU0fJ4fyEOSTVi951M+0kqR4DQS/RxEs=
+NUMBER_OF_RUNS=encrypted:BNUcnRLjCw19luwOsHgztbU/xUQBsU+BmCGPqGPlyKmROKtmtZJXMJAdpixVkYG/S7zLhBDXOEAv2hmNNXD35QnkOBWOq4V2nKB1BNn4LDa3cW2yvd8fITBnxIQipI/iYvQ=
 
 # Maximum custom NUMBER_OF_RUNS.
 # Default: 20
-MAX_NUMBER_OF_RUNS=encrypted:BH/dUkKbHib8a0Kkc4nQsPxQJxiAv27eu1DkNHtH4NL4N1SqMHuDEMx9j//CaV5/yN69atJeEr80bG3bPspAcQq1fouXFbrm1ixt1/BN1vWK+CFbe9UZUu2o1aXUJ2gZpA==
+MAX_NUMBER_OF_RUNS=encrypted:BKN8Cb3RDVoeE0QBrPMcQfVpdrlS1QKnLskcywdVyyPIuXJppRUlNJz7759UYuhh8pxJ8CcraXI+ml6zDxNJiNbFWbkgeAoOFnsKfaMu435lICRU52ijeHbgPbBoLsrB3w==
 
 # Redirect stderr to stdout.
 # Default: false
-REDIRECT_STDERR_TO_STDOUT=encrypted:BEtXRM1SNhsP9E/vKEyf8bFscSJrUj9fC4ktIFI2IlcOPcjOibEvw7hPrm1b3p2Q7JLa7VwdzejrbRtaIEyZxfuuGVV1WZH0PdX3MBZLdaWx7HCE0rUPNplkRwwJ7cxDrg==
+REDIRECT_STDERR_TO_STDOUT=encrypted:BEJZrYXTFXOOMOHGczCqwD+G9WsdQLxiTlZMUyOP8k8Cpvz2usNUtgO9rb0oCLwMgL1XWMy3OZGRdMfYwzNvk7OfsO0JNj0VzlWw38TM7A8LI3rpFlaH0dmZrGeS9RfgfQ==
 
 # Maximum total size (in kilobytes) of extracted files from additional files archive.
 # Default: 10240, i.e. maximum of 10MB in total can be extracted.
-MAX_EXTRACT_SIZE=encrypted:BDDwsBnrhLxi3nwMyQnkBZnU9QwZACbEiRM78UcPuHCxNGY6pq2kjBg7dgK4UB+iNiSVRecSbA4RzZgc1qLzT/mEQDyABsHde5Aso6qTH6zWzSBnK5qRuwDr6KuQfzNweg==
+MAX_EXTRACT_SIZE=encrypted:BDIdXv36RN6QbKzVTunfO2IvqW2fWR7LfIpTQ9wPBGShxyBYfc6EUAyR+vvSkZHehOH4REbgCderG/HZm1fi5eU3UQtWNgkwI7/q1VKq36gNyJ/D994T2ppGKfpm4aMlzA==
 
 # If false, user won't be able to set ENABLE_NETWORK.
 # Default: true, i.e. allow user to permit or deny network calls from the submission.
-ALLOW_ENABLE_NETWORK=encrypted:BKtnespiWUuSEdyxzvY0/A8pxDFCh1/jBEiyiYD8dfmcIpwC+Ia0LqDTyx1HdaGsh52ILEMvUziqg/MKkdl5dpBuW3fBZ2SQxHiq7dOx2BfDFOGV2BEFIyAhSkYjwZOWDQ==
+ALLOW_ENABLE_NETWORK=encrypted:BLOFhNcmSE8M88Xlr643h9k7Qd/lTBBXkGV2RWqNdJOguYhzWxzmswwYbxHCOrYgrSdMAosLhvz4UJjQ6IKqQaSf+k2dKGZEWRqGr+DQRhdImDh90Nsunk5iMWsrHL974w==
 
 # If true submission will by default be able to do network calls.
 # Default: false, i.e. programs cannot do network calls.
-ENABLE_NETWORK=encrypted:BN3/W+grHuOawLVXbOPnNqI0Hr11cNOcMVrbK/8ID6OWYuXbPekBsQUxhM70JdFnSWTApPxf6nZUMeYaqBS64mMdq04ryZskCjer93JRIlYV8iBuwgnDS/cXxyhqdJaQ5Q==
+ENABLE_NETWORK=encrypted:BDA1Fp17ITPaVS6QPxgnvuDs9zM7cuRNKKB4waDY7uJlKjYv9ziA/rn4E/uGG0/iEg146jNx0WXz97VZRCF2z0Qstcyf1JKnpZQt4CHEHX6FHu0hiGgAbWyMTGWDvBtl/A==
 
 
 ################################################################################
@@ -349,17 +349,17 @@ ENABLE_NETWORK=encrypted:BN3/W+grHuOawLVXbOPnNqI0Hr11cNOcMVrbK/8ID6OWYuXbPekBsQU
 ################################################################################
 # Specify Rails environment: production or development
 # Default: production
-RAILS_ENV=encrypted:BERAauQdeIm565wKUVEes0sw94hyxhlv1tIspqcCTAip4GcE+MHy/qP184yTHts+HYgu1c+DM1D3YZpTsaKqY+z4a8vStSnFNsP5mfquN9svYKdJJP2vF73dRKMJCL7q6g==
+RAILS_ENV=encrypted:BB9hioZnByMwFNwj/dJyyl7lo9y0OtRmIPPQllpeREB0hRGcXxAE95YJtewGekpTfI2DVdYo2SrPUJqmXqnfbXeeJkcuUI5nsTE4VJhjeBtaOpkCTPj+YYRjrsHpRlhJWA==
 
 # Specify maximum number of concurrent Rails threads.
 # Default: nproc (https://linux.die.net/man/1/nproc)
-RAILS_MAX_THREADS=encrypted:BG5Vz2hoLUtGv9i/GncYsAZe6K92vZmecMwEs935gzCd4okizfSRE70U1FMtRpyWPRj8Xsk67ZqATRywafnRNGjNYrrt/5rSmw4UC6EB/jy9jZNeK9mG0QRZTIDoHnZbjg==
+RAILS_MAX_THREADS=encrypted:BGjcjcBHZjVeM+ZFntnFJ/OK45LUz8oBfAiWDZv7fwDYW7glq2N4BrvSY6E3zvsbYfIkAwo4tT1aoLE4yf4adPfI27LJUs2NlUU8i/bazwifj3wFiw5eW6BE3D7Mz6Ye/Q==
 
 # Specify how many processes will be created for handing requests. Each process
 # will aditionally create RAILS_MAX_THREADS threads.
 # Default: 2
-RAILS_SERVER_PROCESSES=encrypted:BE9QE4f4n55g2GCGkhcAxkykAeCKrH+NVg0AALlVga6Hi8f1KRIp/AEwHxCiEBbe945SP5oNZFdYeBD198idvwvDdQFmwGEWHpLKr7Klwhziz4ps89/nJcIYE7x2nrpL4A==
+RAILS_SERVER_PROCESSES=encrypted:BCXjLyzNSr9xsPow/6zDrEN2kOLdrYarFeDY+2fxk+BiPM29ddjWGwJT0SLFcs5cbMCVOKhHbOgjo4yEK+UePVjptreLBpjWzGaF9qX3b9jmNXGhVPOWw5kyHv1Iuuscqg==
 
 # Secret key base for production, if not set it will be randomly generated
 # Default: randomly generated
-SECRET_KEY_BASE=encrypted:BF7MQewriDhPEZ5MI2Nva8TLxb9kLGnxfJDa2IcyB1L7wRNq966OTVpjSbXnejKof6pxnzP5GNlyLry5SlLb7P1UsSSoAyq+Ur6xIZ3CHMl1wu/Huu91bwAIjx5XF+XVXw==
+SECRET_KEY_BASE=encrypted:BBMRuCWQ+xv3uTKbAce9Qkr0xnnIpx2h+L35LyzIuvyAUB/+aMfg1HiKe6DrzyX+X7DmwRHeF/Lj2zF6DU5FvSiaH84q0RvHEESvRW6FsPv6jksNNijZNgBg0vG/bE1uLw==

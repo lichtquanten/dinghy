@@ -1,66 +1,43 @@
-import { useEffect, useState } from "react"
 import { useStoreSelector } from "@workspace/pairing"
 import { useCurrentPhase } from "./progress"
-import { useSecondsSince } from "./time"
+import { useIsPartnerReady } from "./useIsPartnerReady"
 import { usePairingDoc } from "./usePairingDoc"
-import { useReadiness } from "./useReadiness"
+import { usePhaseSecsRemaining } from "./usePhaseSecsRemaining"
+import { useSelfReady } from "./useSelfReady"
 
 export type PhaseStatus =
-    | { status: "locked"; countdown: number }
+    | { status: "paused" }
+    | { status: "locked"; secsRemaining: number }
     | { status: "unlocked" }
-    | { status: "partnerWaiting"; countdown: number | null }
-    | { status: "waiting"; countdown: number | null }
+    | { status: "partnerWaiting"; secsRemaining: number | null }
+    | { status: "waiting"; secsRemaining: number | null }
     | { status: "advancing" }
 
-function useElapsed() {
-    const secondsSince = useSecondsSince()
-    const pairing = usePairingDoc()
-    const phaseStartedAt = useStoreSelector(
-        pairing.store,
-        (s) => s.phaseStartedAt
-    )
-
-    const [elapsed, setElapsed] = useState(0)
-
-    useEffect(() => {
-        if (!phaseStartedAt) return
-        const tick = () => setElapsed(secondsSince(phaseStartedAt))
-        tick()
-        const interval = setInterval(tick, 1000)
-        return () => clearInterval(interval)
-    }, [phaseStartedAt, secondsSince])
-
-    return elapsed
-}
-
-function deriveStatus(
-    elapsed: number,
-    minTime: number,
-    maxTime: number | null,
-    isReady: boolean,
-    isPartnerReady: boolean
-): PhaseStatus {
-    const countdownToForced = maxTime ? Math.max(0, maxTime - elapsed) : null
-
-    if (elapsed < minTime)
-        return { status: "locked", countdown: Math.max(0, minTime - elapsed) }
-    if (isReady && isPartnerReady) return { status: "advancing" }
-    if (isReady) return { status: "waiting", countdown: countdownToForced }
-    if (isPartnerReady)
-        return { status: "partnerWaiting", countdown: countdownToForced }
-    return { status: "unlocked" }
-}
-
 export function usePhaseStatus(): PhaseStatus {
+    const pairing = usePairingDoc()
     const phase = useCurrentPhase()
-    const { isReady, isPartnerReady } = useReadiness()
-    const elapsed = useElapsed()
+    const secsRemaining = usePhaseSecsRemaining()
+    const isPaused = useStoreSelector(pairing.store, (s) => s.isPaused)
+    const { isSelfReady } = useSelfReady()
+    const isPartnerReady = useIsPartnerReady()
 
-    return deriveStatus(
-        elapsed,
-        phase?.minTimeSecs ?? 0,
-        phase?.maxTimeSecs ?? null,
-        isReady,
-        isPartnerReady
-    )
+    if (isPaused) return { status: "paused" }
+
+    const minTime = phase?.minTimeSecs ?? 0
+    const maxTime = phase?.maxTimeSecs ?? null
+
+    const elapsed =
+        secsRemaining != null && maxTime != null ? maxTime - secsRemaining : 0
+
+    if (elapsed < minTime) {
+        return {
+            status: "locked",
+            secsRemaining: Math.max(0, minTime - elapsed),
+        }
+    }
+
+    if (isSelfReady && isPartnerReady) return { status: "advancing" }
+    if (isSelfReady) return { status: "waiting", secsRemaining }
+    if (isPartnerReady) return { status: "partnerWaiting", secsRemaining }
+    return { status: "unlocked" }
 }

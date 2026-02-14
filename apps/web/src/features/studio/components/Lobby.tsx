@@ -1,20 +1,16 @@
-import type { ReactNode } from "react"
 import { useNavigate } from "react-router-dom"
 import { Button } from "@workspace/ui/components/button.js"
 import { Spinner } from "@workspace/ui/components/spinner.js"
 import { useAssignment } from "../hooks/assignment"
 import { usePartner } from "../hooks/pairing"
-import { usePartnerPresence } from "../hooks/usePartnerPresence"
+import { useAutoStartPairing } from "../hooks/useAutoStartPairing"
 
-export function Lobby({ children }: { children: ReactNode }) {
-    const { isOnline } = usePartnerPresence()
+export function Lobby() {
+    useAutoStartPairing()
+
     const partner = usePartner()
     const assignment = useAssignment()
     const navigate = useNavigate()
-
-    if (isOnline) {
-        return <>{children}</>
-    }
 
     const partnerFirstInitial = partner.firstName[0]?.toUpperCase() || "?"
     const partnerLastInitial = partner.lastInitial || ""

@@ -1,6 +1,6 @@
 import type { Pairing } from "@workspace/db/client"
 import { prisma } from "@/infrastructure/db.js"
-import { redisClient } from "@/infrastructure/redis.js"
+import { withLock } from "@/infrastructure/redis.js"
 import { createMeeting, deleteMeeting } from "@/integrations/whereby/client.js"
 
 export async function destroySession(sessionId: string) {
@@ -23,6 +23,7 @@ export async function destroySession(sessionId: string) {
 
 async function createWherebyMeeting() {
     const meeting = await createMeeting()
+
     return prisma.wherebyMeeting.create({
         data: {
             wherebyId: meeting.meetingId,
@@ -50,15 +51,19 @@ async function refreshWherebyMeeting(
                 expiresAt: meeting.endDate,
             },
         })
+
         await tx.session.update({
             where: { id: sessionId },
             data: { wherebyMeetingId: created.id },
         })
+
         await tx.wherebyMeeting.delete({ where: { id: wherebyMeetingId } })
+
         return created
     })
 
     await deleteMeeting(old.wherebyId)
+
     return newMeeting
 }
 
@@ -70,16 +75,15 @@ export function isExpiringSoon(expiresAt: Date) {
 export async function ensureSessionInitialized(
     pairingId: Pairing["id"]
 ): Promise<void> {
-    const lockKey = `lock:pairing:${pairingId}:session`
-    const acquired = await redisClient.set(lockKey, "1", { EX: 300, NX: true })
-
-    if (acquired) {
-        try {
+    const acquired = await withLock(
+        `pairing:${pairingId}:session`,
+        async () => {
             await initializeSession(pairingId)
-        } finally {
-            await redisClient.del(lockKey)
-        }
-    } else {
+        },
+        300
+    )
+
+    if (!acquired) {
         await pollUntilSessionInitialized(pairingId)
     }
 }
@@ -103,18 +107,13 @@ async function initializeSession(pairingId: Pairing["id"]): Promise<void> {
     }
 
     const wherebyMeeting = await createWherebyMeeting()
-    await prisma.$transaction([
-        prisma.session.create({
-            data: {
-                pairingId,
-                wherebyMeetingId: wherebyMeeting.id,
-            },
-        }),
-        prisma.pairing.update({
-            where: { id: pairingId },
-            data: { status: "IN_PROGRESS" },
-        }),
-    ])
+
+    await prisma.session.create({
+        data: {
+            pairingId,
+            wherebyMeetingId: wherebyMeeting.id,
+        },
+    })
 }
 
 async function pollUntilSessionInitialized(
@@ -124,11 +123,14 @@ async function pollUntilSessionInitialized(
 ): Promise<void> {
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
         await new Promise((resolve) => setTimeout(resolve, intervalMs))
+
         const pairing = await prisma.pairing.findUniqueOrThrow({
             where: { id: pairingId },
             select: { session: { select: { id: true } } },
         })
+
         if (pairing.session) return
     }
+
     throw new Error(`Session initialization timed out for pairing ${pairingId}`)
 }

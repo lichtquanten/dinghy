@@ -3,7 +3,7 @@ import { createAwarenessStore } from "../lib/awareness"
 import { usePartner } from "./pairing"
 import { useYjs } from "./useYjs"
 
-export function usePartnerPresence() {
+export function useIsPartnerOnline() {
     const { awareness } = useYjs()
     const partner = usePartner()
     const [isOnline, setIsOnline] = useState(false)
@@ -16,5 +16,5 @@ export function usePartnerPresence() {
         return store.subscribe(check)
     }, [awareness, partner.id])
 
-    return { isOnline }
+    return isOnline
 }

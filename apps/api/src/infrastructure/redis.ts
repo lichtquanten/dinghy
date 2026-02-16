@@ -5,7 +5,7 @@ export const redisClient = createClient({
     url: env.REDIS_URL,
     socket: {
         reconnectStrategy: (retries) => {
-            if (retries > 20) return new Error("Too many retries")
+            console.warn(`Redis reconnect attempt ${retries}`)
             return Math.min(retries * 50, 3000)
         },
         keepAlive: true,
@@ -13,10 +13,18 @@ export const redisClient = createClient({
     },
 })
 
+redisClient.on("error", (err) => {
+    console.error("Redis error:", err)
+})
+
 await redisClient.connect()
 
 export function disconnect() {
     redisClient.destroy()
+}
+
+export function getIsRedisConnected() {
+    return redisClient.isReady
 }
 
 export const KEYS = {

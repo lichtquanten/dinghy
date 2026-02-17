@@ -21,4 +21,9 @@ export const pairings = [
         courseTitle: "CSCI 201",
         partnerEmails: ["user@demo.com", "student2@demo.com"],
     }),
+    definePairing({
+        assignmentTitle: "Spell Checker",
+        courseTitle: "CSCI 201",
+        partnerEmails: ["user@demo.com", "student2@demo.com"],
+    }),
 ]

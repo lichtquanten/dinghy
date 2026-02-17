@@ -46,6 +46,9 @@ pnpm run dev"
 # =============================================================================
 FROM package-json AS build
 
+ARG PRISMA_DB_URL
+ENV PRISMA_DB_URL=$PRISMA_DB_URL
+
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm install --frozen-lockfile
 

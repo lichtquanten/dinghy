@@ -78,6 +78,8 @@ COPY --from=build --chown=node:node /app/apps/web/dist/ ./apps/api/public/
 COPY --from=build --chown=node:node /app/apps/api/dist/ ./apps/api/dist/
 COPY --from=build --chown=node:node /app/packages/db/dist/ ./packages/db/dist/
 COPY --from=build --chown=node:node /app/packages/db/src/generated/prisma/ ./packages/db/src/generated/prisma/
+COPY --from=build --chown=node:node /app/packages/pairing/dist/ ./packages/pairing/dist/
+COPY --from=build --chown=node:node /app/packages/yjs-store/dist/ ./packages/yjs-store/dist/
 
 USER node
 

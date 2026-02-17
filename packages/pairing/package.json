@@ -20,6 +20,7 @@
     "devDependencies": {
         "@workspace/eslint-config": "workspace:*",
         "@workspace/typescript-config": "workspace:*",
+        "react": "^19.2.3",
         "tsdown": "^0.15.12",
         "typescript": "^5.9.3"
     },
@@ -27,6 +28,13 @@
         ".": {
             "import": "./dist/index.js",
             "types": "./dist/index.d.ts"
+        },
+        "./react": {
+            "import": "./dist/react.js",
+            "types": "./dist/react.d.ts"
         }
+    },
+    "peerDependencies": {
+        "react": "^19.2.3"
     }
 }

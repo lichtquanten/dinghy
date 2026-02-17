@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react"
-import { useStoreSelector } from "@workspace/pairing"
+import { useStoreSelector } from "@workspace/pairing/react"
 import { usePartnerIds } from "./pairing"
 import { usePairingDoc } from "./usePairingDoc"
 

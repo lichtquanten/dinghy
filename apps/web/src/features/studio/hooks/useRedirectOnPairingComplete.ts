@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
-import { useStoreSelector } from "@workspace/pairing"
+import { useStoreSelector } from "@workspace/pairing/react"
 import { usePairingDoc } from "./usePairingDoc"
 
 export function useRedirectOnPairingComplete() {

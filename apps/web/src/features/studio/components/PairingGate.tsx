@@ -1,5 +1,5 @@
 import type { ReactNode } from "react"
-import { useStoreSelector } from "@workspace/pairing"
+import { useStoreSelector } from "@workspace/pairing/react"
 import { useAutoAdvancePhase } from "../hooks/useAutoAdvancePhase"
 import { usePairingDoc } from "../hooks/usePairingDoc"
 import { useRedirectOnPairingComplete } from "../hooks/useRedirectOnPairingComplete"

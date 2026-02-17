@@ -1,4 +1,4 @@
-import { useStoreSelector } from "@workspace/pairing"
+import { useStoreSelector } from "@workspace/pairing/react"
 import { useCurrentPhase } from "./progress"
 import { useIsPartnerReady } from "./useIsPartnerReady"
 import { usePairingDoc } from "./usePairingDoc"

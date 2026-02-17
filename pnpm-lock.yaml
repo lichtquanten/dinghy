@@ -405,6 +405,9 @@ importers:
       '@workspace/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
+      react:
+        specifier: ^19.2.3
+        version: 19.2.3
       tsdown:
         specifier: ^0.15.12
         version: 0.15.12(typescript@5.9.3)

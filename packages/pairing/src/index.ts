@@ -6,5 +6,4 @@ export type {
 } from "./types"
 export { getPairingDoc } from "./doc"
 export { PairingRoomId } from "./roomId"
-export { useStore, useStoreSelector } from "@workspace/yjs-store"
 export { createPairingStore } from "./store"

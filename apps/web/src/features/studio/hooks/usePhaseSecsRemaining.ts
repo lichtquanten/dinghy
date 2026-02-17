@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useStoreSelector } from "@workspace/pairing"
+import { useStoreSelector } from "@workspace/pairing/react"
 import { usePairingDoc } from "./usePairingDoc"
 
 function computeTimeLeft(

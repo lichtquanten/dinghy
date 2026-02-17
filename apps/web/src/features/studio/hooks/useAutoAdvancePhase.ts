@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query"
 import { useEffect } from "react"
-import { useStoreSelector } from "@workspace/pairing"
+import { useStoreSelector } from "@workspace/pairing/react"
 import { trpc } from "@/lib/trpc"
 import { usePairingId } from "./pairing"
 import { useAllReady } from "./useAllReady"

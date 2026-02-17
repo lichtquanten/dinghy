@@ -1,4 +1,4 @@
-import { useStoreSelector } from "@workspace/pairing"
+import { useStoreSelector } from "@workspace/pairing/react"
 import { useAssignment } from "./assignment"
 import { usePairingDoc } from "./usePairingDoc"
 

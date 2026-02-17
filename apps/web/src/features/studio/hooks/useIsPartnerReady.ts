@@ -1,4 +1,4 @@
-import { useStoreSelector } from "@workspace/pairing"
+import { useStoreSelector } from "@workspace/pairing/react"
 import { useSelf } from "@/lib/hooks/useSelf"
 import { usePairingDoc } from "./usePairingDoc"
 

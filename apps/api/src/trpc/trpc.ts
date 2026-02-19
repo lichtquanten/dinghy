@@ -1,6 +1,5 @@
 import { initTRPC, TRPCError } from "@trpc/server"
 import superjson from "superjson"
-import { clerkClient } from "@/infrastructure/auth.js"
 import { prisma } from "@/infrastructure/db.js"
 import { type Context } from "./context.js"
 
@@ -19,19 +18,15 @@ const t = initTRPC.context<Context>().create({
 })
 
 const requireAuth = t.middleware(async ({ ctx, next }) => {
-    if (!ctx.auth?.userId) throw new TRPCError({ code: "UNAUTHORIZED" })
+    const email = ctx.auth.sessionClaims?.primaryEmailAddress
 
-    let clerkUser
-    try {
-        clerkUser = await clerkClient.users.getUser(ctx.auth.userId)
-    } catch {
-        throw new TRPCError({
-            code: "INTERNAL_SERVER_ERROR",
-            message: "Unable to verify user",
-        })
-    }
+    const firstName = ctx.auth.sessionClaims?.firstName ?? "Unknown"
 
-    const email = clerkUser.primaryEmailAddress?.emailAddress
+    const lastName = ctx.auth.sessionClaims?.lastName ?? ""
+
+    const clerkId = ctx.auth.userId
+
+    if (!clerkId) throw new TRPCError({ code: "UNAUTHORIZED" })
 
     if (!email) {
         throw new TRPCError({
@@ -40,12 +35,9 @@ const requireAuth = t.middleware(async ({ ctx, next }) => {
         })
     }
 
-    const firstName = clerkUser.firstName ?? "Unknown"
-    const lastName = clerkUser.lastName ?? ""
-
     const user = await prisma.user.upsert({
         where: {
-            clerkId: ctx.auth.userId,
+            clerkId,
         },
         update: {
             email,

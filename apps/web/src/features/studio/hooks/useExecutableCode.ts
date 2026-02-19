@@ -1,3 +1,4 @@
+import { InteractionMode } from "@workspace/db/browser"
 import { useMyCode, useSharedCode } from "./code"
 import { useCurrentInteractionMode } from "./progress"
 
@@ -7,11 +8,11 @@ export function useExecutableCode(): string | null {
     const sharedCode = useSharedCode()
 
     switch (mode) {
-        case "solo":
+        case InteractionMode.solo:
             return myCode.toString()
-        case "collaborative":
+        case InteractionMode.collaborative:
             return sharedCode.toString()
-        case "review":
+        case InteractionMode.review:
             return null
         default: {
             mode satisfies never

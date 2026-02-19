@@ -11,7 +11,7 @@ type Result =
 export function Playground() {
     const assignment = useAssignment()
 
-    const code = useExecutableCode()
+    const getCode = useExecutableCode()
     const { run, isRunning } = useCodeExecution()
     const [stdin, setStdin] = useState("")
     const [result, setResult] = useState<Result | null>(null)
@@ -19,6 +19,7 @@ export function Playground() {
     const handleRun = async () => {
         setResult(null)
 
+        const code = getCode()
         if (!code || code.trim() === "") {
             setResult({
                 type: "error",

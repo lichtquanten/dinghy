@@ -8,9 +8,10 @@ interface TaskTestCasesProps {
 }
 
 export function TestCases({ testCases }: TaskTestCasesProps) {
-    const code = useExecutableCode()
+    const getCode = useExecutableCode()
     const { runTests, results, isRunning, error } = useTestRunner()
 
+    const code = getCode()
     const canRun = code !== null && !isRunning
 
     return (
@@ -85,6 +86,7 @@ export function TestCases({ testCases }: TaskTestCasesProps) {
             {/* Run button */}
             <Button
                 onClick={() => {
+                    const code = getCode()
                     if (code !== null) {
                         void runTests(code)
                     }

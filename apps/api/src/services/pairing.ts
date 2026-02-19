@@ -1,14 +1,24 @@
 import * as Y from "yjs"
-import type { Assignment, Pairing } from "@workspace/db/client"
+import {
+    type Assignment,
+    InteractionMode,
+    type Pairing,
+    type Phase,
+    type Prisma,
+} from "@workspace/db/client"
 import {
     createPairingStore,
     getPairingDoc,
     PairingRoomId,
 } from "@workspace/pairing"
-import type { PairingState, PairingStore } from "@workspace/pairing"
+import type { PairingDoc, PairingState, PairingStore } from "@workspace/pairing"
 import { prisma } from "@/infrastructure/db.js"
 import { withLock } from "@/infrastructure/redis.js"
 import { liveblocks, sendYjsUpdate } from "@/integrations/liveblocks/client.js"
+
+type TaskWithPhases = Prisma.TaskGetPayload<{
+    include: { phases: true }
+}>
 
 export async function createPairing(
     partnerIds: Pairing["partnerIds"],
@@ -22,6 +32,21 @@ export async function createPairing(
     })
 
     return pairing
+}
+
+export async function withPairingDoc(
+    roomId: string,
+    partnerIds: string[],
+    fn: (doc: PairingDoc) => void | false
+): Promise<void> {
+    const ydoc = new Y.Doc()
+    const update = await liveblocks.getYjsDocumentAsBinaryUpdate(roomId)
+    Y.applyUpdate(ydoc, new Uint8Array(update))
+    const doc = getPairingDoc(ydoc, partnerIds)
+    const result = fn(doc)
+    if (result !== false) {
+        await sendYjsUpdate(roomId, ydoc)
+    }
 }
 
 export async function withPairingStore(
@@ -40,6 +65,103 @@ export async function withPairingStore(
     if (result !== false) {
         await sendYjsUpdate(roomId, ydoc)
     }
+}
+
+export async function advancePhase(
+    roomId: string,
+    partnerIds: string[],
+    tasks: TaskWithPhases[],
+    taskIndex: number,
+    phaseIndex: number
+): Promise<boolean> {
+    let didComplete = false
+
+    await withPairingDoc(roomId, partnerIds, (doc) => {
+        const state = doc.store.get()
+
+        if (state.taskIndex !== taskIndex) return false
+        if (state.phaseIndex !== phaseIndex) return false
+
+        const currentTask = tasks[state.taskIndex]
+        if (!currentTask) {
+            throw new Error(`Invalid task index: ${state.taskIndex}`)
+        }
+        const currentPhase = currentTask.phases[state.phaseIndex]
+        if (!currentPhase) {
+            throw new Error(`Invalid phase index: ${state.phaseIndex}`)
+        }
+
+        const isLastPhase = state.phaseIndex >= currentTask.phases.length - 1
+        const isLastTask = state.taskIndex >= tasks.length - 1
+
+        if (isLastPhase && isLastTask) {
+            doc.store.complete()
+            didComplete = true
+            return
+        }
+
+        const nextPhase = resolveNextPhase(
+            tasks,
+            state.taskIndex,
+            state.phaseIndex
+        )
+
+        if (isLastPhase) {
+            doc.store.advanceTask()
+        } else {
+            doc.store.advancePhase(nextPhase.maxTimeSecs ?? 0, Date.now())
+        }
+
+        if (
+            currentPhase.interactionMode === InteractionMode.collaborative &&
+            nextPhase.interactionMode === InteractionMode.solo
+        ) {
+            const shared = doc.sharedCode.ytext().toJSON()
+            for (const id of partnerIds) {
+                const userYText = doc.userCode[id]?.ytext()
+                if (!userYText) {
+                    throw new Error(`No userCode ytext for partner ${id}`)
+                }
+                userYText.delete(0, userYText.length)
+                userYText.insert(0, shared)
+            }
+        }
+    })
+
+    return didComplete
+}
+
+function resolveNextPhase(
+    tasks: TaskWithPhases[],
+    currentTaskIndex: number,
+    currentPhaseIndex: number
+): Phase {
+    const currentTask = tasks[currentTaskIndex]
+    if (!currentTask) {
+        throw new Error(`Invalid task index: ${currentTaskIndex}`)
+    }
+
+    const isLastPhase = currentPhaseIndex >= currentTask.phases.length - 1
+
+    if (isLastPhase) {
+        const nextTask = tasks[currentTaskIndex + 1]
+        if (!nextTask) {
+            throw new Error(`No next task at index ${currentTaskIndex + 1}`)
+        }
+        const nextPhase = nextTask.phases[0]
+        if (!nextPhase) {
+            throw new Error(
+                `Task at index ${currentTaskIndex + 1} has no phases`
+            )
+        }
+        return nextPhase
+    }
+
+    const nextPhase = currentTask.phases[currentPhaseIndex + 1]
+    if (!nextPhase) {
+        throw new Error(`No phase at index ${currentPhaseIndex + 1}`)
+    }
+    return nextPhase
 }
 
 export function computeSecsRemaining(state: PairingState): number {

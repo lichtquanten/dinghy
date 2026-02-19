@@ -4,6 +4,7 @@ import { PairingRoomId } from "@workspace/pairing"
 import { prisma } from "@/infrastructure/db.js"
 import { withLock } from "@/infrastructure/redis.js"
 import {
+    advancePhase,
     ensurePairingInitialized,
     withPairingStore,
 } from "@/services/pairing.js"
@@ -211,39 +212,14 @@ export const pairingRouter = router({
             let didComplete = false
 
             await withLock(`pairing:${input.pairingId}:advance`, async () => {
-                const tasks = pairing.assignment.tasks
                 const roomId = PairingRoomId.from(input.pairingId)
-
-                await withPairingStore(roomId, (store, state) => {
-                    if (state.taskIndex !== input.taskIndex) return false
-                    if (state.phaseIndex !== input.phaseIndex) return false
-
-                    const currentTask = tasks[state.taskIndex]
-                    if (!currentTask) {
-                        throw new TRPCError({
-                            code: "INTERNAL_SERVER_ERROR",
-                            message: `Invalid task index: ${state.taskIndex}`,
-                        })
-                    }
-
-                    const isLastPhase =
-                        state.phaseIndex >= currentTask.phases.length - 1
-                    const isLastTask = state.taskIndex >= tasks.length - 1
-
-                    if (isLastPhase && isLastTask) {
-                        store.complete()
-                        didComplete = true
-                    } else if (isLastPhase) {
-                        store.advanceTask()
-                    } else {
-                        const nextPhase =
-                            currentTask.phases[state.phaseIndex + 1]
-                        store.advancePhase(
-                            nextPhase?.maxTimeSecs ?? 0,
-                            Date.now()
-                        )
-                    }
-                })
+                didComplete = await advancePhase(
+                    roomId,
+                    pairing.partnerIds,
+                    pairing.assignment.tasks,
+                    input.taskIndex,
+                    input.phaseIndex
+                )
             })
 
             if (didComplete) {
